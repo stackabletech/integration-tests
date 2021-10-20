@@ -1,0 +1,81 @@
+name: Integration tests
+
+on:
+  workflow_dispatch:
+
+jobs:
+
+  integration_test:
+
+    strategy:
+      fail-fast: false
+      matrix:
+        environment: [ ionos-debian-10, aws-centos-8 ]
+        include: 
+          - environment: ionos-debian-10
+            install_additional_build_packages: "sudo apt-get install gcc libssl-dev pkg-config -y"
+            install_git: "sudo apt-get install git -y"
+          - environment: aws-centos-8
+            install_additional_build_packages: "sudo yum install vim procps curl gcc make pkgconfig openssl-devel systemd-devel python3-pip container-selinux selinux-policy-base -y"
+            install_git: "sudo yum install git -y"
+
+    runs-on: ubuntu-latest
+
+    steps:
+
+      - name: cleanup workspace
+        run: |
+          rm -rf *
+          rm -rf .git*
+
+      - name: Install Python3
+        run: |
+          sudo apt install python3
+
+      - name: Assure that Python3 is available
+        run: |
+          which python3
+
+      - uses: actions/checkout@v2.3.5
+
+      - name: Download T2 cluster launch script
+        run: |
+          curl https://raw.githubusercontent.com/stackabletech/t2/client-script/client/t2.py > t2.py
+
+      - name: Launch cluster via T2 API
+        env:
+          T2_TOKEN: ${{ secrets.T2_TOKEN }}
+        run: | 
+          python3 t2.py launch "$T2_TOKEN" https://t2.stackable.tech .github/workflows/resources/cluster-definition-${{matrix.environment}}.yaml
+
+      - name: Label nodes
+        run: | 
+          ./stackable.sh testdriver-1 -i ./.cluster/key 'kubectl label node main-1.stackable.test node=1'
+          ./stackable.sh testdriver-1 -i ./.cluster/key 'kubectl label node main-2.stackable.test node=2'
+          ./stackable.sh testdriver-1 -i ./.cluster/key 'kubectl label node main-3.stackable.test node=3'
+
+      - name: Test (step 1) - install Rust and required tools
+        run: | 
+          ./stackable.sh testdriver-1 -i ./.cluster/key 'sudo sh -c "echo \"13.32.25.75     static.rust-lang.org\" >> /etc/hosts"'
+          ./stackable.sh testdriver-1 -i ./.cluster/key 'curl --proto "=https" --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y'
+          ./stackable.sh testdriver-1 -i ./.cluster/key 'cargo --version'
+          ./stackable.sh testdriver-1 -i ./.cluster/key '${{matrix.install_additional_build_packages}}'
+
+      - name: Test (step 2) - clone repository
+        run: | 
+          ./stackable.sh testdriver-1 -i ./.cluster/key '${{matrix.install_git}}'
+          ./stackable.sh testdriver-1 -i ./.cluster/key 'git --version'
+          ./stackable.sh testdriver-1 -i ./.cluster/key "git clone -b ${GITHUB_REF##*/} https://github.com/stackabletech/zookeeper-operator-integration-tests.git"
+ 
+      - name: Test (step 3) - run tests
+        run: | 
+          ./stackable.sh testdriver-1 -i ./.cluster/key 'cd zookeeper-operator-integration-tests/ && cargo test -- --test-threads=1'
+
+      - name: Terminate cluster via T2 API
+        if: always()
+        env:
+          T2_TOKEN: ${{ secrets.T2_TOKEN }}
+        run: | 
+          python3 t2.py terminate "$T2_TOKEN" https://t2.stackable.tech
+
+ 

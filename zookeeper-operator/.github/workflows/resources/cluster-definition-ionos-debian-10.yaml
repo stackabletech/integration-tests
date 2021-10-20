@@ -1,0 +1,26 @@
+---
+apiVersion: t2.stackable.tech/v1
+kind: Infra
+template: demo-debian-10
+metadata: 
+  name: zookeper-operator-integration-tests
+  description: "Cluster for Zookeeper Operator Integration Tests (Debian 10)"
+domain: stackable.test
+publicKeys: []
+spec:
+  region: de/fra
+  wireguard: false
+  nodes:
+    main:
+      numberOfNodes: 3
+      numberOfCores: 2
+      memoryMb: 4096
+      diskType: HDD 
+      diskSizeGb: 15
+    testdriver:
+      numberOfNodes: 1
+      numberOfCores: 2
+      memoryMb: 4096
+      diskType: HDD 
+      diskSizeGb: 15
+      agent: false
