@@ -1,0 +1,10 @@
+= Integration test commons
+
+This crate contains common functionality used in the integration tests
+of the Stackable components.
+
+== Contributing
+The integration tests are developed as open source tools and we
+absolutely welcome any contributions! Don't hesitate to drop us a line
+at info@stackable.de or reach out directly to any of our
+committers/contributors.
