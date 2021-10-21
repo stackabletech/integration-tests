@@ -1,0 +1,19 @@
+[package]
+name = "hive-operator-integration-tests"
+version = "0.1.0"
+edition = "2018"
+repository = "https://github.com/stackabletech/hive-operator-integration-tests"
+description = "Integration tests for the Stackable Operator for Apache Hive"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+anyhow = "1.0"
+integration-test-commons = { git = "https://github.com/stackabletech/integration-test-commons.git", tag = "0.5.0" }
+stackable-hive-crd = { git = "https://github.com/stackabletech/hive-operator.git", branch = "hackathon"}
+serde = "1.0"
+serde_json = "1.0"
+serde_yaml = "0.8"
+
+[dev-dependencies]
+k8s-openapi = { version = "0.13", default-features = false, features = ["v1_22"] }
