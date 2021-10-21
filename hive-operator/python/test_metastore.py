@@ -61,7 +61,7 @@ def main():
 
     with HiveMetastoreClient(args.address, args.port) as hive_client:
         hive_client.create_database_if_not_exists(database)
-        #hive_client.create_table(table(args.database, table_name))
+        hive_client.create_table(table(args.database, table_name))
         #print(hive_client.get_all_tables(db_name=args.database))
         schema = hive_client.get_schema(db_name=args.database, table_name=table_name)
         assert schema == [FieldSchema(name='id', type='string', comment='col comment')]

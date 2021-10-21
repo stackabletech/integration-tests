@@ -27,6 +27,7 @@ pub fn build_test_cluster() -> TestCluster<HiveCluster> {
 pub fn build_hive_cluster(
     name: &str,
     version: &str,
+    database_path: &str,
     replicas: usize,
 ) -> Result<(HiveCluster, usize)> {
     let spec = &format!(
@@ -51,13 +52,13 @@ pub fn build_hive_cluster(
                   javaHome: /usr/lib/jvm/java-11-openjdk-amd64/
                   metricsPort: 11111
                   database:
-                    connString: jdbc:derby:;databaseName=/tmp/metastore_db;create=true
+                    connString: jdbc:derby:;databaseName={};create=true
                     user: APP
                     password: mine
                     dbType: derby
 
         ",
-        name, version, replicas
+        name, version, replicas, database_path
     );
 
     Ok((serde_yaml::from_str(spec)?, replicas))
