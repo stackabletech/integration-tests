@@ -8,4 +8,5 @@ members = [
 "opa-operator",
 "spark-operator",
 "zookeeper-operator"
+"hive-operator"
 ]
