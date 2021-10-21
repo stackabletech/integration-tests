@@ -238,7 +238,7 @@ impl Default for Timeouts {
             create: Duration::from_secs(10),
             delete: Duration::from_secs(10),
             get_annotation: Duration::from_secs(10),
-            verify_status: Duration::from_secs(30),
+            verify_status: Duration::from_secs(294),
         }
     }
 }
