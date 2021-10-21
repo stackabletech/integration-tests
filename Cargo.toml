@@ -1,0 +1,11 @@
+[workspace]
+
+members = [
+"commons",
+"kafka-operator",
+"monitoring-operator",
+"nifi-operator",
+"opa-operator",
+"spark-operator",
+"zookeeper-operator"
+]

@@ -9,7 +9,7 @@ version = "0.1.0"
 
 [dependencies]
 anyhow = "1.0"
-integration-test-commons = { git = "https://github.com/stackabletech/integration-test-commons.git", tag = "0.5.0" }
+integration-test-commons = { path = "../commons" }
 serde = "1.0"
 serde_yaml = "0.8"
 stackable-spark-crd = { git = "https://github.com/stackabletech/spark-operator.git", branch = "main" }
