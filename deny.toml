@@ -31,6 +31,19 @@ allow = [
 ]
 
 exceptions = [
+    { name = "hive-operator-integration-tests", allow = ["OSL-3.0"] },
+    { name = "kafka-operator-integration-tests", allow = ["OSL-3.0"] },
+    { name = "monitoring-operator-integration-tests", allow = ["OSL-3.0"] },
+    { name = "nifi-operator-integration-tests", allow = ["OSL-3.0"] },
+    { name = "opa-operator-integration-tests", allow = ["OSL-3.0"] },
+    { name = "spark-operator-integration-tests", allow = ["OSL-3.0"] },
+    { name = "stackable-hive-crd", allow = ["OSL-3.0"] },
+    { name = "stackable-kafka-crd", allow = ["OSL-3.0"] },
+    { name = "stackable-monitoring-crd", allow = ["OSL-3.0"] },
+    { name = "stackable-nifi-crd", allow = ["OSL-3.0"] },
+    { name = "stackable-opa-crd", allow = ["OSL-3.0"] },
+    { name = "stackable-spark-common", allow = ["OSL-3.0"] },
+    { name = "stackable-spark-crd", allow = ["OSL-3.0"] },
     { name = "stackable-zookeeper-crd", allow = ["OSL-3.0"] },
     { name = "zookeeper-operator-integration-tests", allow = ["OSL-3.0"] },
 ]

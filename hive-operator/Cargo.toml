@@ -2,6 +2,7 @@
 name = "hive-operator-integration-tests"
 version = "0.1.0"
 edition = "2018"
+license = "OSL-3.0"
 repository = "https://github.com/stackabletech/hive-operator-integration-tests"
 description = "Integration tests for the Stackable Operator for Apache Hive"
 
