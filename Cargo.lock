@@ -693,9 +693,9 @@ dependencies = [
  "futures",
  "indoc",
  "k8s-openapi",
- "kube",
+ "kube 0.60.0",
  "kube-derive",
- "kube-runtime",
+ "kube-runtime 0.60.0",
  "once_cell",
  "schemars",
  "serde",
@@ -808,8 +808,54 @@ dependencies = [
  "hyper-tls",
  "jsonpath_lib",
  "k8s-openapi",
- "kube-core",
+ "kube-core 0.60.0",
  "kube-derive",
+ "openssl",
+ "pem",
+ "pin-project 1.0.8",
+ "serde",
+ "serde_json",
+ "serde_yaml",
+ "thiserror",
+ "tokio",
+ "tokio-native-tls",
+ "tokio-util",
+ "tower",
+ "tower-http",
+ "tracing",
+]
+
+[[package]]
+name = "kube"
+version = "0.62.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "8db51365e1dbaaf9e5216849ca7d0c03e2c43bae5a9d7a4f6104999448eb16b4"
+dependencies = [
+ "kube-client",
+ "kube-core 0.62.0",
+ "kube-runtime 0.62.0",
+]
+
+[[package]]
+name = "kube-client"
+version = "0.62.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "8cd12d68768b54bbd50547f4c7b57b73cff680ef8da3ba409463ee995cf0d707"
+dependencies = [
+ "base64",
+ "bytes",
+ "chrono",
+ "dirs-next",
+ "either",
+ "futures",
+ "http",
+ "http-body",
+ "hyper",
+ "hyper-timeout",
+ "hyper-tls",
+ "jsonpath_lib",
+ "k8s-openapi",
+ "kube-core 0.62.0",
  "openssl",
  "pem",
  "pin-project 1.0.8",
@@ -831,6 +877,23 @@ version = "0.60.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "04ccd59635e9b21353da8d4a394bb5d3473b5965ed44496c8f857281b0625ffe"
 dependencies = [
+ "form_urlencoded",
+ "http",
+ "json-patch",
+ "k8s-openapi",
+ "once_cell",
+ "serde",
+ "serde_json",
+ "thiserror",
+]
+
+[[package]]
+name = "kube-core"
+version = "0.62.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "7cb6083983fc47d9144f1796d47edfeaba7e012de94c151bec8533af89d9b198"
+dependencies = [
+ "chrono",
  "form_urlencoded",
  "http",
  "json-patch",
@@ -865,7 +928,29 @@ dependencies = [
  "futures",
  "json-patch",
  "k8s-openapi",
- "kube",
+ "kube 0.60.0",
+ "pin-project 1.0.8",
+ "serde",
+ "serde_json",
+ "smallvec",
+ "snafu",
+ "tokio",
+ "tokio-util",
+ "tracing",
+]
+
+[[package]]
+name = "kube-runtime"
+version = "0.62.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "1dc77aa51353e95d9f16157adf9f8e5322ec8fa2bffaabe895ed815b968cfc5e"
+dependencies = [
+ "dashmap",
+ "derivative",
+ "futures",
+ "json-patch",
+ "k8s-openapi",
+ "kube-client",
  "pin-project 1.0.8",
  "serde",
  "serde_json",
@@ -1301,7 +1386,7 @@ dependencies = [
 [[package]]
 name = "product-config"
 version = "0.2.0-nightly"
-source = "git+https://github.com/stackabletech/product-config.git?branch=main#53c4bac3aa52bf61f5cef4fc47447be67749c3ce"
+source = "git+https://github.com/stackabletech/product-config.git?branch=main#97734dfa78c5e96922b2fc99bbd0cf2a1b7ac89d"
 dependencies = [
  "java-properties",
  "regex",
@@ -1732,7 +1817,7 @@ source = "git+https://github.com/stackabletech/hive-operator.git?branch=main#af4
 dependencies = [
  "duplicate",
  "k8s-openapi",
- "kube",
+ "kube 0.60.0",
  "product-config 0.2.0-nightly",
  "schemars",
  "semver",
@@ -1752,7 +1837,7 @@ source = "git+https://github.com/stackabletech/kafka-operator.git?branch=main#0f
 dependencies = [
  "duplicate",
  "k8s-openapi",
- "kube",
+ "kube 0.60.0",
  "schemars",
  "semver",
  "serde",
@@ -1771,7 +1856,7 @@ version = "0.3.0-nightly"
 source = "git+https://github.com/stackabletech/monitoring-operator.git?branch=main#16550187dc4ae51dc8e8bca62bf3895b1427a9d0"
 dependencies = [
  "k8s-openapi",
- "kube",
+ "kube 0.60.0",
  "product-config 0.1.0",
  "schemars",
  "semver",
@@ -1787,10 +1872,10 @@ dependencies = [
 [[package]]
 name = "stackable-nifi-crd"
 version = "0.3.0-nightly"
-source = "git+https://github.com/stackabletech/nifi-operator.git?branch=main#7ad3b18fb02a5059f60f3f8a062d326b3be0df73"
+source = "git+https://github.com/stackabletech/nifi-operator.git?branch=main#2559068ec5f3f72d4359298071df4473732e15c1"
 dependencies = [
  "k8s-openapi",
- "kube",
+ "kube 0.60.0",
  "product-config 0.1.0",
  "schemars",
  "semver",
@@ -1809,7 +1894,7 @@ version = "0.4.1-nightly"
 source = "git+https://github.com/stackabletech/opa-operator.git?branch=main#f5fa7daf6f439c5c64f4da828fa5c761ba3af4ff"
 dependencies = [
  "k8s-openapi",
- "kube",
+ "kube 0.60.0",
  "rand 0.8.4",
  "schemars",
  "semver",
@@ -1837,8 +1922,8 @@ dependencies = [
  "futures",
  "json-patch",
  "k8s-openapi",
- "kube",
- "kube-runtime",
+ "kube 0.60.0",
+ "kube-runtime 0.60.0",
  "lazy_static",
  "product-config 0.1.0",
  "rand 0.8.4",
@@ -1860,7 +1945,7 @@ dependencies = [
 [[package]]
 name = "stackable-operator"
 version = "0.2.3-nightly"
-source = "git+https://github.com/stackabletech/operator-rs.git?branch=main#e3de43f5bd24df9c68d26cd9f0989afd3ff93e84"
+source = "git+https://github.com/stackabletech/operator-rs.git?branch=main#f9c600b0cf20ed75b1766c2e9add7b5e8d629a2b"
 dependencies = [
  "async-trait",
  "backoff",
@@ -1871,8 +1956,7 @@ dependencies = [
  "futures",
  "json-patch",
  "k8s-openapi",
- "kube",
- "kube-runtime",
+ "kube 0.62.0",
  "lazy_static",
  "product-config 0.2.0-nightly",
  "rand 0.8.4",
@@ -1881,7 +1965,7 @@ dependencies = [
  "serde",
  "serde_json",
  "serde_yaml",
- "strum 0.21.0",
+ "strum 0.22.0",
  "strum_macros 0.22.0",
  "thiserror",
  "tokio",
@@ -1902,7 +1986,7 @@ version = "0.3.0-nightly"
 source = "git+https://github.com/stackabletech/spark-operator.git?rev=8047f336fd85b5e37b757a2a6cf6d590dbae2607#8047f336fd85b5e37b757a2a6cf6d590dbae2607"
 dependencies = [
  "k8s-openapi",
- "kube",
+ "kube 0.60.0",
  "product-config 0.1.0",
  "schemars",
  "semver",
@@ -1919,11 +2003,11 @@ dependencies = [
 [[package]]
 name = "stackable-zookeeper-crd"
 version = "0.4.1-nightly"
-source = "git+https://github.com/stackabletech/zookeeper-operator.git?branch=main#67de5a2cd4e8f4d550bd4ae42c15fedeffffe986"
+source = "git+https://github.com/stackabletech/zookeeper-operator.git?branch=main#f04e97c9b413d06b42d7b685be4ebefdc8a4a902"
 dependencies = [
  "duplicate",
  "k8s-openapi",
- "kube",
+ "kube 0.60.0",
  "product-config 0.2.0-nightly",
  "schemars",
  "semver",
