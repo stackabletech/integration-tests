@@ -1,0 +1,22 @@
+[package]
+authors = ["Razvan-Daniel Mihai <84674+razvan@users.noreply.github.com>"]
+description = "Integration tests for the Stackable Operator for Apache ZooKeeper"
+edition = "2018"
+license = "OSL-3.0"
+name = "zookeeper-operator-integration-tests"
+repository = "https://github.com/stackabletech/zookeeper-operator-integration-tests"
+version = "0.1.0"
+
+[dependencies]
+anyhow = "1.0"
+indoc = "1.0"
+integration-test-commons = { path = "../commons" }
+reqwest = { version = "0.11", features = ["blocking"] }
+serde = "1.0"
+serde_json = "1.0"
+serde_yaml = "0.8"
+semver = "1.0"
+stackable-zookeeper-crd = { git = "https://github.com/stackabletech/zookeeper-operator.git", branch = "main"}
+
+[dev-dependencies]
+k8s-openapi = { version = "0.13", default-features = false, features = ["v1_22"] }

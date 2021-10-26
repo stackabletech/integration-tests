@@ -1,0 +1,20 @@
+---
+apiVersion: t2.stackable.tech/v1
+kind: Infra
+template: aws-centos-8
+metadata: 
+  name: spark-operator-integration-tests
+  description: "Cluster for Spark Operator Integration Tests (AWS EC2 / CentOS 8)"
+domain: stackable.test
+publicKeys: []
+spec:
+  region: eu-central-1
+  wireguard: false
+  versions:
+    stackable-spark-operator: "$SPARK_OPERATOR_VERSION"
+  nodes:
+    main:
+      numberOfNodes: 3
+    testdriver:
+      numberOfNodes: 1
+      agent: false
