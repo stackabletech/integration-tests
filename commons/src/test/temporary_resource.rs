@@ -1,8 +1,8 @@
 //! Resource which is deleted when it goes out of scope
 
 use super::prelude::TestKubeClient;
-use kube::Resource;
 use serde::{de::DeserializeOwned, Serialize};
+use stackable_operator::kube::Resource;
 use std::fmt::Debug;
 use std::{mem, ops::Deref};
 

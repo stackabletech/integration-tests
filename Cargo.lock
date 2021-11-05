@@ -31,9 +31,9 @@ dependencies = [
 
 [[package]]
 name = "anyhow"
-version = "1.0.44"
+version = "1.0.45"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "61604a8f862e1d5c3229fdd78f8b02c68dcf73a4c4b05fd636d12240aaa242c1"
+checksum = "ee10e43ae4a853c0a3591d4e2ada1719e553be18199d9da9d4a83f5927c2f5c7"
 
 [[package]]
 name = "async-trait"
@@ -177,9 +177,9 @@ checksum = "5827cebf4670468b8772dd191856768aedcb1b0278a04f989f7766351917b9dc"
 
 [[package]]
 name = "darling"
-version = "0.12.4"
+version = "0.13.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "5f2c43f534ea4b0b049015d00269734195e6d3f0f6635cb692251aca6f9f8b3c"
+checksum = "757c0ded2af11d8e739c4daea1ac623dd1624b06c844cf3f5a39f1bdbd99bb12"
 dependencies = [
  "darling_core",
  "darling_macro",
@@ -187,9 +187,9 @@ dependencies = [
 
 [[package]]
 name = "darling_core"
-version = "0.12.4"
+version = "0.13.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "8e91455b86830a1c21799d94524df0845183fa55bafd9aa137b01c7d1065fa36"
+checksum = "2c34d8efb62d0c2d7f60ece80f75e5c63c1588ba68032740494b0b9a996466e3"
 dependencies = [
  "fnv",
  "ident_case",
@@ -201,9 +201,9 @@ dependencies = [
 
 [[package]]
 name = "darling_macro"
-version = "0.12.4"
+version = "0.13.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "29b5acf0dea37a7f66f7b25d2c5e93fd46f8f6968b1a5d7a3e02e97768afc95a"
+checksum = "ade7bff147130fe5e6d39f089c6bd49ec0250f35d70b2eebf72afdfc919f15cc"
 dependencies = [
  "darling_core",
  "quote",
@@ -503,9 +503,9 @@ dependencies = [
 
 [[package]]
 name = "h2"
-version = "0.3.6"
+version = "0.3.7"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "6c06815895acec637cd6ed6e9662c935b866d20a106f8361892893a7d9234964"
+checksum = "7fd819562fcebdac5afc5c113c3ec36f902840b70fd4fc458799c8ce4607ae55"
 dependencies = [
  "bytes",
  "fnv",
@@ -550,7 +550,6 @@ version = "0.1.0"
 dependencies = [
  "anyhow",
  "integration-test-commons",
- "k8s-openapi",
  "serde",
  "serde_json",
  "serde_yaml",
@@ -570,9 +569,9 @@ dependencies = [
 
 [[package]]
 name = "http-body"
-version = "0.4.3"
+version = "0.4.4"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "399c583b2979440c60be0821a6199eca73bc3c8dcd9d070d75ac726e2c6186e5"
+checksum = "1ff4f84919677303da5f147645dbea6b1881f368d03ac84e1dc09031ebd7b2c6"
 dependencies = [
  "bytes",
  "http",
@@ -593,9 +592,9 @@ checksum = "6456b8a6c8f33fee7d958fcd1b60d55b11940a79e63ae87013e6d22e26034440"
 
 [[package]]
 name = "hyper"
-version = "0.14.13"
+version = "0.14.14"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "15d1cfb9e4f68655fa04c01f59edb405b6074a0f7118ea881e5026e4a1cd8593"
+checksum = "2b91bb1f221b6ea1f1e4371216b70f40748774c2fb5971b450c07773fb92d26b"
 dependencies = [
  "bytes",
  "futures-channel",
@@ -692,16 +691,12 @@ dependencies = [
  "anyhow",
  "futures",
  "indoc",
- "k8s-openapi",
- "kube",
- "kube-derive",
- "kube-runtime",
  "once_cell",
- "schemars",
  "serde",
  "serde_json",
  "serde_yaml",
  "spectral",
+ "stackable-operator 0.4.0-nightly",
  "tokio",
  "uuid",
 ]
@@ -781,7 +776,6 @@ version = "0.1.0"
 dependencies = [
  "anyhow",
  "integration-test-commons",
- "k8s-openapi",
  "reqwest",
  "serde",
  "serde_json",
@@ -791,9 +785,22 @@ dependencies = [
 
 [[package]]
 name = "kube"
-version = "0.60.0"
+version = "0.63.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "a0ae4dcb1a65182551922303a2d292b463513a6727db5ad980afbd32df7f3c16"
+checksum = "75e877325e5540a3041b519bd7ee27a858691f9f816cf533d652cbb33cbfea45"
+dependencies = [
+ "k8s-openapi",
+ "kube-client",
+ "kube-core",
+ "kube-derive",
+ "kube-runtime",
+]
+
+[[package]]
+name = "kube-client"
+version = "0.63.2"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "bb8e1a36f17c63e263ba0ffa2c0658de315c75decad983d83aaeafeda578cc78"
 dependencies = [
  "base64",
  "bytes",
@@ -809,7 +816,6 @@ dependencies = [
  "jsonpath_lib",
  "k8s-openapi",
  "kube-core",
- "kube-derive",
  "openssl",
  "pem",
  "pin-project 1.0.8",
@@ -827,10 +833,11 @@ dependencies = [
 
 [[package]]
 name = "kube-core"
-version = "0.60.0"
+version = "0.63.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "04ccd59635e9b21353da8d4a394bb5d3473b5965ed44496c8f857281b0625ffe"
+checksum = "a91e572d244436fbc0d0b5a4829d96b9d623e08eb6b5d1e80418c1fab10b162a"
 dependencies = [
+ "chrono",
  "form_urlencoded",
  "http",
  "json-patch",
@@ -843,9 +850,9 @@ dependencies = [
 
 [[package]]
 name = "kube-derive"
-version = "0.60.0"
+version = "0.63.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "e4191660b8e26f6e6cb06f21b5372bdbc2c76b54f7c3d65e7a8c8708f9c36ed5"
+checksum = "2034f57f3db36978ef366f45f1e263e623d9a6a8fcc6a6b1ef8879a213e1d2c4"
 dependencies = [
  "darling",
  "proc-macro2",
@@ -856,16 +863,16 @@ dependencies = [
 
 [[package]]
 name = "kube-runtime"
-version = "0.60.0"
+version = "0.63.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "eec378b03890f9f2bfa9448a51aa0f6a4299f6bb2ed0d180330e628c7a395918"
+checksum = "6018cf8410f9d460be3a3ac35deef63b71c860c368016d7bf6871994343728b4"
 dependencies = [
  "dashmap",
  "derivative",
  "futures",
  "json-patch",
  "k8s-openapi",
- "kube",
+ "kube-client",
  "pin-project 1.0.8",
  "serde",
  "serde_json",
@@ -884,9 +891,9 @@ checksum = "e2abad23fbc42b3700f2f279844dc832adb2b2eb069b2df918f455c4e18cc646"
 
 [[package]]
 name = "libc"
-version = "0.2.104"
+version = "0.2.106"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "7b2f96d100e1cf1929e7719b7edb3b90ab5298072638fccd77be9ce942ecdfce"
+checksum = "a60553f9a9e039a333b4e9b20573b9e9b9c0bb3a11e201ccc48ef4283456d673"
 
 [[package]]
 name = "linked-hash-map"
@@ -905,9 +912,9 @@ dependencies = [
 
 [[package]]
 name = "matchers"
-version = "0.0.1"
+version = "0.1.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "f099785f7595cc4b4553a174ce30dd7589ef93391ff414dbb67f62392b9e0ce1"
+checksum = "8263075bb86c5a1b1427b5ae862e8889656f126e9f77c484496e8b47cf5c5558"
 dependencies = [
  "regex-automata",
 ]
@@ -959,7 +966,6 @@ dependencies = [
  "anyhow",
  "indoc",
  "integration-test-commons",
- "k8s-openapi",
  "serde",
  "serde_json",
  "serde_yaml",
@@ -990,7 +996,6 @@ version = "0.1.0"
 dependencies = [
  "anyhow",
  "integration-test-commons",
- "k8s-openapi",
  "reqwest",
  "serde",
  "serde_json",
@@ -1107,19 +1112,18 @@ version = "0.1.0"
 dependencies = [
  "anyhow",
  "integration-test-commons",
- "k8s-openapi",
  "reqwest",
  "serde",
  "serde_json",
  "serde_yaml",
- "stackable-opa-crd",
+ "stackable-opa-crd 0.5.0-nightly",
 ]
 
 [[package]]
 name = "openssl"
-version = "0.10.36"
+version = "0.10.38"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "8d9facdb76fec0b73c406f125d44d86fdad818d66fef0531eec9233ca425ff4a"
+checksum = "0c7ae222234c30df141154f159066c5093ff73b63204dcda7121eb082fc56a95"
 dependencies = [
  "bitflags",
  "cfg-if",
@@ -1137,9 +1141,9 @@ checksum = "28988d872ab76095a6e6ac88d99b54fd267702734fd7ffe610ca27f533ddb95a"
 
 [[package]]
 name = "openssl-sys"
-version = "0.9.67"
+version = "0.9.70"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "69df2d8dfc6ce3aaf44b40dec6f487d5a886516cf6879c49e98e0710f310a058"
+checksum = "c6517987b3f8226b5da3661dad65ff7f300cc59fb5ea8333ca191fc65fde3edf"
 dependencies = [
  "autocfg",
  "cc",
@@ -1228,15 +1232,15 @@ checksum = "8b870d8c151b6f2fb93e84a13146138f05d02ed11c7e7c54f8826aaaf7c9f184"
 
 [[package]]
 name = "pkg-config"
-version = "0.3.20"
+version = "0.3.22"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "7c9b1041b4387893b91ee6746cddfc28516aff326a3519fb2adf820932c5e6cb"
+checksum = "12295df4f294471248581bc09bef3c38a5e46f1e36d6a37353621a0c6c357e1f"
 
 [[package]]
 name = "ppv-lite86"
-version = "0.2.14"
+version = "0.2.15"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "c3ca011bd0129ff4ae15cd04c4eef202cadf6c51c21e47aba319b4e0501db741"
+checksum = "ed0cfbc8191465bed66e1718596ee0b0b35d5ee1f41c5df2189d0fe8bde535ba"
 
 [[package]]
 name = "proc-macro-error"
@@ -1276,32 +1280,17 @@ checksum = "bc881b2c22681370c6a780e47af9840ef841837bc98118431d4e1868bd0c1086"
 
 [[package]]
 name = "proc-macro2"
-version = "1.0.30"
+version = "1.0.32"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "edc3358ebc67bc8b7fa0c007f945b0b18226f78437d61bec735a9eb96b61ee70"
+checksum = "ba508cc11742c0dc5c1659771673afbab7a0efab23aa17e854cbab0837ed0b43"
 dependencies = [
  "unicode-xid",
 ]
 
 [[package]]
 name = "product-config"
-version = "0.1.0"
-source = "git+https://github.com/stackabletech/product-config.git?tag=0.1.0#2c8f66264cceca02d0a7ecb413435041cd7d0ca6"
-dependencies = [
- "java-properties",
- "regex",
- "schemars",
- "semver",
- "serde",
- "serde_json",
- "serde_yaml",
- "thiserror",
-]
-
-[[package]]
-name = "product-config"
 version = "0.2.0-nightly"
-source = "git+https://github.com/stackabletech/product-config.git?branch=main#53c4bac3aa52bf61f5cef4fc47447be67749c3ce"
+source = "git+https://github.com/stackabletech/product-config.git?branch=main#97734dfa78c5e96922b2fc99bbd0cf2a1b7ac89d"
 dependencies = [
  "java-properties",
  "regex",
@@ -1710,7 +1699,6 @@ version = "0.1.0"
 dependencies = [
  "anyhow",
  "integration-test-commons",
- "k8s-openapi",
  "serde",
  "serde_yaml",
  "stackable-spark-crd",
@@ -1727,39 +1715,32 @@ dependencies = [
 
 [[package]]
 name = "stackable-hive-crd"
-version = "0.1.0-nightly"
-source = "git+https://github.com/stackabletech/hive-operator.git?branch=main#af45d2cd9a5ae505f8a8a9d75741ec4686d7650f"
+version = "0.2.0-nightly"
+source = "git+https://github.com/stackabletech/hive-operator.git?branch=main#653234797c2303b9ce6731db158161dd38910556"
 dependencies = [
  "duplicate",
- "k8s-openapi",
- "kube",
- "product-config 0.2.0-nightly",
- "schemars",
  "semver",
  "serde",
  "serde_json",
- "stackable-operator 0.2.3-nightly",
- "strum 0.21.0",
- "strum_macros 0.21.1",
+ "stackable-operator 0.3.0",
+ "strum 0.22.0",
+ "strum_macros 0.22.0",
  "thiserror",
  "tracing",
 ]
 
 [[package]]
 name = "stackable-kafka-crd"
-version = "0.3.0-nightly"
-source = "git+https://github.com/stackabletech/kafka-operator.git?branch=main#0f80af923413c7407f79bb394f41e000007dcadc"
+version = "0.4.0-nightly"
+source = "git+https://github.com/stackabletech/kafka-operator.git?branch=main#73e5582f05422a7719bf48b0ad1527f07335c4ee"
 dependencies = [
  "duplicate",
- "k8s-openapi",
- "kube",
- "schemars",
  "semver",
  "serde",
  "serde_json",
- "stackable-opa-crd",
- "stackable-operator 0.2.3-nightly",
- "stackable-zookeeper-crd",
+ "stackable-opa-crd 0.4.1",
+ "stackable-operator 0.3.0",
+ "stackable-zookeeper-crd 0.4.1",
  "strum 0.22.0",
  "strum_macros 0.22.0",
  "thiserror",
@@ -1767,18 +1748,14 @@ dependencies = [
 
 [[package]]
 name = "stackable-monitoring-crd"
-version = "0.3.0-nightly"
-source = "git+https://github.com/stackabletech/monitoring-operator.git?branch=main#16550187dc4ae51dc8e8bca62bf3895b1427a9d0"
+version = "0.4.0-nightly"
+source = "git+https://github.com/stackabletech/monitoring-operator.git?branch=main#89205a41057a81e0d5a60dbb59e9b4823302b3fa"
 dependencies = [
- "k8s-openapi",
- "kube",
- "product-config 0.1.0",
- "schemars",
  "semver",
  "serde",
  "serde_json",
- "stackable-operator 0.2.3-nightly",
- "strum 0.21.0",
+ "stackable-operator 0.3.0",
+ "strum 0.22.0",
  "strum_macros 0.22.0",
  "thiserror",
  "tracing",
@@ -1786,38 +1763,48 @@ dependencies = [
 
 [[package]]
 name = "stackable-nifi-crd"
-version = "0.3.0-nightly"
-source = "git+https://github.com/stackabletech/nifi-operator.git?branch=main#7ad3b18fb02a5059f60f3f8a062d326b3be0df73"
+version = "0.4.0-nightly"
+source = "git+https://github.com/stackabletech/nifi-operator.git?branch=main#7fd0b5f2762d44013e3f784481a49ee6055dc561"
 dependencies = [
- "k8s-openapi",
- "kube",
- "product-config 0.1.0",
- "schemars",
  "semver",
  "serde",
  "serde_json",
  "serde_yaml",
- "stackable-operator 0.2.3-nightly",
- "stackable-zookeeper-crd",
+ "stackable-operator 0.3.0",
+ "stackable-zookeeper-crd 0.4.1",
  "strum 0.21.0",
  "strum_macros 0.21.1",
 ]
 
 [[package]]
 name = "stackable-opa-crd"
-version = "0.4.1-nightly"
-source = "git+https://github.com/stackabletech/opa-operator.git?branch=main#f5fa7daf6f439c5c64f4da828fa5c761ba3af4ff"
+version = "0.4.1"
+source = "git+https://github.com/stackabletech/opa-operator.git?tag=0.4.1#ebe2c0b59abb5e959508fd1af0f0360426e49cdb"
 dependencies = [
- "k8s-openapi",
- "kube",
  "rand 0.8.4",
- "schemars",
  "semver",
  "serde",
  "serde_json",
- "stackable-operator 0.2.3-nightly",
- "strum 0.21.0",
- "strum_macros 0.21.1",
+ "stackable-operator 0.3.0",
+ "strum 0.22.0",
+ "strum_macros 0.22.0",
+ "thiserror",
+ "tracing",
+ "url",
+]
+
+[[package]]
+name = "stackable-opa-crd"
+version = "0.5.0-nightly"
+source = "git+https://github.com/stackabletech/opa-operator.git?branch=main#b0008ca4a983176763b5a86e6a199044a6ba2322"
+dependencies = [
+ "rand 0.8.4",
+ "semver",
+ "serde",
+ "serde_json",
+ "stackable-operator 0.3.0",
+ "strum 0.22.0",
+ "strum_macros 0.22.0",
  "thiserror",
  "tracing",
  "url",
@@ -1825,8 +1812,8 @@ dependencies = [
 
 [[package]]
 name = "stackable-operator"
-version = "0.2.2"
-source = "git+https://github.com/stackabletech/operator-rs.git?tag=0.2.2#a4d00c8cfb72c70ce6a2bf77334375a00aea3300"
+version = "0.3.0"
+source = "git+https://github.com/stackabletech/operator-rs.git?tag=0.3.0#a0a1d10260f7921d436a0cd7ba6ce957368e42fb"
 dependencies = [
  "async-trait",
  "backoff",
@@ -1838,17 +1825,16 @@ dependencies = [
  "json-patch",
  "k8s-openapi",
  "kube",
- "kube-runtime",
  "lazy_static",
- "product-config 0.1.0",
+ "product-config",
  "rand 0.8.4",
  "regex",
  "schemars",
  "serde",
  "serde_json",
  "serde_yaml",
- "strum 0.21.0",
- "strum_macros 0.21.1",
+ "strum 0.22.0",
+ "strum_macros 0.22.0",
  "thiserror",
  "tokio",
  "tracing",
@@ -1859,8 +1845,8 @@ dependencies = [
 
 [[package]]
 name = "stackable-operator"
-version = "0.2.3-nightly"
-source = "git+https://github.com/stackabletech/operator-rs.git?branch=main#e3de43f5bd24df9c68d26cd9f0989afd3ff93e84"
+version = "0.4.0-nightly"
+source = "git+https://github.com/stackabletech/operator-rs.git?branch=main#b7262fb73b8c517683f3c55ba60358e1d94d2848"
 dependencies = [
  "async-trait",
  "backoff",
@@ -1872,16 +1858,15 @@ dependencies = [
  "json-patch",
  "k8s-openapi",
  "kube",
- "kube-runtime",
  "lazy_static",
- "product-config 0.2.0-nightly",
+ "product-config",
  "rand 0.8.4",
  "regex",
  "schemars",
  "serde",
  "serde_json",
  "serde_yaml",
- "strum 0.21.0",
+ "strum 0.22.0",
  "strum_macros 0.22.0",
  "thiserror",
  "tokio",
@@ -1893,43 +1878,51 @@ dependencies = [
 
 [[package]]
 name = "stackable-spark-common"
-version = "0.3.0-nightly"
-source = "git+https://github.com/stackabletech/spark-operator.git?rev=8047f336fd85b5e37b757a2a6cf6d590dbae2607#8047f336fd85b5e37b757a2a6cf6d590dbae2607"
+version = "0.4.0-nightly"
+source = "git+https://github.com/stackabletech/spark-operator.git?branch=main#2a85fad59181bee9ca66db856b45263338359969"
 
 [[package]]
 name = "stackable-spark-crd"
-version = "0.3.0-nightly"
-source = "git+https://github.com/stackabletech/spark-operator.git?rev=8047f336fd85b5e37b757a2a6cf6d590dbae2607#8047f336fd85b5e37b757a2a6cf6d590dbae2607"
+version = "0.4.0-nightly"
+source = "git+https://github.com/stackabletech/spark-operator.git?branch=main#2a85fad59181bee9ca66db856b45263338359969"
 dependencies = [
- "k8s-openapi",
- "kube",
- "product-config 0.1.0",
- "schemars",
  "semver",
  "serde",
  "serde_json",
  "serde_yaml",
- "stackable-operator 0.2.2",
+ "stackable-operator 0.3.0",
  "stackable-spark-common",
- "strum 0.21.0",
- "strum_macros 0.21.1",
+ "strum 0.22.0",
+ "strum_macros 0.22.0",
  "thiserror",
 ]
 
 [[package]]
 name = "stackable-zookeeper-crd"
-version = "0.4.1-nightly"
-source = "git+https://github.com/stackabletech/zookeeper-operator.git?branch=main#67de5a2cd4e8f4d550bd4ae42c15fedeffffe986"
+version = "0.4.1"
+source = "git+https://github.com/stackabletech/zookeeper-operator.git?tag=0.4.1#a95a0cb793d07ea9a7a8fcfc6cf4c4ea16452284"
 dependencies = [
  "duplicate",
- "k8s-openapi",
- "kube",
- "product-config 0.2.0-nightly",
- "schemars",
  "semver",
  "serde",
  "serde_json",
- "stackable-operator 0.2.3-nightly",
+ "stackable-operator 0.3.0",
+ "strum 0.22.0",
+ "strum_macros 0.22.0",
+ "thiserror",
+ "tracing",
+]
+
+[[package]]
+name = "stackable-zookeeper-crd"
+version = "0.5.0-nightly"
+source = "git+https://github.com/stackabletech/zookeeper-operator.git?branch=main#46c1196d752c7ce85572f037bd633078ff990c87"
+dependencies = [
+ "duplicate",
+ "semver",
+ "serde",
+ "serde_json",
+ "stackable-operator 0.3.0",
  "strum 0.22.0",
  "strum_macros 0.22.0",
  "thiserror",
@@ -1953,15 +1946,15 @@ name = "strum"
 version = "0.21.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "aaf86bbcfd1fa9670b7a129f64fc0c9fcbbfe4f1bc4210e9e98fe71ffc12cde2"
-dependencies = [
- "strum_macros 0.21.1",
-]
 
 [[package]]
 name = "strum"
 version = "0.22.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "f7ac893c7d471c8a21f31cfe213ec4f6d9afeed25537c772e08ef3f005f8729e"
+dependencies = [
+ "strum_macros 0.22.0",
+]
 
 [[package]]
 name = "strum_macros"
@@ -1989,9 +1982,9 @@ dependencies = [
 
 [[package]]
 name = "syn"
-version = "1.0.80"
+version = "1.0.81"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "d010a1623fbd906d51d650a9916aaefc05ffa0e4053ff7fe601167f3e715d194"
+checksum = "f2afee18b8beb5a596ecb4a2dce128c719b4ba399d34126b9e4396e3f9860966"
 dependencies = [
  "proc-macro2",
  "quote",
@@ -2078,9 +2071,9 @@ checksum = "cda74da7e1a664f795bb1f8a87ec406fb89a02522cf6e50620d016add6dbbf5c"
 
 [[package]]
 name = "tokio"
-version = "1.12.0"
+version = "1.13.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "c2c2416fdedca8443ae44b4527de1ea633af61d8f7169ffa6e72c5b53d24efcc"
+checksum = "588b2d10a336da58d877567cd8fb8a14b463e2104910f8132cd054b4b96e29ee"
 dependencies = [
  "autocfg",
  "bytes",
@@ -2107,9 +2100,9 @@ dependencies = [
 
 [[package]]
 name = "tokio-macros"
-version = "1.5.0"
+version = "1.5.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "b2dd85aeaba7b68df939bd357c6afb36c87951be9e80bf9c859f2fc3e9fca0fd"
+checksum = "114383b041aa6212c579467afa0075fbbdd0718de036100bc0ba7961d8cb9095"
 dependencies = [
  "proc-macro2",
  "quote",
@@ -2128,9 +2121,9 @@ dependencies = [
 
 [[package]]
 name = "tokio-util"
-version = "0.6.8"
+version = "0.6.9"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "08d3725d3efa29485e87311c5b699de63cde14b00ed4d256b8318aa30ca452cd"
+checksum = "9e99e1983e5d376cd8eb4b66604d2e99e79f5bd988c3055891dcd8c9e2604cc0"
 dependencies = [
  "bytes",
  "futures-core",
@@ -2243,35 +2236,21 @@ dependencies = [
 ]
 
 [[package]]
-name = "tracing-serde"
-version = "0.1.2"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "fb65ea441fbb84f9f6748fd496cf7f63ec9af5bca94dd86456978d055e8eb28b"
-dependencies = [
- "serde",
- "tracing-core",
-]
-
-[[package]]
 name = "tracing-subscriber"
-version = "0.2.25"
+version = "0.3.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "0e0d2eaa99c3c2e41547cfa109e910a68ea03823cccad4a0525dcbc9b01e8c71"
+checksum = "80a4ddde70311d8da398062ecf6fc2c309337de6b0f77d6c27aff8d53f6fca52"
 dependencies = [
  "ansi_term 0.12.1",
- "chrono",
  "lazy_static",
  "matchers",
  "regex",
- "serde",
- "serde_json",
  "sharded-slab",
  "smallvec",
  "thread_local",
  "tracing",
  "tracing-core",
  "tracing-log",
- "tracing-serde",
 ]
 
 [[package]]
@@ -2512,11 +2491,10 @@ dependencies = [
  "anyhow",
  "indoc",
  "integration-test-commons",
- "k8s-openapi",
  "reqwest",
  "semver",
  "serde",
  "serde_json",
  "serde_yaml",
- "stackable-zookeeper-crd",
+ "stackable-zookeeper-crd 0.5.0-nightly",
 ]

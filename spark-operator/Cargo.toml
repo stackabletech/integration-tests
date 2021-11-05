@@ -12,7 +12,4 @@ anyhow = "1.0"
 integration-test-commons = { path = "../commons" }
 serde = "1.0"
 serde_yaml = "0.8"
-stackable-spark-crd = { git = "https://github.com/stackabletech/spark-operator.git", rev = "8047f336fd85b5e37b757a2a6cf6d590dbae2607" }
-
-[dev-dependencies]
-k8s-openapi = { version = "0.13", default-features = false, features = ["v1_22"] }
+stackable-spark-crd = { git = "https://github.com/stackabletech/spark-operator.git", branch = "main" }
