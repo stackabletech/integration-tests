@@ -1,0 +1,15 @@
+[package]
+authors = ["Siegfried Weber <mail@siegfriedweber.net>"]
+description = "Integration tests for the Stackable Operator for Apache Superset"
+edition = "2021"
+license = "OSL-3.0"
+name = "superset-operator-integration-tests"
+repository = "https://github.com/stackabletech/superset-operator-integration-tests"
+version = "0.1.0"
+
+[dependencies]
+anyhow = "1.0"
+indoc = "1.0"
+integration-test-commons = { path = "../commons" }
+serde_yaml = "0.8"
+stackable-superset-crd = { git = "https://github.com/stackabletech/superset-operator.git", branch = "setup"}
