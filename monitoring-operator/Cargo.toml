@@ -15,6 +15,3 @@ serde = "1.0"
 serde_json = "1.0"
 serde_yaml = "0.8"
 stackable-monitoring-crd = { git = "https://github.com/stackabletech/monitoring-operator.git", branch = "main"}
-
-[dev-dependencies]
-k8s-openapi = { version = "0.13", default-features = false, features = ["v1_22"] }

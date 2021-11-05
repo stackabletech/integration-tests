@@ -2,11 +2,10 @@
 
 use super::prelude::{KubeClient, TestKubeClient};
 use anyhow::Result;
-use kube::CustomResourceExt;
-use kube_derive::CustomResource;
 use once_cell::sync::OnceCell;
-use schemars::JsonSchema;
 use serde::{Deserialize, Serialize};
+use stackable_operator::kube::{CustomResource, CustomResourceExt};
+use stackable_operator::schemars::{self, JsonSchema};
 use std::collections::HashMap;
 
 const REPO_SPEC: &str = "
@@ -27,7 +26,10 @@ const REPO_SPEC: &str = "
     kind = "Repository",
     group = "stable.stackable.de",
     version = "v1",
-    namespaced
+    namespaced,
+    kube_core = "stackable_operator::kube::core",
+    k8s_openapi = "stackable_operator::k8s_openapi",
+    schemars = "stackable_operator::schemars"
 )]
 pub struct RepositorySpec {
     pub repo_type: RepoType,

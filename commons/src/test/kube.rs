@@ -4,22 +4,24 @@
 
 use anyhow::{anyhow, Result};
 use futures::{StreamExt, TryStreamExt};
-use k8s_openapi::api::core::v1::{Node, NodeCondition, Pod, PodCondition, Taint};
-use k8s_openapi::apiextensions_apiserver::pkg::apis::apiextensions::v1::{
-    CustomResourceDefinition, CustomResourceDefinitionCondition,
-};
-use kube::api::{
-    Api, DeleteParams, ListParams, ObjectList, Patch, PatchParams, PostParams, WatchEvent,
-};
-use kube::{Client, Resource, ResourceExt};
 use serde::de::DeserializeOwned;
 use serde::Serialize;
 use serde_json::Value;
+use stackable_operator::k8s_openapi::api::core::v1::{
+    Node, NodeCondition, Pod, PodCondition, Taint,
+};
+use stackable_operator::k8s_openapi::apiextensions_apiserver::pkg::apis::apiextensions::v1::{
+    CustomResourceDefinition, CustomResourceDefinitionCondition,
+};
+use stackable_operator::kube::api::{
+    Api, DeleteParams, ListParams, ObjectList, Patch, PatchParams, PostParams, WatchEvent,
+};
+use stackable_operator::kube::{Client, Resource, ResourceExt};
 use std::{fmt::Debug, time::Duration};
 use tokio::runtime::Runtime;
 use uuid::Uuid;
 
-pub use kube::api::LogParams;
+pub use stackable_operator::kube::api::LogParams;
 
 /// A client for interacting with the Kubernetes API
 ///

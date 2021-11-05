@@ -1,10 +1,10 @@
 use crate::test::prelude::{Node, Pod, TestKubeClient};
 
 use anyhow::{anyhow, Result};
-use k8s_openapi::apimachinery::pkg::apis::meta::v1::Time;
-use kube::Resource;
 use serde::de::DeserializeOwned;
 use serde::Serialize;
+use stackable_operator::k8s_openapi::apimachinery::pkg::apis::meta::v1::Time;
+use stackable_operator::kube::Resource;
 use std::collections::BTreeMap;
 use std::fmt::Debug;
 use std::thread;

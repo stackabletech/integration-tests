@@ -8,7 +8,10 @@
 - The CDN jsdelivr.net is used instead of githubusercontent.com for the Stackable repository because
   it serves the content with the content type "application/gzip" which is expected by the Stackable
   Agent ([#32]).
+- Dependency to `operator-rs` reestablished and reexports for `kube`, `k8s-openapi`, and `schemars`
+  used ([#12]).
 
+[#12]: https://github.com/stackabletech/integration-tests/pull/12
 [#32]: https://github.com/stackabletech/integration-test-commons/pull/32
 
 ## [0.5.0] - 2021-09-22
