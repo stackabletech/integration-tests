@@ -1,9 +1,7 @@
 use anyhow::Result;
 use integration_test_commons::{
-    operator::setup::{
-        TestCluster, TestClusterLabels, TestClusterOptions, TestClusterTimeouts,
-    },
-    test::prelude::{Service, TemporaryResource, TestKubeClient, Pod},
+    operator::setup::{TestCluster, TestClusterLabels, TestClusterOptions, TestClusterTimeouts},
+    test::prelude::{Pod, Service, TemporaryResource, TestKubeClient},
 };
 use stackable_druid_crd::{DruidCluster, APP_NAME};
 use std::time::Duration;
@@ -97,7 +95,9 @@ pub fn build_druid_cluster(
                   plaintextPort: 8888
                 replicas: {replicas}
         ",
-        name = name, version = version, replicas = replicas
+        name = name,
+        version = version,
+        replicas = replicas
     );
 
     Ok((serde_yaml::from_str(spec)?, replicas * 5))
@@ -111,7 +111,13 @@ pub struct TestService<'a> {
 }
 
 impl<'a> TestService<'a> {
-    pub fn new(client: &'a TestKubeClient, name: &str, component: &str, pod_port: u16, node_port: u16) -> Self {
+    pub fn new(
+        client: &'a TestKubeClient,
+        name: &str,
+        component: &str,
+        pod_port: u16,
+        node_port: u16,
+    ) -> Self {
         TestService {
             service: TemporaryResource::new(
                 client,
@@ -131,9 +137,15 @@ impl<'a> TestService<'a> {
                           targetPort: {pod_port}
                           nodePort: {node_port}
                     ",
-                    svc_name = format!("{}-{}", name.to_ascii_lowercase(), component.to_ascii_lowercase()),
-                    name = name, component = component,
-                    pod_port = pod_port, node_port = node_port
+                    svc_name = format!(
+                        "{}-{}",
+                        name.to_ascii_lowercase(),
+                        component.to_ascii_lowercase()
+                    ),
+                    name = name,
+                    component = component,
+                    pod_port = pod_port,
+                    node_port = node_port
                 ),
             ),
             node_port,
@@ -143,7 +155,14 @@ impl<'a> TestService<'a> {
     /// For the defined service, find all applicable pods and check their health.
     pub fn conduct_healthcheck(&self, client: &'a TestKubeClient) -> Result<()> {
         let mut selectors = vec![];
-        let selector_map = self.service.spec.as_ref().unwrap().selector.as_ref().unwrap();
+        let selector_map = self
+            .service
+            .spec
+            .as_ref()
+            .unwrap()
+            .selector
+            .as_ref()
+            .unwrap();
         for (k, v) in selector_map {
             selectors.push(format!("{}={}", k, v));
         }
@@ -153,9 +172,10 @@ impl<'a> TestService<'a> {
             let host_ip = p.status.unwrap().host_ip.unwrap();
             let url = format!("http://{}:{}/status/health", host_ip, self.node_port);
             println!("Requesting [{}]", url);
-            let mut res = reqwest::blocking::get(&url)?;
+            let res = reqwest::blocking::get(&url)?;
             let resp = res.text()?;
-            assert_eq!(resp, "true");
+            println!("Response: {}", resp);
+            assert_eq!(resp, "true", "Response from the healthcheck wasn't 'true'");
         }
         Ok(())
     }
