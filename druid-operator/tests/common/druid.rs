@@ -1,6 +1,9 @@
 use anyhow::Result;
-use integration_test_commons::operator::setup::{
-    TestCluster, TestClusterLabels, TestClusterOptions, TestClusterTimeouts,
+use integration_test_commons::{
+    operator::setup::{
+        TestCluster, TestClusterLabels, TestClusterOptions, TestClusterTimeouts,
+    },
+    test::prelude::{Service, TemporaryResource, TestKubeClient, Pod, Endpoints},
 };
 use stackable_druid_crd::{DruidCluster, APP_NAME};
 use std::time::Duration;
@@ -94,8 +97,62 @@ pub fn build_druid_cluster(
                   plaintextPort: 8888
                 replicas: {replicas}
         ",
-        name=name, version=version, replicas=replicas
+        name = name, version = version, replicas = replicas
     );
 
     Ok((serde_yaml::from_str(spec)?, replicas * 5))
+}
+
+pub struct TestService<'a> {
+    service: TemporaryResource<'a, Service>,
+    node_port: u16,
+}
+
+impl<'a> TestService<'a> {
+    pub fn new(client: &'a TestKubeClient, name: &str, component: &str, pod_port: u16, node_port: u16) -> Self {
+        TestService {
+            service: TemporaryResource::new(
+                client,
+                &format!(
+                    "
+                    apiVersion: v1
+                    kind: Service
+                    metadata:
+                      name: {svc_name}
+                    spec:
+                      type: NodePort
+                      selector:
+                        app.kubernetes.io/name: {name}
+                        app.kubernetes.io/component: {component}
+                      ports:
+                        - port: {pod_port}
+                          targetPort: {pod_port}
+                          nodePort: {node_port}
+                    ",
+                    svc_name = format!("{}-{}", name.to_ascii_lowercase(), component.to_ascii_lowercase()),
+                    name = name, component = component,
+                    pod_port = pod_port, node_port = node_port
+                ),
+            ),
+            node_port: node_port,
+        }
+    }
+
+    pub fn scan_ports(&self, client: &'a TestKubeClient) -> Result<()> {
+        let mut selectors = vec![];
+        for (k, v) in self.service.spec.as_ref().unwrap().selector.as_ref().unwrap() {
+            selectors.push(format!("{}={}", k, v));
+        }
+        let selector = selectors.join(",");
+        let pods = client.list_labeled::<Pod>(&selector);
+        for p in pods {
+            let host_ip = p.status.unwrap().host_ip.unwrap();
+            let url = format!("http://{}:{}/status/health", host_ip, self.node_port);
+            println!("Requesting [{}]", url);
+            let mut res = reqwest::blocking::get(&url)?;
+            let resp = res.text()?;
+            assert_eq!(resp, "true");
+        }
+        Ok(())
+    }
 }

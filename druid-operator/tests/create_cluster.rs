@@ -1,8 +1,8 @@
 pub mod common;
 
 use anyhow::{anyhow, Result};
-use common::druid::{build_druid_cluster, build_test_cluster};
-use integration_test_commons::test::prelude::Pod;
+use common::druid::{build_druid_cluster, build_test_cluster, TestService};
+use integration_test_commons::test::prelude::{Pod, Endpoints};
 use std::process::Command;
 use std::{thread, time};
 
@@ -15,7 +15,7 @@ fn test_create_1_server_0_22_0() -> Result<()> {
     cluster.create_or_update(&druid_cr, expected_pod_count)?;
 
     // Wait for the metastore to have started fully
-    let delay_time = time::Duration::from_secs(40);
+    let delay_time = time::Duration::from_secs(3);
     thread::sleep(delay_time);
 
     let created_pods = cluster.list::<Pod>(None);
@@ -28,6 +28,21 @@ fn test_create_1_server_0_22_0() -> Result<()> {
             actual_pod_count
         ));
     }
+
+    let s = TestService::new(&cluster.client, "druid", "coordinator", 8081, 30081);
+    s.scan_ports(&cluster.client);
+    let s = TestService::new(&cluster.client, "druid", "broker", 8082, 30082);
+    s.scan_ports(&cluster.client);
+    let s = TestService::new(&cluster.client, "druid", "historical", 8083, 30083);
+    s.scan_ports(&cluster.client);
+    let s = TestService::new(&cluster.client, "druid", "middleManager", 8091, 30091);
+    s.scan_ports(&cluster.client);
+    let s = TestService::new(&cluster.client, "druid", "router", 8888, 30888);
+    s.scan_ports(&cluster.client);
+
+    let delay_time = time::Duration::from_secs(30);
+    thread::sleep(delay_time);
+
 
     /*
     // Check if the metastore is running on the pod
