@@ -2,8 +2,7 @@ pub mod common;
 
 use anyhow::{anyhow, Result};
 use common::druid::{build_druid_cluster, build_test_cluster, TestService};
-use integration_test_commons::test::prelude::{Pod, Endpoints};
-use std::process::Command;
+use integration_test_commons::test::prelude::{Pod};
 use std::{thread, time};
 
 #[test]
@@ -29,16 +28,17 @@ fn test_create_1_cluster_0_22_0() -> Result<()> {
         ));
     }
 
+    // for each process/pod, create a NodePort service and check the health status
     let s = TestService::new(&cluster.client, "druid", "coordinator", 8081, 30081);
-    s.scan_ports(&cluster.client);
+    s.conduct_healthcheck(&cluster.client);
     let s = TestService::new(&cluster.client, "druid", "broker", 8082, 30082);
-    s.scan_ports(&cluster.client);
+    s.conduct_healthcheck(&cluster.client);
     let s = TestService::new(&cluster.client, "druid", "historical", 8083, 30083);
-    s.scan_ports(&cluster.client);
+    s.conduct_healthcheck(&cluster.client);
     let s = TestService::new(&cluster.client, "druid", "middleManager", 8091, 30091);
-    s.scan_ports(&cluster.client);
+    s.conduct_healthcheck(&cluster.client);
     let s = TestService::new(&cluster.client, "druid", "router", 8888, 30888);
-    s.scan_ports(&cluster.client);
+    s.conduct_healthcheck(&cluster.client);
 
     let delay_time = time::Duration::from_secs(30);
     thread::sleep(delay_time);

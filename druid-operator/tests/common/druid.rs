@@ -3,7 +3,7 @@ use integration_test_commons::{
     operator::setup::{
         TestCluster, TestClusterLabels, TestClusterOptions, TestClusterTimeouts,
     },
-    test::prelude::{Service, TemporaryResource, TestKubeClient, Pod, Endpoints},
+    test::prelude::{Service, TemporaryResource, TestKubeClient, Pod},
 };
 use stackable_druid_crd::{DruidCluster, APP_NAME};
 use std::time::Duration;
@@ -136,13 +136,15 @@ impl<'a> TestService<'a> {
                     pod_port = pod_port, node_port = node_port
                 ),
             ),
-            node_port: node_port,
+            node_port,
         }
     }
 
-    pub fn scan_ports(&self, client: &'a TestKubeClient) -> Result<()> {
+    /// For the defined service, find all applicable pods and check their health.
+    pub fn conduct_healthcheck(&self, client: &'a TestKubeClient) -> Result<()> {
         let mut selectors = vec![];
-        for (k, v) in self.service.spec.as_ref().unwrap().selector.as_ref().unwrap() {
+        let selector_map = self.service.spec.as_ref().unwrap().selector.as_ref().unwrap();
+        for (k, v) in selector_map {
             selectors.push(format!("{}={}", k, v));
         }
         let selector = selectors.join(",");
