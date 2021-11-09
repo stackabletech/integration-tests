@@ -7,7 +7,7 @@ use std::process::Command;
 use std::{thread, time};
 
 #[test]
-fn test_create_1_server_0_22_0() -> Result<()> {
+fn test_create_1_cluster_0_22_0() -> Result<()> {
     let version = "0.22.0";
     let mut cluster = build_test_cluster();
 

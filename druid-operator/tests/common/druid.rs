@@ -103,6 +103,8 @@ pub fn build_druid_cluster(
     Ok((serde_yaml::from_str(spec)?, replicas * 5))
 }
 
+/// This is a helper service to expose the ports of the processes in the cluster as node ports,
+/// so we can access them from outside of kubernetes to check the /status/health endpoint.
 pub struct TestService<'a> {
     service: TemporaryResource<'a, Service>,
     node_port: u16,
