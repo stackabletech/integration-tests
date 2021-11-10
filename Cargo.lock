@@ -2099,7 +2099,9 @@ dependencies = [
  "anyhow",
  "indoc",
  "integration-test-commons",
+ "reqwest",
  "serde_yaml",
+ "stackable-operator 0.5.0-nightly",
  "stackable-superset-crd",
 ]
 

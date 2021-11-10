@@ -1,7 +1,11 @@
+use std::net::TcpStream;
+
 use crate::common::service::SupersetService;
-use anyhow::Result;
+use anyhow::{anyhow, Context, Result};
 use integration_test_commons::test::kube::TestKubeClient;
-use integration_test_commons::test::prelude::Pod;
+use integration_test_commons::test::prelude::{json, Pod};
+use reqwest::blocking::Client;
+use stackable_operator::kube::ResourceExt;
 
 /// Collect and gather all checks that may be performed on Superset node pods.
 pub fn custom_checks(client: &TestKubeClient, pods: &[Pod]) -> Result<()> {
@@ -9,6 +13,7 @@ pub fn custom_checks(client: &TestKubeClient, pods: &[Pod]) -> Result<()> {
 
     for pod in pods {
         scan_port(&service, pod)?;
+        login(&service, pod)?;
     }
 
     Ok(())
@@ -16,5 +21,37 @@ pub fn custom_checks(client: &TestKubeClient, pods: &[Pod]) -> Result<()> {
 
 /// Scan HTTP port.
 pub fn scan_port(service: &SupersetService, pod: &Pod) -> Result<()> {
-    service.scan_port(pod)
+    let address = service.address(pod);
+
+    TcpStream::connect(&address)
+        .with_context(|| format!("TCP error occurred when connecting to [{}]", address))?;
+
+    Ok(())
+}
+
+/// Login to Superset as admin
+pub fn login(service: &SupersetService, pod: &Pod) -> Result<()> {
+    let client = Client::new();
+
+    let address = service.address(pod);
+
+    let response = client
+        .post(format!("http://{}/api/v1/security/login", address))
+        .json(&json!({
+            "password": "admin",
+            "provider": "db",
+            "refresh": true,
+            "username": "admin"
+        }))
+        .send()?;
+
+    if response.status().is_success() {
+        Ok(())
+    } else {
+        Err(anyhow!(
+            "Login on pod [{}] failed. {:?}",
+            pod.name(),
+            response
+        ))
+    }
 }

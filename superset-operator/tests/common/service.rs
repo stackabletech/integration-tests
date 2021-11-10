@@ -1,7 +1,6 @@
-use anyhow::{Context, Result};
 use indoc::indoc;
 use integration_test_commons::test::prelude::{Pod, Service, TemporaryResource, TestKubeClient};
-use std::{net::TcpStream, thread::sleep, time::Duration};
+use std::{thread::sleep, time::Duration};
 
 pub struct SupersetService<'a> {
     _service: TemporaryResource<'a, Service>,
@@ -42,12 +41,8 @@ impl<'a> SupersetService<'a> {
         }
     }
 
-    pub fn scan_port(&self, pod: &Pod) -> Result<()> {
-        let address = &format!("{}:{}", host_ip(pod), self.node_port);
-        TcpStream::connect(address)
-            .with_context(|| format!("TCP error occurred when connecting to [{}]", address))?;
-
-        Ok(())
+    pub fn address(&self, pod: &Pod) -> String {
+        format!("{}:{}", host_ip(pod), self.node_port)
     }
 }
 
