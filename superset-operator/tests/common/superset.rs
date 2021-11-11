@@ -3,6 +3,7 @@ use indoc::formatdoc;
 use integration_test_commons::operator::setup::{
     TestCluster, TestClusterLabels, TestClusterOptions, TestClusterTimeouts,
 };
+use integration_test_commons::test::prelude::Secret;
 use stackable_operator::k8s_openapi::serde::de::DeserializeOwned;
 use stackable_operator::k8s_openapi::serde::Serialize;
 use stackable_superset_crd::{SupersetCluster, SupersetVersion, APP_NAME};
@@ -27,8 +28,42 @@ pub fn build_test_cluster() -> TestCluster<SupersetCluster> {
     )
 }
 
+/// This returns the secret with the Superset credentials.
+pub fn build_superset_credentials(
+    secret_name: &str,
+    admin_username: &str,
+    admin_password: &str,
+) -> Result<Secret> {
+    let spec = &formatdoc!(
+        "
+            apiVersion: v1
+            kind: Secret
+            metadata:
+              name: {secret_name}
+            type: superset.stackable.tech/superset-credentials
+            stringData:
+              adminUser.username: {admin_username}
+              adminUser.firstname: Superset
+              adminUser.lastname: Admin
+              adminUser.email: admin@superset.com
+              adminUser.password: {admin_password}
+              connections.secretKey: thisISaSECRET_1234
+              connections.sqlalchemyDatabaseUri: postgresql://superset:superset@superset-postgresql/superset
+        ",
+        secret_name = secret_name,
+        admin_username = admin_username,
+        admin_password = admin_password,
+    );
+
+    Ok(serde_yaml::from_str(spec)?)
+}
+
 /// This returns a Superset custom resource.
-pub fn build_superset_cluster(name: &str, version: &SupersetVersion) -> Result<SupersetCluster> {
+pub fn build_superset_cluster(
+    name: &str,
+    version: &SupersetVersion,
+    secret_name: &str,
+) -> Result<SupersetCluster> {
     let spec = &formatdoc!(
         "
             apiVersion: superset.stackable.tech/v1alpha1
@@ -41,16 +76,22 @@ pub fn build_superset_cluster(name: &str, version: &SupersetVersion) -> Result<S
                 roleGroups:
                   default:
                     config:
-                      credentialsSecret: simple-superset-credentials
+                      credentialsSecret: {secret_name}
         ",
         name = name,
-        version = version.to_string()
+        version = version.to_string(),
+        secret_name = secret_name,
     );
 
     Ok(serde_yaml::from_str(spec)?)
 }
 
-pub fn build_command<T>(name: &str, kind: &str, cluster_reference: &str) -> Result<T>
+pub fn build_command<T>(
+    name: &str,
+    kind: &str,
+    cluster_reference: &str,
+    secret_name: &str,
+) -> Result<T>
 where
     T: Clone + Debug + DeserializeOwned + Serialize,
 {
@@ -62,12 +103,13 @@ where
               name: {name}
             spec:
               name: {cluster_reference}
-              credentialsSecret: simple-superset-credentials
+              credentialsSecret: {secret_name}
               loadExamples: false
         ",
         kind = kind,
         name = name,
-        cluster_reference = cluster_reference
+        cluster_reference = cluster_reference,
+        secret_name = secret_name,
     );
 
     Ok(serde_yaml::from_str(&spec)?)

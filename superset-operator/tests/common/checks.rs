@@ -8,12 +8,17 @@ use reqwest::blocking::Client;
 use stackable_operator::kube::ResourceExt;
 
 /// Collect and gather all checks that may be performed on Superset node pods.
-pub fn custom_checks(client: &TestKubeClient, pods: &[Pod]) -> Result<()> {
+pub fn custom_checks(
+    client: &TestKubeClient,
+    pods: &[Pod],
+    admin_username: &str,
+    admin_password: &str,
+) -> Result<()> {
     let service = SupersetService::new(client);
 
     for pod in pods {
         scan_port(&service, pod)?;
-        login(&service, pod)?;
+        login(&service, pod, admin_username, admin_password)?;
     }
 
     Ok(())
@@ -30,7 +35,12 @@ pub fn scan_port(service: &SupersetService, pod: &Pod) -> Result<()> {
 }
 
 /// Login to Superset as admin
-pub fn login(service: &SupersetService, pod: &Pod) -> Result<()> {
+pub fn login(
+    service: &SupersetService,
+    pod: &Pod,
+    admin_username: &str,
+    admin_password: &str,
+) -> Result<()> {
     let client = Client::new();
 
     let address = service.address(pod);
@@ -38,10 +48,10 @@ pub fn login(service: &SupersetService, pod: &Pod) -> Result<()> {
     let response = client
         .post(format!("http://{}/api/v1/security/login", address))
         .json(&json!({
-            "password": "admin",
+            "password": admin_password,
             "provider": "db",
             "refresh": true,
-            "username": "admin"
+            "username": admin_username,
         }))
         .send()?;
 
