@@ -1746,14 +1746,14 @@ dependencies = [
 [[package]]
 name = "stackable-druid-crd"
 version = "0.1.0"
-source = "git+https://github.com/stackabletech/druid-operator.git?branch=start#66a60c114af52f96307e975bd997b8c466ce4cef"
+source = "git+https://github.com/stackabletech/druid-operator.git?branch=main#d7c640b900bc803ae1e74aa75148bed90b5e6cce"
 dependencies = [
  "duplicate",
  "semver",
  "serde",
  "serde_json",
  "stackable-operator 0.4.0",
- "stackable-zookeeper-crd 0.5.0-nightly (git+https://github.com/stackabletech/zookeeper-operator.git?branch=adapt_to_use_docker_image)",
+ "stackable-zookeeper-crd 0.5.0",
  "strum 0.21.0",
  "strum_macros 0.21.1",
  "thiserror",
@@ -2012,13 +2012,13 @@ dependencies = [
 [[package]]
 name = "stackable-zookeeper-crd"
 version = "0.5.0-nightly"
-source = "git+https://github.com/stackabletech/zookeeper-operator.git?branch=adapt_to_use_docker_image#6ecf8a00852fb4f88f94c4fa52324f1c7ae233a8"
+source = "git+https://github.com/stackabletech/zookeeper-operator.git?branch=main#c36fd91418e73f2fb90ae923f1466fadc4238d74"
 dependencies = [
  "duplicate",
  "semver",
  "serde",
  "serde_json",
- "stackable-operator 0.4.0",
+ "stackable-operator 0.3.0",
  "strum 0.22.0",
  "strum_macros 0.22.0",
  "thiserror",
@@ -2027,14 +2027,14 @@ dependencies = [
 
 [[package]]
 name = "stackable-zookeeper-crd"
-version = "0.5.0-nightly"
-source = "git+https://github.com/stackabletech/zookeeper-operator.git?branch=main#c36fd91418e73f2fb90ae923f1466fadc4238d74"
+version = "0.5.0"
+source = "git+https://github.com/stackabletech/zookeeper-operator.git?tag=0.5.0#45ebcca59ee128af363d0266b83cd3c05a6659a9"
 dependencies = [
  "duplicate",
  "semver",
  "serde",
  "serde_json",
- "stackable-operator 0.3.0",
+ "stackable-operator 0.4.0",
  "strum 0.22.0",
  "strum_macros 0.22.0",
  "thiserror",
@@ -2621,5 +2621,5 @@ dependencies = [
  "serde",
  "serde_json",
  "serde_yaml",
- "stackable-zookeeper-crd 0.5.0-nightly (git+https://github.com/stackabletech/zookeeper-operator.git?branch=main)",
+ "stackable-zookeeper-crd 0.5.0-nightly",
 ]
