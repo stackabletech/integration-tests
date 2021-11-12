@@ -6,13 +6,10 @@ use integration_test_commons::operator::setup::{
 use integration_test_commons::test::prelude::Secret;
 use stackable_operator::k8s_openapi::serde::de::DeserializeOwned;
 use stackable_operator::k8s_openapi::serde::Serialize;
+use stackable_operator::labels::{APP_INSTANCE_LABEL, APP_NAME_LABEL, APP_VERSION_LABEL};
 use stackable_superset_crd::{SupersetCluster, SupersetVersion, APP_NAME};
 use std::fmt::Debug;
 use std::time::Duration;
-
-const APP_NAME_LABEL: &str = "app.kubernetes.io/name";
-const APP_INSTANCE_LABEL: &str = "app.kubernetes.io/instance";
-const APP_VERSION_LABEL: &str = "app.kubernetes.io/version";
 
 /// Predefined options and timeouts for the TestCluster.
 pub fn build_test_cluster() -> TestCluster<SupersetCluster> {
