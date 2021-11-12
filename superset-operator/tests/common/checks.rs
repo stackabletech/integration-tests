@@ -1,7 +1,6 @@
-use std::net::TcpStream;
-
 use crate::common::service::SupersetService;
-use anyhow::{anyhow, Context, Result};
+use anyhow::{anyhow, Result};
+use integration_test_commons::operator::checks;
 use integration_test_commons::test::kube::TestKubeClient;
 use integration_test_commons::test::prelude::{json, Pod};
 use reqwest::blocking::Client;
@@ -17,19 +16,9 @@ pub fn custom_checks(
     let service = SupersetService::new(client);
 
     for pod in pods {
-        scan_port(&service, pod)?;
+        checks::scan_port(&service.address(pod))?;
         login(&service, pod, admin_username, admin_password)?;
     }
-
-    Ok(())
-}
-
-/// Scan HTTP port.
-pub fn scan_port(service: &SupersetService, pod: &Pod) -> Result<()> {
-    let address = service.address(pod);
-
-    TcpStream::connect(&address)
-        .with_context(|| format!("TCP error occurred when connecting to [{}]", address))?;
 
     Ok(())
 }
