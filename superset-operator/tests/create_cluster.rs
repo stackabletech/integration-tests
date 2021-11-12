@@ -37,6 +37,14 @@ fn test_create_cluster_1_3_2() -> Result<()> {
     )?;
     cluster.apply_command(&init)?;
 
+    cluster.client.verify_status(&init, |command| {
+        command
+            .status
+            .as_ref()
+            .and_then(|status| status.finished_at.as_ref())
+            .is_some()
+    });
+
     custom_checks(
         &cluster.client,
         &created_pods,

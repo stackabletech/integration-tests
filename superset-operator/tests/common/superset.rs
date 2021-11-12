@@ -48,7 +48,7 @@ pub fn build_superset_credentials(
               adminUser.email: admin@superset.com
               adminUser.password: {admin_password}
               connections.secretKey: thisISaSECRET_1234
-              connections.sqlalchemyDatabaseUri: postgresql://superset:superset@superset-postgresql/superset
+              connections.sqlalchemyDatabaseUri: postgresql://superset:superset@superset-postgresql.default.svc.cluster.local/superset
         ",
         secret_name = secret_name,
         admin_username = admin_username,
