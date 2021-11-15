@@ -1,6 +1,7 @@
 use crate::common::four_letter_commands::send_4lw_i_am_ok;
 use anyhow::{anyhow, Result};
 use integration_test_commons::operator::checks;
+use integration_test_commons::stackable_operator::configmap::CONFIGMAP_TYPE_LABEL;
 use integration_test_commons::test::kube::TestKubeClient;
 use integration_test_commons::test::prelude::{ConfigMap, ConfigMapVolumeSource, Pod};
 use stackable_zookeeper_crd::ZookeeperVersion;
@@ -40,9 +41,7 @@ pub fn check_config_map(
     pod: &Pod,
     expected_server_count: usize,
 ) -> Result<()> {
-    // TODO: the config_type_label should be recovered from kube-rs / k8s-openapi independent crate
-    //   in operator-rs
-    let config_cm_name = get_config_cm(client, pod, "configmap.stackable.tech/type")?;
+    let config_cm_name = get_config_cm(client, pod, CONFIGMAP_TYPE_LABEL)?;
     let config_map: Option<ConfigMap> = client.find_namespaced(&config_cm_name);
 
     check_for_server_id_property_count(config_map, expected_server_count)
