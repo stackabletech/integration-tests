@@ -2,6 +2,9 @@ use anyhow::Result;
 use integration_test_commons::operator::setup::{
     TestCluster, TestClusterLabels, TestClusterOptions, TestClusterTimeouts,
 };
+use integration_test_commons::stackable_operator::labels::{
+    APP_INSTANCE_LABEL, APP_NAME_LABEL, APP_VERSION_LABEL,
+};
 use integration_test_commons::test::kube::TestKubeClient;
 use stackable_nifi_crd::{NifiCluster, APP_NAME};
 use std::time::Duration;
@@ -11,16 +14,10 @@ use std::time::Duration;
 // https://github.com/kubernetes/kubernetes/issues/6513
 const MAX_VERIFY_STATUS_TIMEOUT: u64 = 294;
 
-const APP_NAME_LABEL: &str = "app.kubernetes.io/name";
-const APP_INSTANCE_LABEL: &str = "app.kubernetes.io/instance";
-const APP_VERSION_LABEL: &str = "app.kubernetes.io/version";
-
 /// Predefined options and timeouts for the TestCluster.
 pub fn build_test_cluster() -> TestCluster<NifiCluster> {
     TestCluster::new(
         &TestClusterOptions::new(APP_NAME, "simple"),
-        // TODO: the app, instance and version labels should be recovered from kube-rs / k8s-openapi
-        //    independent crate in operator-rs
         &TestClusterLabels::new(APP_NAME_LABEL, APP_INSTANCE_LABEL, APP_VERSION_LABEL),
         &TestClusterTimeouts {
             cluster_ready: Duration::from_secs(300),

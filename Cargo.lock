@@ -1746,7 +1746,7 @@ dependencies = [
 [[package]]
 name = "stackable-druid-crd"
 version = "0.1.0"
-source = "git+https://github.com/stackabletech/druid-operator.git?branch=start#9d34c35ce884d81d600de07ed09d360299b107da"
+source = "git+https://github.com/stackabletech/druid-operator.git?branch=main#99a1a6f1194a53174fc67ea44d6f97b2e7485e78"
 dependencies = [
  "duplicate",
  "semver",
@@ -1945,6 +1945,22 @@ dependencies = [
 ]
 
 [[package]]
+name = "stackable-superset-crd"
+version = "0.1.0-nightly"
+source = "git+https://github.com/stackabletech/superset-operator.git?branch=main#32c2f84fe10b3a976e233070fa9679b84117a9cd"
+dependencies = [
+ "duplicate",
+ "semver",
+ "serde",
+ "serde_json",
+ "stackable-operator 0.4.0",
+ "strum 0.22.0",
+ "strum_macros 0.22.0",
+ "thiserror",
+ "tracing",
+]
+
+[[package]]
 name = "stackable-zookeeper-crd"
 version = "0.5.0"
 source = "git+https://github.com/stackabletech/zookeeper-operator.git?tag=0.5.0#45ebcca59ee128af363d0266b83cd3c05a6659a9"
@@ -2025,6 +2041,18 @@ dependencies = [
  "proc-macro2",
  "quote",
  "syn",
+]
+
+[[package]]
+name = "superset-operator-integration-tests"
+version = "0.1.0"
+dependencies = [
+ "anyhow",
+ "indoc",
+ "integration-test-commons",
+ "reqwest",
+ "serde_yaml",
+ "stackable-superset-crd",
 ]
 
 [[package]]

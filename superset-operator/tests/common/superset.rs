@@ -3,10 +3,12 @@ use indoc::formatdoc;
 use integration_test_commons::operator::setup::{
     TestCluster, TestClusterLabels, TestClusterOptions, TestClusterTimeouts,
 };
+use integration_test_commons::stackable_operator::k8s_openapi::serde::de::DeserializeOwned;
+use integration_test_commons::stackable_operator::k8s_openapi::serde::Serialize;
+use integration_test_commons::stackable_operator::labels::{
+    APP_INSTANCE_LABEL, APP_NAME_LABEL, APP_VERSION_LABEL,
+};
 use integration_test_commons::test::prelude::Secret;
-use stackable_operator::k8s_openapi::serde::de::DeserializeOwned;
-use stackable_operator::k8s_openapi::serde::Serialize;
-use stackable_operator::labels::{APP_INSTANCE_LABEL, APP_NAME_LABEL, APP_VERSION_LABEL};
 use stackable_superset_crd::{SupersetCluster, SupersetVersion, APP_NAME};
 use std::fmt::Debug;
 use std::time::Duration;
@@ -15,8 +17,6 @@ use std::time::Duration;
 pub fn build_test_cluster() -> TestCluster<SupersetCluster> {
     TestCluster::new(
         &TestClusterOptions::new(APP_NAME, "simple"),
-        // TODO: the app, instance and version labels should be recovered from kube-rs / k8s-openapi
-        //    independent crate in operator-rs
         &TestClusterLabels::new(APP_NAME_LABEL, APP_INSTANCE_LABEL, APP_VERSION_LABEL),
         &TestClusterTimeouts {
             cluster_ready: Duration::from_secs(300),

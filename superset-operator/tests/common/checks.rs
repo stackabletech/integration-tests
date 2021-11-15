@@ -1,10 +1,10 @@
 use crate::common::service::SupersetService;
 use anyhow::{anyhow, Result};
 use integration_test_commons::operator::checks;
+use integration_test_commons::stackable_operator::kube::ResourceExt;
 use integration_test_commons::test::kube::TestKubeClient;
 use integration_test_commons::test::prelude::{json, Pod};
 use reqwest::blocking::Client;
-use stackable_operator::kube::ResourceExt;
 
 /// Collect and gather all checks that may be performed on Superset node pods.
 pub fn custom_checks(
