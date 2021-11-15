@@ -1,9 +1,9 @@
 use crate::common::four_letter_commands::send_4lw_i_am_ok;
 use anyhow::{anyhow, Result};
+use integration_test_commons::operator::checks;
 use integration_test_commons::test::kube::TestKubeClient;
 use integration_test_commons::test::prelude::{ConfigMap, ConfigMapVolumeSource, Pod};
 use stackable_zookeeper_crd::ZookeeperVersion;
-use std::net::TcpStream;
 
 /// Collect and gather all checks that may be performed on ZooKeeper server pods.
 pub fn custom_checks(
@@ -124,19 +124,7 @@ pub fn check_metrics_port_open(pod: &Pod, container_name: &str) -> Result<()> {
         }
     };
 
-    scan_port(&format!("{}:{}", node_name, port))
-}
-
-/// Scan port of an address.
-pub fn scan_port(address: &str) -> Result<()> {
-    match TcpStream::connect(address) {
-        Ok(_) => Ok(()),
-        Err(err) => Err(anyhow!(
-            "TCP error occurred when connecting to [{}]: {}",
-            address,
-            err.to_string()
-        )),
-    }
+    checks::scan_port(&format!("{}:{}", node_name, port))
 }
 
 /// This is a simple check for the correctness of the server property in config maps.

@@ -9,7 +9,7 @@ description = "Integration tests for the Stackable Operator for Apache Druid"
 [dependencies]
 anyhow = "1.0"
 integration-test-commons = { path = "../commons" }
-stackable-druid-crd = { git = "https://github.com/stackabletech/druid-operator.git", branch = "start"}
+stackable-druid-crd = { git = "https://github.com/stackabletech/druid-operator.git", branch = "main"}
 serde = "1.0"
 serde_json = "1.0"
 serde_yaml = "0.8"
