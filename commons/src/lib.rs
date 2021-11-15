@@ -46,3 +46,5 @@
 
 pub mod operator;
 pub mod test;
+
+pub use stackable_operator;

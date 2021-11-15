@@ -46,7 +46,7 @@ pub fn build_monitoring_cluster(
               default:
                 selector:
                   matchLabels:
-                    kubernetes.io/arch: stackable-linux
+                    kubernetes.io/os: linux
                 config:
                   webUiPort: {}
                   scrapeInterval: 15s
@@ -61,7 +61,7 @@ pub fn build_monitoring_cluster(
               default:
                 selector:
                   matchLabels:
-                    kubernetes.io/arch: stackable-linux
+                    kubernetes.io/os: linux
                 config:
                   metricsPort: {}
                   cliArgs:
@@ -75,7 +75,7 @@ pub fn build_monitoring_cluster(
               default:
                 selector:
                   matchLabels:
-                    kubernetes.io/arch: stackable-linux
+                    kubernetes.io/os: linux
                 replicas: 1
                 config:
                   webUiPort: {}

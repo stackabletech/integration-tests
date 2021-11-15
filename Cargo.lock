@@ -100,9 +100,9 @@ checksum = "c4872d67bab6358e59559027aa3b9157c53d9358c51423c17554809a8858e0f8"
 
 [[package]]
 name = "cc"
-version = "1.0.71"
+version = "1.0.72"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "79c2681d6594606957bbb8631c4b90a7fcaaa72cdb714743a437b156d6a7eedd"
+checksum = "22a9137b95ea06864e018375b72adfb7db6e6f68cfc8df5a04d00288050485ee"
 
 [[package]]
 name = "cfg-if"
@@ -710,7 +710,7 @@ dependencies = [
  "serde_json",
  "serde_yaml",
  "spectral",
- "stackable-operator 0.5.0-nightly",
+ "stackable-operator 0.4.0",
  "tokio",
  "uuid",
 ]
@@ -1130,7 +1130,7 @@ dependencies = [
  "serde",
  "serde_json",
  "serde_yaml",
- "stackable-opa-crd 0.5.0-nightly",
+ "stackable-opa-crd 0.6.0-nightly",
 ]
 
 [[package]]
@@ -1320,7 +1320,7 @@ dependencies = [
 [[package]]
 name = "product-config"
 version = "0.3.0-nightly"
-source = "git+https://github.com/stackabletech/product-config.git?branch=main#1d8467ff950e2b074a37057ab5582a854db0fc70"
+source = "git+https://github.com/stackabletech/product-config.git?branch=main#d153daeb3da7bc6fd74fa545f44d4e4c7856f6b6"
 dependencies = [
  "java-properties",
  "regex",
@@ -1532,9 +1532,9 @@ dependencies = [
 
 [[package]]
 name = "schemars"
-version = "0.8.6"
+version = "0.8.7"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "d7a48d098c2a7fdf5740b19deb1181b4fb8a9e68e03ae517c14cde04b5725409"
+checksum = "271ac0c667b8229adf70f0f957697c96fafd7486ab7481e15dc5e45e3e6a4368"
 dependencies = [
  "dyn-clone",
  "schemars_derive",
@@ -1544,9 +1544,9 @@ dependencies = [
 
 [[package]]
 name = "schemars_derive"
-version = "0.8.6"
+version = "0.8.7"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "4a9ea2a613fe4cd7118b2bb101a25d8ae6192e1975179b67b2f17afd11e70ac8"
+checksum = "6ebda811090b257411540779860bc09bf321bc587f58d2c5864309d1566214e7"
 dependencies = [
  "proc-macro2",
  "quote",
@@ -1626,9 +1626,9 @@ dependencies = [
 
 [[package]]
 name = "serde_json"
-version = "1.0.69"
+version = "1.0.70"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "e466864e431129c7e0d3476b92f20458e5879919a0596c6472738d9fa2d342f8"
+checksum = "e277c495ac6cd1a01a58d0a0c574568b4d1ddf14f59965c6a58b8d96400b54f3"
 dependencies = [
  "indexmap",
  "itoa",
@@ -1746,14 +1746,14 @@ dependencies = [
 [[package]]
 name = "stackable-druid-crd"
 version = "0.1.0"
-source = "git+https://github.com/stackabletech/druid-operator.git?branch=start#32afa2e745322bb9e4d9db3631ca1574eda167b0"
+source = "git+https://github.com/stackabletech/druid-operator.git?branch=start#9d34c35ce884d81d600de07ed09d360299b107da"
 dependencies = [
  "duplicate",
  "semver",
  "serde",
  "serde_json",
  "stackable-operator 0.4.0",
- "stackable-zookeeper-crd 0.5.0-nightly (git+https://github.com/stackabletech/zookeeper-operator.git?branch=adapt_to_use_docker_image)",
+ "stackable-zookeeper-crd 0.5.0",
  "strum 0.21.0",
  "strum_macros 0.21.1",
  "thiserror",
@@ -1762,14 +1762,14 @@ dependencies = [
 
 [[package]]
 name = "stackable-hive-crd"
-version = "0.2.0-nightly"
-source = "git+https://github.com/stackabletech/hive-operator.git?branch=main#653234797c2303b9ce6731db158161dd38910556"
+version = "0.3.0-nightly"
+source = "git+https://github.com/stackabletech/hive-operator.git?branch=main#5c8e650a2bea9f679f34c8e84e29fc240908ecac"
 dependencies = [
  "duplicate",
  "semver",
  "serde",
  "serde_json",
- "stackable-operator 0.3.0",
+ "stackable-operator 0.4.0",
  "strum 0.22.0",
  "strum_macros 0.22.0",
  "thiserror",
@@ -1779,15 +1779,15 @@ dependencies = [
 [[package]]
 name = "stackable-kafka-crd"
 version = "0.4.0-nightly"
-source = "git+https://github.com/stackabletech/kafka-operator.git?branch=main#1a3a9d3ff5c422d9597fe9c57a2231c280396f0e"
+source = "git+https://github.com/stackabletech/kafka-operator.git?branch=main#cec05af2974569af6e221128c90c2a6ed55b70f5"
 dependencies = [
  "duplicate",
  "semver",
  "serde",
  "serde_json",
- "stackable-opa-crd 0.4.1",
- "stackable-operator 0.3.0",
- "stackable-zookeeper-crd 0.4.1",
+ "stackable-opa-crd 0.5.0",
+ "stackable-operator 0.4.0",
+ "stackable-zookeeper-crd 0.5.0",
  "strum 0.22.0",
  "strum_macros 0.22.0",
  "thiserror",
@@ -1796,7 +1796,7 @@ dependencies = [
 [[package]]
 name = "stackable-monitoring-crd"
 version = "0.4.0-nightly"
-source = "git+https://github.com/stackabletech/monitoring-operator.git?branch=main#89205a41057a81e0d5a60dbb59e9b4823302b3fa"
+source = "git+https://github.com/stackabletech/monitoring-operator.git?branch=main#67b2e6983215c9ea6e0f99c90a4e1006c1341be6"
 dependencies = [
  "semver",
  "serde",
@@ -1811,28 +1811,28 @@ dependencies = [
 [[package]]
 name = "stackable-nifi-crd"
 version = "0.4.0-nightly"
-source = "git+https://github.com/stackabletech/nifi-operator.git?branch=main#6b89b8668774a34aa66c3a570ecebf4ea34ec5d1"
+source = "git+https://github.com/stackabletech/nifi-operator.git?branch=main#da392247f5e50e0e183b7e85f9333a5f19adb135"
 dependencies = [
  "semver",
  "serde",
  "serde_json",
  "serde_yaml",
- "stackable-operator 0.3.0",
- "stackable-zookeeper-crd 0.4.1",
- "strum 0.21.0",
- "strum_macros 0.21.1",
+ "stackable-operator 0.4.0",
+ "stackable-zookeeper-crd 0.5.0",
+ "strum 0.22.0",
+ "strum_macros 0.22.0",
 ]
 
 [[package]]
 name = "stackable-opa-crd"
-version = "0.4.1"
-source = "git+https://github.com/stackabletech/opa-operator.git?tag=0.4.1#ebe2c0b59abb5e959508fd1af0f0360426e49cdb"
+version = "0.5.0"
+source = "git+https://github.com/stackabletech/opa-operator.git?tag=0.5.0#f8a019b6fd78cd78e1507cc7ba9e4ae4501afdc3"
 dependencies = [
  "rand 0.8.4",
  "semver",
  "serde",
  "serde_json",
- "stackable-operator 0.3.0",
+ "stackable-operator 0.4.0",
  "strum 0.22.0",
  "strum_macros 0.22.0",
  "thiserror",
@@ -1842,14 +1842,14 @@ dependencies = [
 
 [[package]]
 name = "stackable-opa-crd"
-version = "0.5.0-nightly"
-source = "git+https://github.com/stackabletech/opa-operator.git?branch=main#b0008ca4a983176763b5a86e6a199044a6ba2322"
+version = "0.6.0-nightly"
+source = "git+https://github.com/stackabletech/opa-operator.git?branch=main#ba772654d0eb0f88dc0a4947a7218cc40d3bf57e"
 dependencies = [
  "rand 0.8.4",
  "semver",
  "serde",
  "serde_json",
- "stackable-operator 0.3.0",
+ "stackable-operator 0.4.0",
  "strum 0.22.0",
  "strum_macros 0.22.0",
  "thiserror",
@@ -1924,53 +1924,20 @@ dependencies = [
 ]
 
 [[package]]
-name = "stackable-operator"
-version = "0.5.0-nightly"
-source = "git+https://github.com/stackabletech/operator-rs.git?branch=main#9ea13b4c64dd00d391077ba6d1a87b4e301fb816"
-dependencies = [
- "async-trait",
- "backoff",
- "chrono",
- "clap",
- "const_format",
- "either",
- "futures",
- "json-patch",
- "k8s-openapi",
- "kube",
- "lazy_static",
- "product-config 0.2.0",
- "rand 0.8.4",
- "regex",
- "schemars",
- "serde",
- "serde_json",
- "serde_yaml",
- "strum 0.22.0",
- "strum_macros 0.22.0",
- "thiserror",
- "tokio",
- "tracing",
- "tracing-futures",
- "tracing-subscriber",
- "uuid",
-]
-
-[[package]]
 name = "stackable-spark-common"
 version = "0.4.0-nightly"
-source = "git+https://github.com/stackabletech/spark-operator.git?branch=main#2a85fad59181bee9ca66db856b45263338359969"
+source = "git+https://github.com/stackabletech/spark-operator.git?branch=main#089afb3fcdd0980fef335c2489a8c5a1e80cc12b"
 
 [[package]]
 name = "stackable-spark-crd"
 version = "0.4.0-nightly"
-source = "git+https://github.com/stackabletech/spark-operator.git?branch=main#2a85fad59181bee9ca66db856b45263338359969"
+source = "git+https://github.com/stackabletech/spark-operator.git?branch=main#089afb3fcdd0980fef335c2489a8c5a1e80cc12b"
 dependencies = [
  "semver",
  "serde",
  "serde_json",
  "serde_yaml",
- "stackable-operator 0.3.0",
+ "stackable-operator 0.4.0",
  "stackable-spark-common",
  "strum 0.22.0",
  "strum_macros 0.22.0",
@@ -1979,24 +1946,8 @@ dependencies = [
 
 [[package]]
 name = "stackable-zookeeper-crd"
-version = "0.4.1"
-source = "git+https://github.com/stackabletech/zookeeper-operator.git?tag=0.4.1#a95a0cb793d07ea9a7a8fcfc6cf4c4ea16452284"
-dependencies = [
- "duplicate",
- "semver",
- "serde",
- "serde_json",
- "stackable-operator 0.3.0",
- "strum 0.22.0",
- "strum_macros 0.22.0",
- "thiserror",
- "tracing",
-]
-
-[[package]]
-name = "stackable-zookeeper-crd"
-version = "0.5.0-nightly"
-source = "git+https://github.com/stackabletech/zookeeper-operator.git?branch=adapt_to_use_docker_image#6ecf8a00852fb4f88f94c4fa52324f1c7ae233a8"
+version = "0.5.0"
+source = "git+https://github.com/stackabletech/zookeeper-operator.git?tag=0.5.0#45ebcca59ee128af363d0266b83cd3c05a6659a9"
 dependencies = [
  "duplicate",
  "semver",
@@ -2011,14 +1962,14 @@ dependencies = [
 
 [[package]]
 name = "stackable-zookeeper-crd"
-version = "0.5.0-nightly"
-source = "git+https://github.com/stackabletech/zookeeper-operator.git?branch=main#46c1196d752c7ce85572f037bd633078ff990c87"
+version = "0.6.0-nightly"
+source = "git+https://github.com/stackabletech/zookeeper-operator.git?branch=main#e2b3b2d6ed1b7ac42ec5bea53d06ba26975134f3"
 dependencies = [
  "duplicate",
  "semver",
  "serde",
  "serde_json",
- "stackable-operator 0.3.0",
+ "stackable-operator 0.4.0",
  "strum 0.22.0",
  "strum_macros 0.22.0",
  "thiserror",
@@ -2152,9 +2103,9 @@ dependencies = [
 
 [[package]]
 name = "tinyvec"
-version = "1.5.0"
+version = "1.5.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "f83b2a3d4d9091d0abd7eba4dc2710b1718583bd4d8992e2190720ea38f391f7"
+checksum = "2c1c1d5a42b6245520c249549ec267180beaffcc0615401ac8e31853d4b6d8d2"
 dependencies = [
  "tinyvec_macros",
 ]
@@ -2249,9 +2200,9 @@ dependencies = [
 
 [[package]]
 name = "tower-http"
-version = "0.1.1"
+version = "0.1.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "0b7b56efe69aa0ad2b5da6b942e57ea9f6fe683b7a314d4ff48662e2c8838de1"
+checksum = "6f70061b0592867f0a60e67a6e699da5fe000c88a360a5b92ebdba9d73b2238c"
 dependencies = [
  "base64",
  "bytes",
@@ -2592,5 +2543,5 @@ dependencies = [
  "serde",
  "serde_json",
  "serde_yaml",
- "stackable-zookeeper-crd 0.5.0-nightly (git+https://github.com/stackabletech/zookeeper-operator.git?branch=main)",
+ "stackable-zookeeper-crd 0.6.0-nightly",
 ]

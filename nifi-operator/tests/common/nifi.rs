@@ -57,7 +57,7 @@ pub fn build_nifi_cluster(
             roleGroups:
               default:
                 selector:
-                  kubernetes.io/arch: stackable-linux
+                  kubernetes.io/os: linux
                 replicas: {}
                 config:
                   httpPort: 10000
@@ -94,7 +94,7 @@ pub fn build_nifi_cluster_monitoring(
             roleGroups:
               default:
                 selector:
-                  kubernetes.io/arch: stackable-linux
+                  kubernetes.io/os: linux
                 replicas: {}
                 config:
                   httpPort: 10000

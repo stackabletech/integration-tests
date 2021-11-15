@@ -49,21 +49,21 @@ pub fn build_spark_custom_resource(
               default:
                 selector:
                   matchLabels:
-                    kubernetes.io/arch: stackable-linux
+                    kubernetes.io/os: linux
                 replicas: {}
           workers:
             roleGroups:
               default:
                 selector:
                   matchLabels:
-                    kubernetes.io/arch: stackable-linux
+                    kubernetes.io/os: linux
                 replicas: {}
           historyServers:
             roleGroups:
               default:
                 selector:
                   matchLabels:
-                    kubernetes.io/arch: stackable-linux
+                    kubernetes.io/os: linux
                 replicas: {}
                 config:
                   historyWebUiPort: 10000 

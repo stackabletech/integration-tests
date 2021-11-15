@@ -41,7 +41,7 @@ pub fn build_opa_cluster(
             roleGroups:
               default:
                 selector:
-                  kubernetes.io/arch: stackable-linux
+                  kubernetes.io/os: linux
                 replicas: {}
                 config:
                   port: 8181

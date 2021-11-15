@@ -10,8 +10,8 @@ use std::time::Duration;
 
 #[test]
 fn test_cluster_update() -> Result<()> {
-    let version = ZookeeperVersion::v3_4_14;
-    let version_update = ZookeeperVersion::v3_5_8;
+    let version = ZookeeperVersion::v3_5_8;
+    let version_update = ZookeeperVersion::v3_7_0;
     let mut cluster = build_test_cluster();
 
     let (zookeeper_cr, expected_pod_count) = build_zk_cluster(cluster.name(), &version, 1)?;

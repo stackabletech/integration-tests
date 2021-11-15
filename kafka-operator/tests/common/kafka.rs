@@ -45,7 +45,7 @@ pub fn build_kafka_cluster(
             roleGroups:
               default:
                 selector:
-                  kubernetes.io/arch: stackable-linux
+                  kubernetes.io/os: linux
                 replicas: {}
                 config:
                   logDirs: /tmp/kafka-logs
@@ -80,7 +80,7 @@ pub fn build_kafka_cluster_monitoring(
             roleGroups:
               default:
                 selector:
-                  kubernetes.io/arch: stackable-linux
+                  kubernetes.io/os: linux
                 replicas: {}
                 config:
                   logDirs: /tmp/kafka-logs
