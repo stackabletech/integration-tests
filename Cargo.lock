@@ -1947,7 +1947,7 @@ dependencies = [
 [[package]]
 name = "stackable-superset-crd"
 version = "0.1.0-nightly"
-source = "git+https://github.com/stackabletech/superset-operator.git?branch=setup#488bdf7c272d24f77b7cbaa922c71e6bb75056eb"
+source = "git+https://github.com/stackabletech/superset-operator.git?branch=main#32c2f84fe10b3a976e233070fa9679b84117a9cd"
 dependencies = [
  "duplicate",
  "semver",

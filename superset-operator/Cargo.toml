@@ -14,4 +14,4 @@ integration-test-commons = { path = "../commons" }
 reqwest = { version = "0.11", features = ["blocking", "json"] }
 serde_yaml = "0.8"
 stackable-operator = { git = "https://github.com/stackabletech/operator-rs.git", tag = "0.4.0" }
-stackable-superset-crd = { git = "https://github.com/stackabletech/superset-operator.git", branch = "setup"}
+stackable-superset-crd = { git = "https://github.com/stackabletech/superset-operator.git", branch = "main"}
