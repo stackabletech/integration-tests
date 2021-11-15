@@ -1,6 +1,5 @@
 use anyhow::{anyhow, Result};
-use integration_test_commons::test::prelude::Pod;
-use std::net::TcpStream;
+use integration_test_commons::{operator::checks, test::prelude::Pod};
 
 /// Collect and gather all checks with regard to metrics and container ports.
 pub fn custom_monitoring_checks(
@@ -96,17 +95,5 @@ pub fn check_metrics_port_open(pod: &Pod, container_name: &str) -> Result<()> {
         }
     };
 
-    scan_port(&format!("{}:{}", node_name, port))
-}
-
-/// Scan port of an address.
-pub fn scan_port(address: &str) -> Result<()> {
-    match TcpStream::connect(address) {
-        Ok(_) => Ok(()),
-        Err(err) => Err(anyhow!(
-            "TCP error occurred when connecting to [{}]: {}",
-            address,
-            err.to_string()
-        )),
-    }
+    checks::scan_port(&format!("{}:{}", node_name, port))
 }
