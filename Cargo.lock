@@ -1320,7 +1320,7 @@ dependencies = [
 [[package]]
 name = "product-config"
 version = "0.3.0-nightly"
-source = "git+https://github.com/stackabletech/product-config.git?branch=main#1d8467ff950e2b074a37057ab5582a854db0fc70"
+source = "git+https://github.com/stackabletech/product-config.git?branch=main#d153daeb3da7bc6fd74fa545f44d4e4c7856f6b6"
 dependencies = [
  "java-properties",
  "regex",
@@ -1779,15 +1779,15 @@ dependencies = [
 [[package]]
 name = "stackable-kafka-crd"
 version = "0.4.0-nightly"
-source = "git+https://github.com/stackabletech/kafka-operator.git?branch=main#1a3a9d3ff5c422d9597fe9c57a2231c280396f0e"
+source = "git+https://github.com/stackabletech/kafka-operator.git?branch=main#cec05af2974569af6e221128c90c2a6ed55b70f5"
 dependencies = [
  "duplicate",
  "semver",
  "serde",
  "serde_json",
- "stackable-opa-crd 0.4.1",
- "stackable-operator 0.3.0",
- "stackable-zookeeper-crd 0.4.1",
+ "stackable-opa-crd 0.5.0",
+ "stackable-operator 0.4.0",
+ "stackable-zookeeper-crd 0.5.0",
  "strum 0.22.0",
  "strum_macros 0.22.0",
  "thiserror",
@@ -1825,8 +1825,8 @@ dependencies = [
 
 [[package]]
 name = "stackable-opa-crd"
-version = "0.4.1"
-source = "git+https://github.com/stackabletech/opa-operator.git?tag=0.4.1#ebe2c0b59abb5e959508fd1af0f0360426e49cdb"
+version = "0.5.0-nightly"
+source = "git+https://github.com/stackabletech/opa-operator.git?branch=main#b0008ca4a983176763b5a86e6a199044a6ba2322"
 dependencies = [
  "rand 0.8.4",
  "semver",
@@ -1842,14 +1842,14 @@ dependencies = [
 
 [[package]]
 name = "stackable-opa-crd"
-version = "0.5.0-nightly"
-source = "git+https://github.com/stackabletech/opa-operator.git?branch=main#b0008ca4a983176763b5a86e6a199044a6ba2322"
+version = "0.5.0"
+source = "git+https://github.com/stackabletech/opa-operator.git?tag=0.5.0#f8a019b6fd78cd78e1507cc7ba9e4ae4501afdc3"
 dependencies = [
  "rand 0.8.4",
  "semver",
  "serde",
  "serde_json",
- "stackable-operator 0.3.0",
+ "stackable-operator 0.4.0",
  "strum 0.22.0",
  "strum_macros 0.22.0",
  "thiserror",
