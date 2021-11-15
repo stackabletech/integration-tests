@@ -1320,7 +1320,7 @@ dependencies = [
 [[package]]
 name = "product-config"
 version = "0.3.0-nightly"
-source = "git+https://github.com/stackabletech/product-config.git?branch=main#1d8467ff950e2b074a37057ab5582a854db0fc70"
+source = "git+https://github.com/stackabletech/product-config.git?branch=main#d153daeb3da7bc6fd74fa545f44d4e4c7856f6b6"
 dependencies = [
  "java-properties",
  "regex",
@@ -1811,16 +1811,16 @@ dependencies = [
 [[package]]
 name = "stackable-nifi-crd"
 version = "0.4.0-nightly"
-source = "git+https://github.com/stackabletech/nifi-operator.git?branch=main#6b89b8668774a34aa66c3a570ecebf4ea34ec5d1"
+source = "git+https://github.com/stackabletech/nifi-operator.git?branch=main#da392247f5e50e0e183b7e85f9333a5f19adb135"
 dependencies = [
  "semver",
  "serde",
  "serde_json",
  "serde_yaml",
- "stackable-operator 0.3.0",
- "stackable-zookeeper-crd 0.4.1",
- "strum 0.21.0",
- "strum_macros 0.21.1",
+ "stackable-operator 0.4.0",
+ "stackable-zookeeper-crd 0.5.0",
+ "strum 0.22.0",
+ "strum_macros 0.22.0",
 ]
 
 [[package]]
