@@ -1320,7 +1320,7 @@ dependencies = [
 [[package]]
 name = "product-config"
 version = "0.3.0-nightly"
-source = "git+https://github.com/stackabletech/product-config.git?branch=main#1d8467ff950e2b074a37057ab5582a854db0fc70"
+source = "git+https://github.com/stackabletech/product-config.git?branch=main#d153daeb3da7bc6fd74fa545f44d4e4c7856f6b6"
 dependencies = [
  "java-properties",
  "regex",
@@ -1796,7 +1796,7 @@ dependencies = [
 [[package]]
 name = "stackable-monitoring-crd"
 version = "0.4.0-nightly"
-source = "git+https://github.com/stackabletech/monitoring-operator.git?branch=main#89205a41057a81e0d5a60dbb59e9b4823302b3fa"
+source = "git+https://github.com/stackabletech/monitoring-operator.git?branch=main#67b2e6983215c9ea6e0f99c90a4e1006c1341be6"
 dependencies = [
  "semver",
  "serde",
