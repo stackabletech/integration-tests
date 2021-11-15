@@ -1320,7 +1320,7 @@ dependencies = [
 [[package]]
 name = "product-config"
 version = "0.3.0-nightly"
-source = "git+https://github.com/stackabletech/product-config.git?branch=main#1d8467ff950e2b074a37057ab5582a854db0fc70"
+source = "git+https://github.com/stackabletech/product-config.git?branch=main#d153daeb3da7bc6fd74fa545f44d4e4c7856f6b6"
 dependencies = [
  "java-properties",
  "regex",
@@ -1926,18 +1926,18 @@ dependencies = [
 [[package]]
 name = "stackable-spark-common"
 version = "0.4.0-nightly"
-source = "git+https://github.com/stackabletech/spark-operator.git?branch=main#2a85fad59181bee9ca66db856b45263338359969"
+source = "git+https://github.com/stackabletech/spark-operator.git?branch=main#089afb3fcdd0980fef335c2489a8c5a1e80cc12b"
 
 [[package]]
 name = "stackable-spark-crd"
 version = "0.4.0-nightly"
-source = "git+https://github.com/stackabletech/spark-operator.git?branch=main#2a85fad59181bee9ca66db856b45263338359969"
+source = "git+https://github.com/stackabletech/spark-operator.git?branch=main#089afb3fcdd0980fef335c2489a8c5a1e80cc12b"
 dependencies = [
  "semver",
  "serde",
  "serde_json",
  "serde_yaml",
- "stackable-operator 0.3.0",
+ "stackable-operator 0.4.0",
  "stackable-spark-common",
  "strum 0.22.0",
  "strum_macros 0.22.0",
