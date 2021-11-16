@@ -1,5 +1,4 @@
 use anyhow::{anyhow, Result};
-use integration_test_commons::test::prelude::Pod;
 use semver::Version;
 use serde::{Deserialize, Serialize};
 use stackable_zookeeper_crd::ZookeeperVersion;
@@ -11,28 +10,14 @@ use std::time::{Duration, Instant};
 /// If pods are set to "ready" the cluster may still need time to balance to be fully ready.
 /// Therefore we resend the 4lw (if not successful) in the defined timeout period.
 const FOUR_LETTER_WORD_REQUEST_TIMEOUT: u64 = 10;
-
-/// Lists the outstanding sessions and ephemeral nodes. This only works on the leader.
-//pub const DUMP: &str = "dump";
-/// Print details about serving environment
-//pub const ENVIRONMENT: &str = "envi";
-/// Shuts down the server. This must be issued from the machine the ZooKeeper server is running on.
-//pub const KILL_SERVER: &str = "kill";
-/// List outstanding requests
-//pub const LIST_REQUESTS: &str = "reqs";
 /// Tests if server is running in a non-error state. The server will respond with imok if it is running.
 /// Otherwise it will not respond at all.
 pub const ARE_YOU_OK: &str = "ruok";
-/// Reset statistics returned by stat command.
-//pub const RESET_STATISTICS: &str = "srst";
-/// Lists statistics about performance and connected clients.
-//pub const LIST_STATISTICS: &str = "stat";
-
 /// Positive response for the "ruok" command.
 pub const I_AM_OK: &str = "imok";
 
 /// Send "ruok" to a pod and check if the response is "imok"
-pub fn send_4lw_i_am_ok(pod: &Pod, version: &ZookeeperVersion, port: u16) -> Result<()> {
+pub fn send_4lw_i_am_ok(version: &ZookeeperVersion, host: &str) -> Result<()> {
     // 3.4.14 answers with "imok", while 3.5.X onwards the command is mirrored
     // which results in the "ruok" response we have to differentiate here.
     let ver = if Version::parse(&version.to_string())? > Version::parse("3.5.2")? {
@@ -49,15 +34,7 @@ pub fn send_4lw_i_am_ok(pod: &Pod, version: &ZookeeperVersion, port: u16) -> Res
 
     while now.elapsed().as_secs() < Duration::from_secs(FOUR_LETTER_WORD_REQUEST_TIMEOUT).as_secs()
     {
-        last_response = send_4lw(
-            version,
-            ARE_YOU_OK,
-            &format!(
-                "{}:{}",
-                pod.spec.as_ref().unwrap().node_name.as_ref().unwrap(),
-                port
-            ),
-        );
+        last_response = send_4lw(version, ARE_YOU_OK, host);
 
         if last_response.is_err() || last_response.as_ref().unwrap() != &ver {
             println!(

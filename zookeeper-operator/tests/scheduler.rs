@@ -4,7 +4,7 @@ use anyhow::Result;
 use common::zookeeper::{build_test_cluster, build_zk_cluster};
 use integration_test_commons::test::prelude::Pod;
 use stackable_zookeeper_crd::ZookeeperVersion;
-
+/*
 /// Tests that pods are rescheduled on the same nodes.
 /// Requirements: At least 2 nodes.
 /// How it works:
@@ -63,3 +63,4 @@ fn test_scheduler_reschedule_pods_on_the_same_nodes() -> Result<()> {
 
     Ok(())
 }
+*/
