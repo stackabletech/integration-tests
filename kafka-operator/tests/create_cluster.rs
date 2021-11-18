@@ -2,11 +2,6 @@ pub mod common;
 
 use anyhow::Result;
 use common::kafka::{build_kafka_cluster, build_test_cluster};
-use integration_test_commons::operator::checks::monitoring_checks;
-use integration_test_commons::operator::service::create_node_port_service;
-use integration_test_commons::operator::setup::version_label;
-use integration_test_commons::stackable_operator::k8s_openapi::api::core::v1::Pod;
-use stackable_kafka_crd::APP_NAME;
 use std::collections::BTreeMap;
 
 #[test]

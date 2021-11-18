@@ -2,8 +2,6 @@ pub mod common;
 
 use anyhow::Result;
 use common::kafka::{build_kafka_cluster, build_test_cluster};
-use integration_test_commons::operator::service::create_node_port_service;
-use integration_test_commons::operator::setup::version_label;
 use std::collections::BTreeMap;
 
 #[test]

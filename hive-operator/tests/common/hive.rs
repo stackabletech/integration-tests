@@ -38,17 +38,12 @@ pub fn build_hive_cluster(
             roleGroups:
               default:
                 selector:
-                  matchExpressions:
-                    - operator: In
-                      key: kubernetes.io/arch
-                      values:
-                        - stackable-linux
+                  kubernetes.io/os: linux
                 replicas: {}
                 config:
-                  javaHome: /usr/lib/jvm/java-11-openjdk-amd64/
                   metricsPort: 11111
                   database:
-                    connString: jdbc:derby:;databaseName={{{{configroot}}}}/metadata_db;create=true
+                    connString: jdbc:derby:;databaseName=/stackable/dada/metadata_db;create=true
                     user: APP
                     password: mine
                     dbType: derby
