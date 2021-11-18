@@ -711,6 +711,8 @@ dependencies = [
  "serde_yaml",
  "spectral",
  "stackable-operator 0.4.0",
+ "strum 0.22.0",
+ "strum_macros 0.22.0",
  "tokio",
  "uuid",
 ]
@@ -2572,6 +2574,4 @@ dependencies = [
  "serde_json",
  "serde_yaml",
  "stackable-zookeeper-crd 0.6.0-nightly",
- "strum 0.22.0",
- "strum_macros 0.22.0",
 ]

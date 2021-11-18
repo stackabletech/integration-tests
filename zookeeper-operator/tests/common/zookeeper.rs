@@ -7,6 +7,7 @@ use integration_test_commons::stackable_operator::labels::{
     APP_INSTANCE_LABEL, APP_NAME_LABEL, APP_VERSION_LABEL,
 };
 use stackable_zookeeper_crd::{ZookeeperCluster, ZookeeperVersion, APP_NAME};
+use std::collections::BTreeMap;
 use std::time::Duration;
 
 /// Predefined options and timeouts for the TestCluster.
@@ -19,6 +20,13 @@ pub fn build_test_cluster() -> TestCluster<ZookeeperCluster> {
             pods_terminated: Duration::from_secs(60),
         },
     )
+}
+
+/// Required version label to identify pods from a cluster.
+pub fn version_label(version: &str) -> BTreeMap<String, String> {
+    let mut result = BTreeMap::new();
+    result.insert(APP_VERSION_LABEL.to_string(), version.to_string());
+    result
 }
 
 /// This returns a ZooKeeper custom resource and the expected pod count.

@@ -8,8 +8,6 @@ repository = "https://github.com/stackabletech/zookeeper-operator-integration-te
 version = "0.1.0"
 
 [dependencies]
-stackable-zookeeper-crd = { git = "https://github.com/stackabletech/zookeeper-operator.git", branch = "main"}
-
 anyhow = "1.0"
 indoc = "1.0"
 integration-test-commons = { path = "../commons" }
@@ -18,5 +16,4 @@ serde = "1.0"
 serde_json = "1.0"
 serde_yaml = "0.8"
 semver = "1.0"
-strum = "0.22"
-strum_macros = "0.22"
+stackable-zookeeper-crd = { git = "https://github.com/stackabletech/zookeeper-operator.git", branch = "main"}

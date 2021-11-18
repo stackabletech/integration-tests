@@ -169,9 +169,20 @@ where
     /// Creates or updates a custom resource and waits for the cluster to be up and running
     /// within the provided timeout. Depending on the cluster definition we hand in the number
     /// of created pods we expect manually.
-    pub fn create_or_update(&mut self, cluster: &T, expected_pod_count: usize) -> Result<()> {
+    ///
+    /// # Arguments
+    /// * `cluster` - The cluster custom resource.
+    /// * `labels` - Additional labels to select certain pods via selector.
+    /// * `expected_pod_count` - Number of pods to wait for until they become ready.
+    ///     
+    pub fn create_or_update(
+        &mut self,
+        cluster: &T,
+        labels: &BTreeMap<String, String>,
+        expected_pod_count: usize,
+    ) -> Result<()> {
         self.apply(cluster)?;
-        self.wait_ready(expected_pod_count)?;
+        self.wait_ready(labels, expected_pod_count)?;
         Ok(())
     }
 
@@ -247,20 +258,25 @@ where
     /// `cluster_ready` field of the `TestClusterTimeouts`.
     ///
     /// # Arguments
-    ///
+    /// * `labels` - Additional labels to select certain pods via selector.
     /// * `expected_pod_count` - Number of pods to wait for until they become ready.
     ///
-    pub fn wait_ready(&self, expected_pod_count: usize) -> Result<()> {
+    pub fn wait_ready(
+        &self,
+        labels: &BTreeMap<String, String>,
+        expected_pod_count: usize,
+    ) -> Result<()> {
         let now = Instant::now();
 
         while now.elapsed().as_secs() < self.timeouts.cluster_ready.as_secs() {
-            let created_pods = &self.list::<Pod>(None);
+            let created_pods = &self.list::<Pod>(Some(labels.clone()));
             println!(
                 "{}",
                 self.log(&format!(
-                    "Waiting for [{}/{}] pod(s) to be ready...",
+                    "Waiting for [{}/{}] pod(s) with labels {:?} to be ready...",
                     created_pods.len(),
-                    expected_pod_count
+                    expected_pod_count,
+                    labels
                 )),
             );
 

@@ -1,11 +1,14 @@
 pub mod common;
 
 use crate::common::checks::custom_checks;
-use crate::common::zookeeper::{build_test_cluster, build_zk_cluster};
+use crate::common::zookeeper::{build_test_cluster, build_zk_cluster, version_label};
 use anyhow::Result;
-use common::service::{ServiceBuilder, ServiceType, TemporaryService};
+use integration_test_commons::operator::service::create_node_port_service;
+use integration_test_commons::stackable_operator::kube::ResourceExt;
 use integration_test_commons::test::prelude::Pod;
 use stackable_zookeeper_crd::ZookeeperVersion;
+use std::thread;
+use std::time::Duration;
 
 #[test]
 fn test_cluster_update() -> Result<()> {
@@ -25,13 +28,13 @@ fn test_cluster_update() -> Result<()> {
         Some(client_port),
     )?;
 
-    cluster.create_or_update(&zookeeper_cr, expected_pod_count)?;
-    let created_pods = cluster.list::<Pod>(None);
-    check_pod_version(
-        &version.to_string(),
-        created_pods.as_slice(),
-        &cluster.labels.version,
-    );
+    cluster.create_or_update(
+        &zookeeper_cr,
+        &version_label(&version.to_string()),
+        expected_pod_count,
+    )?;
+
+    cluster.check_pod_version(&version.to_string())?;
 
     let (zookeeper_cr, expected_pod_count) = build_zk_cluster(
         cluster.name(),
@@ -41,17 +44,16 @@ fn test_cluster_update() -> Result<()> {
         Some(client_port),
     )?;
 
-    cluster.create_or_update(&zookeeper_cr, expected_pod_count)?;
+    cluster.create_or_update(
+        &zookeeper_cr,
+        &version_label(&version_update.to_string()),
+        expected_pod_count,
+    )?;
+
     let created_pods = cluster.list::<Pod>(None);
 
-    let admin_service = TemporaryService::new(
-        &cluster.client,
-        &ServiceBuilder::new("zookeeper-admin")
-            .with_port(admin_port, admin_port)
-            .with_selector("app.kubernetes.io/name", "zookeeper")
-            .with_type(ServiceType::NodePort)
-            .build(),
-    );
+    let admin_service =
+        create_node_port_service(&cluster.client, "zookeeper-admin", "zookeeper", admin_port);
 
     custom_checks(
         &cluster.client,
@@ -61,22 +63,7 @@ fn test_cluster_update() -> Result<()> {
         &admin_service,
     )?;
 
-    check_pod_version(
-        &version_update.to_string(),
-        created_pods.as_slice(),
-        &cluster.labels.version,
-    );
+    cluster.check_pod_version(&version_update.to_string())?;
 
     Ok(())
-}
-
-fn check_pod_version(version: &str, pods: &[Pod], version_label: &str) {
-    for pod in pods {
-        let pod_version = pod
-            .metadata
-            .labels
-            .as_ref()
-            .and_then(|labels| labels.get(version_label).cloned());
-        assert_eq!(Some(version), pod_version.as_deref());
-    }
 }

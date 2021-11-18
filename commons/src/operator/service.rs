@@ -1,11 +1,28 @@
-use integration_test_commons::stackable_operator::k8s_openapi::apimachinery::pkg::util::intstr::IntOrString;
-use integration_test_commons::stackable_operator::kube::core::ObjectMeta;
-use integration_test_commons::test::prelude::{
+use crate::stackable_operator::k8s_openapi::apimachinery::pkg::apis::meta::v1::ObjectMeta;
+use crate::stackable_operator::k8s_openapi::apimachinery::pkg::util::intstr::IntOrString;
+use crate::test::prelude::{
     Pod, Service, ServicePort, ServiceSpec, TemporaryResource, TestKubeClient,
 };
 use std::collections::BTreeMap;
 use std::{thread::sleep, time::Duration};
 use strum_macros::Display;
+
+/// Helper to provide a temporary service for custom checks
+pub fn create_node_port_service<'a>(
+    client: &'a TestKubeClient,
+    name: &'a str,
+    app: &'a str,
+    port: i32,
+) -> TemporaryService<'a> {
+    TemporaryService::new(
+        client,
+        &ServiceBuilder::new(name)
+            .with_port(port, port)
+            .with_selector("app.kubernetes.io/name", app)
+            .with_type(ServiceType::NodePort)
+            .build(),
+    )
+}
 
 #[derive(Clone, Display)]
 pub enum ServiceType {

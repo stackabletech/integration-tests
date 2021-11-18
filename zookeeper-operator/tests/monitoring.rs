@@ -2,9 +2,10 @@ pub mod common;
 
 use crate::common::checks::{custom_checks, custom_monitoring_checks};
 
+use crate::common::zookeeper::version_label;
 use anyhow::Result;
-use common::service::{ServiceBuilder, ServiceType, TemporaryService};
 use common::zookeeper::{build_test_cluster, build_zk_cluster_with_metrics};
+use integration_test_commons::operator::service::create_node_port_service;
 use integration_test_commons::test::prelude::Pod;
 use stackable_zookeeper_crd::ZookeeperVersion;
 
@@ -28,17 +29,15 @@ fn test_monitoring_and_container_ports() -> Result<()> {
         Some(metrics_port),
     )?;
 
-    cluster.create_or_update(&zookeeper_cr, expected_pod_count)?;
+    cluster.create_or_update(
+        &zookeeper_cr,
+        &version_label(&version.to_string()),
+        expected_pod_count,
+    )?;
     let created_pods = cluster.list::<Pod>(None);
 
-    let admin_service = TemporaryService::new(
-        &cluster.client,
-        &ServiceBuilder::new("zookeeper-admin")
-            .with_port(admin_port, admin_port)
-            .with_selector("app.kubernetes.io/name", "zookeeper")
-            .with_type(ServiceType::NodePort)
-            .build(),
-    );
+    let admin_service =
+        create_node_port_service(&cluster.client, "zookeeper-admin", "zookeeper", admin_port);
 
     custom_checks(
         &cluster.client,
@@ -55,13 +54,11 @@ fn test_monitoring_and_container_ports() -> Result<()> {
         ("admin", admin_port),
     ];
 
-    let metrics_service = TemporaryService::new(
+    let metrics_service = create_node_port_service(
         &cluster.client,
-        &ServiceBuilder::new("zookeeper-metrics")
-            .with_port(metrics_port, metrics_port)
-            .with_selector("app.kubernetes.io/name", "zookeeper")
-            .with_type(ServiceType::NodePort)
-            .build(),
+        "zookeeper-metrics",
+        "zookeeper",
+        metrics_port,
     );
 
     custom_monitoring_checks(

@@ -1,7 +1,7 @@
 use crate::common::four_letter_commands::send_4lw_i_am_ok;
-use crate::common::service::TemporaryService;
 use anyhow::{anyhow, Result};
 use integration_test_commons::operator::checks;
+use integration_test_commons::operator::service::TemporaryService;
 use integration_test_commons::stackable_operator::configmap::CONFIGMAP_TYPE_LABEL;
 use integration_test_commons::test::kube::TestKubeClient;
 use integration_test_commons::test::prelude::{ConfigMap, ConfigMapVolumeSource, Pod};
