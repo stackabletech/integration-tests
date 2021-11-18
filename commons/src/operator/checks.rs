@@ -2,20 +2,56 @@ use crate::operator::service::TemporaryService;
 use crate::stackable_operator::k8s_openapi::api::core::v1::Pod;
 use anyhow::{anyhow, Result};
 use std::net::TcpStream;
+use std::thread;
+use std::time::{Duration, Instant};
+
+pub fn port_check(pods: &[Pod], service: &TemporaryService) -> Result<()> {
+    for pod in pods {
+        let address = &service.address(pod);
+        wait_for_scan_port(address, Duration::from_secs(120))?;
+    }
+    Ok(())
+}
 
 /// Scan port of an address.
 pub fn scan_port(address: &str) -> Result<()> {
-    match TcpStream::connect(address) {
-        Ok(_) => {
-            println!("PortCheck for [{}] successful", address);
-            Ok(())
-        }
-        Err(err) => Err(anyhow!(
+    if let Err(err) = TcpStream::connect(address) {
+        return Err(anyhow!(
             "TCP error occurred when connecting to [{}]: {}",
             address,
             err.to_string()
-        )),
+        ));
     }
+
+    Ok(())
+}
+
+/// Wait a certain timeout to check if a the service port is opened
+pub fn wait_for_scan_port(address: &str, timeout: Duration) -> Result<()> {
+    let now = Instant::now();
+    let sleep = 5;
+    let time_out_in_sec = timeout.as_secs();
+    while now.elapsed().as_secs() < time_out_in_sec {
+        match scan_port(address) {
+            Ok(_) => {
+                println!("Port [{}] opened successfully!", address);
+                return Ok(());
+            }
+            Err(_) => {
+                println!(
+                    "Port [{}] closed. Retrying in {} seconds...",
+                    address, sleep
+                );
+            }
+        };
+
+        thread::sleep(Duration::from_secs(sleep));
+    }
+
+    Err(anyhow!(format!(
+        "Port [{}] not opened after {} second(s)",
+        address, time_out_in_sec,
+    )))
 }
 
 /// Collect and gather all checks with regard to metrics and container ports.
@@ -27,7 +63,7 @@ pub fn monitoring_checks(
 ) -> Result<()> {
     for pod in pods {
         let address = &service.address(pod);
-        scan_port(address)?;
+        wait_for_scan_port(address, Duration::from_secs(120))?;
         check_container_ports(pod, container_ports, container_name)?;
     }
     Ok(())

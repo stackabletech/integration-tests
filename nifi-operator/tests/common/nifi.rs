@@ -37,6 +37,9 @@ pub fn build_nifi_cluster(
     name: &str,
     version: &str,
     replicas: usize,
+    http_port: i32,
+    protocol_port: i32,
+    load_balance_port: i32,
 ) -> Result<(NifiCluster, usize)> {
     let spec = &format!(
         "
@@ -57,11 +60,11 @@ pub fn build_nifi_cluster(
                   kubernetes.io/os: linux
                 replicas: {}
                 config:
-                  httpPort: 10000
-                  protocolPort: 10443
-                  loadBalancePort: 6342
+                  httpPort: {}
+                  protocolPort: {}
+                  loadBalancePort: {}
     ",
-        name, version, replicas,
+        name, version, replicas, http_port, protocol_port, load_balance_port
     );
 
     Ok((serde_yaml::from_str(spec)?, replicas))
@@ -72,7 +75,7 @@ pub fn build_nifi_cluster_monitoring(
     name: &str,
     version: &str,
     replicas: usize,
-    monitoring_port: u16,
+    monitoring_port: i32,
 ) -> Result<(NifiCluster, usize)> {
     let spec = &format!(
         "
@@ -94,9 +97,9 @@ pub fn build_nifi_cluster_monitoring(
                   kubernetes.io/os: linux
                 replicas: {}
                 config:
-                  httpPort: 10000
-                  protocolPort: 10443
-                  loadBalancePort: 6342
+                  httpPort: 11080
+                  protocolPort: 11443
+                  loadBalancePort: 11342
     ",
         name, version, monitoring_port, replicas
     );

@@ -42,7 +42,7 @@ pub fn build_opa_cluster(
                 replicas: {}
                 config:
                   port: 8181
-                  repoRuleReference: no_reference
+                  regoRuleReference: regorule-service:3030/opa/v1
     ",
         name, version, replicas,
     );

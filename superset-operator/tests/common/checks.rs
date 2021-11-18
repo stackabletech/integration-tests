@@ -1,20 +1,17 @@
-use crate::common::service::SupersetService;
 use anyhow::{anyhow, Result};
 use integration_test_commons::operator::checks;
+use integration_test_commons::operator::service::TemporaryService;
 use integration_test_commons::stackable_operator::kube::ResourceExt;
-use integration_test_commons::test::kube::TestKubeClient;
 use integration_test_commons::test::prelude::{json, Pod};
 use reqwest::blocking::Client;
 
 /// Collect and gather all checks that may be performed on Superset node pods.
 pub fn custom_checks(
-    client: &TestKubeClient,
     pods: &[Pod],
     admin_username: &str,
     admin_password: &str,
+    service: &TemporaryService,
 ) -> Result<()> {
-    let service = SupersetService::new(client);
-
     for pod in pods {
         checks::scan_port(&service.address(pod))?;
         login(&service, pod, admin_username, admin_password)?;
@@ -25,7 +22,7 @@ pub fn custom_checks(
 
 /// Login to Superset as admin
 pub fn login(
-    service: &SupersetService,
+    service: &TemporaryService,
     pod: &Pod,
     admin_username: &str,
     admin_password: &str,

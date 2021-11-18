@@ -5,7 +5,7 @@ use serde::de::DeserializeOwned;
 use serde::Serialize;
 use stackable_operator::k8s_openapi::apimachinery::pkg::apis::meta::v1::Time;
 use stackable_operator::kube::Resource;
-use stackable_operator::labels::APP_VERSION_LABEL;
+use stackable_operator::labels::{APP_INSTANCE_LABEL, APP_VERSION_LABEL};
 use std::collections::BTreeMap;
 use std::fmt::Debug;
 use std::thread;
@@ -211,12 +211,32 @@ where
             .items
     }
 
+    /// List resources to all APP instances. Additional labels to filter or limit the
+    /// selector may be passed via `additional_labels`.
+    pub fn list_all<R>(&self, additional_labels: Option<BTreeMap<String, String>>) -> Vec<R>
+    where
+        R: Clone + Debug + DeserializeOwned + Resource<DynamicType = ()> + Serialize,
+    {
+        let mut labels = additional_labels.unwrap_or_default();
+
+        labels.insert(self.labels.app.clone(), self.options.app_name.clone());
+
+        let transformed_labels = labels
+            .iter()
+            .map(|(key, value)| format!("{}={}", key, value))
+            .collect::<Vec<String>>();
+
+        self.client
+            .list_labeled::<R>(&transformed_labels.join(","))
+            .items
+    }
+
     /// List all nodes registered in the api server that have an agent running (or default to
     /// `kubernetes.io/arch=stackable-linux` label).
     /// May be used to determine the expected pods for tests (depending on the custom resource).
     pub fn list_nodes(&self, selector: Option<&str>) -> Vec<Node> {
         self.client
-            .list_labeled::<Node>(selector.unwrap_or("kubernetes.io/arch=stackable-linux"))
+            .list_labeled::<Node>(selector.unwrap_or("kubernetes.io/os=linux"))
             .items
     }
 
@@ -235,7 +255,7 @@ where
         let now = Instant::now();
 
         while now.elapsed().as_secs() < self.timeouts.pods_terminated.as_secs() {
-            let pods = &self.list::<Pod>(None);
+            let pods = &self.list_all::<Pod>(None);
 
             if pods.is_empty() {
                 return Ok(());
@@ -274,7 +294,7 @@ where
             println!(
                 "{}",
                 self.log(&format!(
-                    "Waiting for [{}/{}] pod(s) with labels {:?} to be ready...",
+                    "Waiting for [{}/{}] pod(s) with extra labels {:?} to be ready...",
                     created_pods.len(),
                     expected_pod_count,
                     labels
@@ -320,5 +340,12 @@ where
 pub fn version_label(version: &str) -> BTreeMap<String, String> {
     let mut result = BTreeMap::new();
     result.insert(APP_VERSION_LABEL.to_string(), version.to_string());
+    result
+}
+
+/// Required instance label to identify pods from a cluster.
+pub fn instance_label(instance: &str) -> BTreeMap<String, String> {
+    let mut result = BTreeMap::new();
+    result.insert(APP_INSTANCE_LABEL.to_string(), instance.to_string());
     result
 }
