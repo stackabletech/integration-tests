@@ -1,6 +1,5 @@
 use crate::common::four_letter_commands::send_4lw_i_am_ok;
 use anyhow::{anyhow, Result};
-use integration_test_commons::operator::checks;
 use integration_test_commons::operator::service::TemporaryService;
 use integration_test_commons::stackable_operator::configmap::CONFIGMAP_TYPE_LABEL;
 use integration_test_commons::test::kube::TestKubeClient;
@@ -17,26 +16,8 @@ pub fn custom_checks(
 ) -> Result<()> {
     for pod in pods {
         let address = &service.address(pod);
-
-        checks::scan_port(address)?;
         send_4lw_i_am_ok(version, address)?;
         check_config_map(client, pod, expected_pod_count)?;
-    }
-    Ok(())
-}
-
-/// Collect and gather all checks with regard to metrics and container ports.
-pub fn custom_monitoring_checks(
-    pods: &[Pod],
-    container_ports: &[(&str, i32)],
-    container_name: &str,
-    service: &TemporaryService,
-) -> Result<()> {
-    for pod in pods {
-        let address = &service.address(pod);
-
-        checks::scan_port(address)?;
-        check_container_ports(pod, container_ports, container_name)?;
     }
     Ok(())
 }
@@ -50,44 +31,7 @@ pub fn check_config_map(
 ) -> Result<()> {
     let config_cm_name = get_config_cm(client, pod, CONFIGMAP_TYPE_LABEL)?;
     let config_map: Option<ConfigMap> = client.find_namespaced(&config_cm_name);
-
     check_for_server_id_property_count(config_map, expected_server_count)
-}
-
-/// Check if container ports with given name and port number are set in the pod.
-pub fn check_container_ports(
-    pod: &Pod,
-    container_ports: &[(&str, i32)],
-    container_name: &str,
-) -> Result<()> {
-    let port_count = pod
-        .spec
-        .as_ref()
-        .and_then(|pod| {
-            pod.containers
-                .iter()
-                .find(|container| container.name == container_name)
-                .cloned()
-        })
-        .and_then(|container| container.ports)
-        .map_or(0usize, |ports| {
-            let mut found: usize = 0;
-            for port in &ports {
-                for (name, number) in container_ports {
-                    if port.name == Some(name.to_string()) && port.container_port == *number {
-                        found += 1;
-                    }
-                }
-            }
-            found
-        });
-
-    return if port_count == container_ports.len() {
-        Ok(())
-    } else {
-        Err(anyhow!("Required container_ports in container [{}] do not match the specified pod container ports. Required [{}] vs provided [{}]",
-        container_name, container_ports.len(), port_count))
-    };
 }
 
 /// This is a simple check for the correctness of the server property in config maps.

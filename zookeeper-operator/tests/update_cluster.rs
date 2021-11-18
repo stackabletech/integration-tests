@@ -1,20 +1,19 @@
 pub mod common;
 
 use crate::common::checks::custom_checks;
-use crate::common::zookeeper::{build_test_cluster, build_zk_cluster, version_label};
+use crate::common::zookeeper::{build_test_cluster, build_zk_cluster};
+
 use anyhow::Result;
 use integration_test_commons::operator::service::create_node_port_service;
-use integration_test_commons::stackable_operator::kube::ResourceExt;
+use integration_test_commons::operator::setup::version_label;
 use integration_test_commons::test::prelude::Pod;
 use stackable_zookeeper_crd::ZookeeperVersion;
-use std::thread;
-use std::time::Duration;
 
 #[test]
 fn test_cluster_update() -> Result<()> {
     let replicas = 3;
-    let admin_port: i32 = 9090;
-    let client_port: i32 = 2182;
+    let admin_port: i32 = 8080;
+    let client_port: i32 = 2181;
     let version = ZookeeperVersion::v3_5_8;
     let version_update = ZookeeperVersion::v3_7_0;
 

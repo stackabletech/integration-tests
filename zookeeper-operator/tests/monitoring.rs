@@ -1,11 +1,12 @@
 pub mod common;
 
-use crate::common::checks::{custom_checks, custom_monitoring_checks};
+use crate::common::checks::custom_checks;
 
-use crate::common::zookeeper::version_label;
 use anyhow::Result;
 use common::zookeeper::{build_test_cluster, build_zk_cluster_with_metrics};
+use integration_test_commons::operator::checks::monitoring_checks;
 use integration_test_commons::operator::service::create_node_port_service;
+use integration_test_commons::operator::setup::version_label;
 use integration_test_commons::test::prelude::Pod;
 use stackable_zookeeper_crd::ZookeeperVersion;
 
@@ -13,9 +14,9 @@ use stackable_zookeeper_crd::ZookeeperVersion;
 fn test_monitoring_and_container_ports() -> Result<()> {
     let replicas = 3;
     let container_name = "zookeeper";
-    let admin_port: i32 = 8082;
-    let client_port: i32 = 2183;
-    let metrics_port: i32 = 9506;
+    let admin_port: i32 = 8080;
+    let client_port: i32 = 2181;
+    let metrics_port: i32 = 9505;
     let version = ZookeeperVersion::v3_5_8;
 
     let mut cluster = build_test_cluster();
@@ -61,7 +62,7 @@ fn test_monitoring_and_container_ports() -> Result<()> {
         metrics_port,
     );
 
-    custom_monitoring_checks(
+    monitoring_checks(
         created_pods.as_slice(),
         container_ports.as_slice(),
         container_name,

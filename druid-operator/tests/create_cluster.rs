@@ -2,6 +2,7 @@ pub mod common;
 
 use anyhow::Result;
 use common::druid::{build_druid_cluster, build_test_cluster, TestService};
+use integration_test_commons::operator::setup::version_label;
 use integration_test_commons::test::prelude::Pod;
 use std::{thread, time};
 
@@ -11,7 +12,11 @@ fn test_create_1_cluster_0_22_0() -> Result<()> {
     let mut cluster = build_test_cluster();
 
     let (druid_cr, expected_pod_count) = build_druid_cluster(cluster.name(), version, 1)?;
-    cluster.create_or_update(&druid_cr, expected_pod_count)?;
+    cluster.create_or_update(
+        &druid_cr,
+        &version_label(&version.to_string()),
+        expected_pod_count,
+    )?;
 
     // Wait for the cluster to have started fully
     // The pods are shown as running but are not able to respond to the healthcheck immediately

@@ -9,10 +9,12 @@ use common::{
 };
 use integration_test_commons::test::prelude::{Pod, Secret};
 use stackable_superset_crd::{commands::Init, SupersetVersion};
+use std::collections::BTreeMap;
 
 #[test]
 fn test_create_cluster_1_3_2() -> Result<()> {
     let version = SupersetVersion::v1_3_2;
+    let replicas: usize = 3;
     let mut cluster = build_test_cluster();
 
     let secret_name = "simple-superset-credentials";
@@ -24,9 +26,8 @@ fn test_create_cluster_1_3_2() -> Result<()> {
         .client
         .apply::<Secret>(&serde_yaml::to_string(&superset_secret)?);
 
-    let superset_cr = build_superset_cluster(cluster.name(), &version, secret_name)?;
-    let pod_count = 1;
-    cluster.create_or_update(&superset_cr, pod_count)?;
+    let superset_cr = build_superset_cluster(cluster.name(), &version, replicas, secret_name)?;
+    cluster.create_or_update(&superset_cr, &BTreeMap::new(), replicas)?;
     let created_pods = cluster.list::<Pod>(None);
 
     let init: Init = build_command(

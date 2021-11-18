@@ -59,6 +59,7 @@ pub fn build_superset_credentials(
 pub fn build_superset_cluster(
     name: &str,
     version: &SupersetVersion,
+    replicas: usize,
     secret_name: &str,
 ) -> Result<SupersetCluster> {
     let spec = &formatdoc!(
@@ -74,10 +75,12 @@ pub fn build_superset_cluster(
                   default:
                     config:
                       credentialsSecret: {secret_name}
+                    replicas: {replicas}
         ",
         name = name,
         version = version.to_string(),
         secret_name = secret_name,
+        replicas = replicas
     );
 
     Ok(serde_yaml::from_str(spec)?)

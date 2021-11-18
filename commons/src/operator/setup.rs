@@ -5,6 +5,7 @@ use serde::de::DeserializeOwned;
 use serde::Serialize;
 use stackable_operator::k8s_openapi::apimachinery::pkg::apis::meta::v1::Time;
 use stackable_operator::kube::Resource;
+use stackable_operator::labels::APP_VERSION_LABEL;
 use std::collections::BTreeMap;
 use std::fmt::Debug;
 use std::thread;
@@ -313,4 +314,11 @@ where
             }
         }
     }
+}
+
+/// Required version label to identify pods from a cluster.
+pub fn version_label(version: &str) -> BTreeMap<String, String> {
+    let mut result = BTreeMap::new();
+    result.insert(APP_VERSION_LABEL.to_string(), version.to_string());
+    result
 }

@@ -2,10 +2,10 @@ pub mod common;
 
 use crate::common::checks::custom_checks;
 
-use crate::common::zookeeper::version_label;
 use anyhow::Result;
 use common::zookeeper::{build_test_cluster, build_zk_cluster};
 use integration_test_commons::operator::service::create_node_port_service;
+use integration_test_commons::operator::setup::version_label;
 use integration_test_commons::test::prelude::Pod;
 use stackable_zookeeper_crd::ZookeeperVersion;
 
@@ -44,8 +44,8 @@ fn test_create_cluster_3_5_8() -> Result<()> {
 #[test]
 fn test_create_cluster_3_7_0() -> Result<()> {
     let replicas = 3;
-    let admin_port: i32 = 9090;
-    let client_port: i32 = 2182;
+    let admin_port: i32 = 8080;
+    let client_port: i32 = 2181;
     let version = ZookeeperVersion::v3_7_0;
 
     let mut cluster = build_test_cluster();

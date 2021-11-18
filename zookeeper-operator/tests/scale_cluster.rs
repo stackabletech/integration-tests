@@ -1,10 +1,11 @@
 pub mod common;
 
 use crate::common::checks::custom_checks;
-use crate::common::zookeeper::{build_test_cluster, build_zk_cluster, version_label};
+use crate::common::zookeeper::{build_test_cluster, build_zk_cluster};
 
 use anyhow::Result;
 use integration_test_commons::operator::service::create_node_port_service;
+use integration_test_commons::operator::setup::version_label;
 use integration_test_commons::test::prelude::Pod;
 use stackable_zookeeper_crd::ZookeeperVersion;
 
@@ -13,8 +14,8 @@ use stackable_zookeeper_crd::ZookeeperVersion;
 #[test]
 #[ignore]
 fn test_scale_cluster_up() -> Result<()> {
-    let admin_port: i32 = 9094;
-    let client_port: i32 = 2185;
+    let admin_port: i32 = 8080;
+    let client_port: i32 = 2181;
     let version = ZookeeperVersion::v3_5_8;
 
     let mut cluster = build_test_cluster();
@@ -68,8 +69,8 @@ fn test_scale_cluster_up() -> Result<()> {
 #[ignore]
 fn test_scale_cluster_down() -> Result<()> {
     let version = ZookeeperVersion::v3_5_8;
-    let admin_port: i32 = 8090;
-    let client_port: i32 = 2281;
+    let admin_port: i32 = 8080;
+    let client_port: i32 = 2181;
     let mut cluster = build_test_cluster();
 
     let (zookeeper_cr, expected_pod_count) = build_zk_cluster(
