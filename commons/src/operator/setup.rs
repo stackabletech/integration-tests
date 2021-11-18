@@ -265,7 +265,7 @@ where
                 "{}",
                 self.log(&format!("Waiting for {} Pod(s) to terminate", pods.len()))
             );
-            thread::sleep(Duration::from_secs(1));
+            thread::sleep(Duration::from_secs(10));
         }
 
         Err(anyhow!(self.log(&format!(
@@ -302,7 +302,7 @@ where
             );
 
             if created_pods.len() != expected_pod_count {
-                thread::sleep(Duration::from_secs(2));
+                thread::sleep(Duration::from_secs(10));
                 continue;
             } else {
                 for pod in created_pods {

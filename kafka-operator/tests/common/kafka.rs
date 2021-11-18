@@ -45,8 +45,7 @@ pub fn build_kafka_cluster(
                   kubernetes.io/os: linux
                 replicas: {}
                 config:
-                  logDirs: /tmp/kafka-logs
-                  metricsPort: 9606
+                  logDirs: /stackable/logs/kafka
     ",
         name, version, replicas,
     );
@@ -59,7 +58,7 @@ pub fn build_kafka_cluster_monitoring(
     name: &str,
     version: &str,
     replicas: usize,
-    monitoring_port: u16,
+    metric_port: i32,
 ) -> Result<(KafkaCluster, usize)> {
     let spec = &format!(
         "
@@ -80,10 +79,10 @@ pub fn build_kafka_cluster_monitoring(
                   kubernetes.io/os: linux
                 replicas: {}
                 config:
-                  logDirs: /tmp/kafka-logs
+                  logDirs: /stackable/logs/kafka
                   metricsPort: {}
     ",
-        name, version, replicas, monitoring_port
+        name, version, replicas, metric_port
     );
 
     Ok((serde_yaml::from_str(spec)?, replicas))
