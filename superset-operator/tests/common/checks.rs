@@ -14,7 +14,7 @@ pub fn custom_checks(
 ) -> Result<()> {
     for pod in pods {
         checks::scan_port(&service.address(pod))?;
-        login(&service, pod, admin_username, admin_password)?;
+        login(service, pod, admin_username, admin_password)?;
     }
 
     Ok(())

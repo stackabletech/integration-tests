@@ -19,7 +19,7 @@ fn test_create_1_server_2_3_9() -> Result<()> {
 
     // TODO: remove! This should be checked via open ports or other readiness probe.
     // Wait for the metastore to have started fully
-    let delay_time = time::Duration::from_secs(40);
+    let delay_time = time::Duration::from_secs(15);
     thread::sleep(delay_time);
 
     let created_pods = cluster.list::<Pod>(None);
