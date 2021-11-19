@@ -43,7 +43,7 @@ pub fn build_hive_cluster(
                 config:
                   metricsPort: 11111
                   database:
-                    connString: jdbc:derby:;databaseName=/stackable/dada/metadata_db;create=true
+                    connString: jdbc:derby:;databaseName=/stackable/data/metadata_db;create=true
                     user: APP
                     password: mine
                     dbType: derby

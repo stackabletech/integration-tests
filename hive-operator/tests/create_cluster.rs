@@ -43,8 +43,8 @@ fn test_create_1_server_2_3_9() -> Result<()> {
         let ip = split.get(0).unwrap();
         let port = split.get(1).unwrap();
 
-        println!("Running python health check script ...");
-        let status = Command::new("../hive-operator/python/test_metastore.py")
+        println!("Running python health check script for [{}] ...", address);
+        let status = Command::new("python/test_metastore.py")
             .args(["-a", ip])
             .args(["-p", port])
             .status()
