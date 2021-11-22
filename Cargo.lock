@@ -1746,7 +1746,7 @@ dependencies = [
 [[package]]
 name = "stackable-druid-crd"
 version = "0.1.0"
-source = "git+https://github.com/stackabletech/druid-operator.git?branch=main#d7c640b900bc803ae1e74aa75148bed90b5e6cce"
+source = "git+https://github.com/stackabletech/druid-operator.git?branch=main#58d809e2cc0ed1bb103aa1fde56b0b9a4d476b19"
 dependencies = [
  "duplicate",
  "semver",
