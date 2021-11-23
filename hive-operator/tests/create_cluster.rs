@@ -9,7 +9,6 @@ use stackable_hive_crd::APP_NAME;
 use std::collections::BTreeMap;
 use std::process::Command;
 use std::time::Duration;
-use std::{thread, time};
 
 #[test]
 fn test_create_1_server_2_3_9() -> Result<()> {
