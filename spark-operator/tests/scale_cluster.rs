@@ -40,6 +40,7 @@ fn test_scale_cluster_down() -> Result<()> {
 
     let (spark_cr, expected_pod_count_before) =
         build_spark_custom_resource(cluster.name(), &version, 2, 2, 1)?;
+
     cluster.create_or_update(
         &spark_cr,
         &version_label(&version.to_string()),

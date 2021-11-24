@@ -18,13 +18,19 @@ fn test_scale_cluster_up() -> Result<()> {
     let mut cluster = build_test_cluster();
     maximize_client_verification_time_out(&mut cluster.client);
 
-    build_nifi_cluster(
+    let (nifi_cluster, expected_pod_count) = build_nifi_cluster(
         cluster.name(),
         version,
         1,
         http_port,
         protocol_port,
         load_balance_port,
+    )?;
+
+    cluster.create_or_update(
+        &nifi_cluster,
+        &version_label(&version.to_string()),
+        expected_pod_count,
     )?;
 
     let (nifi_cluster, expected_pod_count) = build_nifi_cluster(
@@ -57,13 +63,19 @@ fn test_scale_cluster_down() -> Result<()> {
     let mut cluster = build_test_cluster();
     maximize_client_verification_time_out(&mut cluster.client);
 
-    build_nifi_cluster(
+    let (nifi_cluster, expected_pod_count) = build_nifi_cluster(
         cluster.name(),
         version,
         2,
         http_port,
         protocol_port,
         load_balance_port,
+    )?;
+
+    cluster.create_or_update(
+        &nifi_cluster,
+        &version_label(&version.to_string()),
+        expected_pod_count,
     )?;
 
     let (nifi_cluster, expected_pod_count) = build_nifi_cluster(
