@@ -38,7 +38,7 @@ def table(db_name, table_name):
 
     storage_descriptor = StorageDescriptorBuilder(
         columns=columns,
-        location=f"/location_{db_name}_{table_name}",
+        location=f"/stackable/warehouse/location_{db_name}_{table_name}",
         input_format="org.apache.hadoop.hive.ql.io.parquet.MapredParquetInputFormat",
         output_format="org.apache.hadoop.hive.ql.io.parquet.MapredParquetOutputFormat",
         serde_info=serde_info,

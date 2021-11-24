@@ -5,6 +5,7 @@ use serde::de::DeserializeOwned;
 use serde::Serialize;
 use stackable_operator::k8s_openapi::apimachinery::pkg::apis::meta::v1::Time;
 use stackable_operator::kube::Resource;
+use stackable_operator::labels::{APP_INSTANCE_LABEL, APP_VERSION_LABEL};
 use std::collections::BTreeMap;
 use std::fmt::Debug;
 use std::thread;
@@ -169,9 +170,20 @@ where
     /// Creates or updates a custom resource and waits for the cluster to be up and running
     /// within the provided timeout. Depending on the cluster definition we hand in the number
     /// of created pods we expect manually.
-    pub fn create_or_update(&mut self, cluster: &T, expected_pod_count: usize) -> Result<()> {
+    ///
+    /// # Arguments
+    /// * `cluster` - The cluster custom resource.
+    /// * `labels` - Additional labels to select certain pods via selector.
+    /// * `expected_pod_count` - Number of pods to wait for until they become ready.
+    ///     
+    pub fn create_or_update(
+        &mut self,
+        cluster: &T,
+        labels: &BTreeMap<String, String>,
+        expected_pod_count: usize,
+    ) -> Result<()> {
         self.apply(cluster)?;
-        self.wait_ready(expected_pod_count)?;
+        self.wait_ready(labels, expected_pod_count)?;
         Ok(())
     }
 
@@ -199,12 +211,32 @@ where
             .items
     }
 
+    /// List resources to all APP instances. Additional labels to filter or limit the
+    /// selector may be passed via `additional_labels`.
+    pub fn list_all<R>(&self, additional_labels: Option<BTreeMap<String, String>>) -> Vec<R>
+    where
+        R: Clone + Debug + DeserializeOwned + Resource<DynamicType = ()> + Serialize,
+    {
+        let mut labels = additional_labels.unwrap_or_default();
+
+        labels.insert(self.labels.app.clone(), self.options.app_name.clone());
+
+        let transformed_labels = labels
+            .iter()
+            .map(|(key, value)| format!("{}={}", key, value))
+            .collect::<Vec<String>>();
+
+        self.client
+            .list_labeled::<R>(&transformed_labels.join(","))
+            .items
+    }
+
     /// List all nodes registered in the api server that have an agent running (or default to
     /// `kubernetes.io/arch=stackable-linux` label).
     /// May be used to determine the expected pods for tests (depending on the custom resource).
     pub fn list_nodes(&self, selector: Option<&str>) -> Vec<Node> {
         self.client
-            .list_labeled::<Node>(selector.unwrap_or("kubernetes.io/arch=stackable-linux"))
+            .list_labeled::<Node>(selector.unwrap_or("kubernetes.io/os=linux"))
             .items
     }
 
@@ -223,7 +255,7 @@ where
         let now = Instant::now();
 
         while now.elapsed().as_secs() < self.timeouts.pods_terminated.as_secs() {
-            let pods = &self.list::<Pod>(None);
+            let pods = &self.list_all::<Pod>(None);
 
             if pods.is_empty() {
                 return Ok(());
@@ -233,7 +265,7 @@ where
                 "{}",
                 self.log(&format!("Waiting for {} Pod(s) to terminate", pods.len()))
             );
-            thread::sleep(Duration::from_secs(1));
+            thread::sleep(Duration::from_secs(10));
         }
 
         Err(anyhow!(self.log(&format!(
@@ -247,25 +279,30 @@ where
     /// `cluster_ready` field of the `TestClusterTimeouts`.
     ///
     /// # Arguments
-    ///
+    /// * `labels` - Additional labels to select certain pods via selector.
     /// * `expected_pod_count` - Number of pods to wait for until they become ready.
     ///
-    pub fn wait_ready(&self, expected_pod_count: usize) -> Result<()> {
+    pub fn wait_ready(
+        &self,
+        labels: &BTreeMap<String, String>,
+        expected_pod_count: usize,
+    ) -> Result<()> {
         let now = Instant::now();
 
         while now.elapsed().as_secs() < self.timeouts.cluster_ready.as_secs() {
-            let created_pods = &self.list::<Pod>(None);
+            let created_pods = &self.list::<Pod>(Some(labels.clone()));
             println!(
                 "{}",
                 self.log(&format!(
-                    "Waiting for [{}/{}] pod(s) to be ready...",
+                    "Waiting for [{}/{}] pod(s) with extra labels {:?} to be ready...",
                     created_pods.len(),
-                    expected_pod_count
+                    expected_pod_count,
+                    labels
                 )),
             );
 
             if created_pods.len() != expected_pod_count {
-                thread::sleep(Duration::from_secs(2));
+                thread::sleep(Duration::from_secs(10));
                 continue;
             } else {
                 for pod in created_pods {
@@ -297,4 +334,18 @@ where
             }
         }
     }
+}
+
+/// Required version label to identify pods from a cluster.
+pub fn version_label(version: &str) -> BTreeMap<String, String> {
+    let mut result = BTreeMap::new();
+    result.insert(APP_VERSION_LABEL.to_string(), version.to_string());
+    result
+}
+
+/// Required instance label to identify pods from a cluster.
+pub fn instance_label(instance: &str) -> BTreeMap<String, String> {
+    let mut result = BTreeMap::new();
+    result.insert(APP_INSTANCE_LABEL.to_string(), instance.to_string());
+    result
 }

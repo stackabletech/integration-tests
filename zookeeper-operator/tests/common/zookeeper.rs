@@ -3,23 +3,20 @@ use indoc::formatdoc;
 use integration_test_commons::operator::setup::{
     TestCluster, TestClusterLabels, TestClusterOptions, TestClusterTimeouts,
 };
+use integration_test_commons::stackable_operator::labels::{
+    APP_INSTANCE_LABEL, APP_NAME_LABEL, APP_VERSION_LABEL,
+};
 use stackable_zookeeper_crd::{ZookeeperCluster, ZookeeperVersion, APP_NAME};
 use std::time::Duration;
-
-const APP_NAME_LABEL: &str = "app.kubernetes.io/name";
-const APP_INSTANCE_LABEL: &str = "app.kubernetes.io/instance";
-const APP_VERSION_LABEL: &str = "app.kubernetes.io/version";
 
 /// Predefined options and timeouts for the TestCluster.
 pub fn build_test_cluster() -> TestCluster<ZookeeperCluster> {
     TestCluster::new(
         &TestClusterOptions::new(APP_NAME, "simple"),
-        // TODO: the app, instance and version labels should be recovered from kube-rs / k8s-openapi
-        //    independent crate in operator-rs
         &TestClusterLabels::new(APP_NAME_LABEL, APP_INSTANCE_LABEL, APP_VERSION_LABEL),
         &TestClusterTimeouts {
             cluster_ready: Duration::from_secs(300),
-            pods_terminated: Duration::from_secs(30),
+            pods_terminated: Duration::from_secs(60),
         },
     )
 }
@@ -29,6 +26,8 @@ pub fn build_zk_cluster(
     name: &str,
     version: &ZookeeperVersion,
     replicas: usize,
+    admin_port: Option<i32>,
+    client_port: Option<i32>,
 ) -> Result<(ZookeeperCluster, usize)> {
     let spec = &formatdoc!(
         "
@@ -43,26 +42,30 @@ pub fn build_zk_cluster(
               default:
                 selector:
                   matchLabels:
-                    kubernetes.io/arch: stackable-linux
+                    kubernetes.io/os: linux
                 replicas: {}
+                config:
+                  adminPort: {}
+                  clientPort: {}
     ",
         name,
         version.to_string(),
-        replicas
+        replicas,
+        admin_port.unwrap_or(8080),
+        client_port.unwrap_or(2181),
     );
 
     Ok((serde_yaml::from_str(spec)?, replicas))
 }
 
-/// This returns a ZooKeeper custom resource and the expected pod count (1). We use labels
-/// for host_name and assign it to the node_ids provided by test-dev-cluster.
-/// This creates 1 ZooKeeper server with a user defined client and metrics port.
-pub fn build_zk_cluster_with_metrics_and_client_port(
+/// This returns a ZooKeeper custom resource with metrics enabled and the expected pod count.
+pub fn build_zk_cluster_with_metrics(
     name: &str,
     version: &ZookeeperVersion,
     replicas: usize,
-    client_port: u16,
-    metrics_port: u16,
+    admin_port: Option<i32>,
+    client_port: Option<i32>,
+    metrics_port: Option<i32>,
 ) -> Result<(ZookeeperCluster, usize)> {
     let spec = &formatdoc!(
         "
@@ -77,17 +80,19 @@ pub fn build_zk_cluster_with_metrics_and_client_port(
               default:
                 selector:
                   matchLabels:
-                    kubernetes.io/arch: stackable-linux
+                    kubernetes.io/os: linux
                 replicas: {}
                 config:
+                  adminPort: {}
                   clientPort: {}
                   metricsPort: {}
     ",
         name,
         version.to_string(),
         replicas,
-        client_port,
-        metrics_port,
+        admin_port.unwrap_or(8080),
+        client_port.unwrap_or(2181),
+        metrics_port.unwrap_or(9505),
     );
 
     Ok((serde_yaml::from_str(spec)?, replicas))

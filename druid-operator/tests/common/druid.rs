@@ -1,4 +1,7 @@
 use anyhow::Result;
+use integration_test_commons::stackable_operator::labels::{
+    APP_INSTANCE_LABEL, APP_NAME_LABEL, APP_VERSION_LABEL,
+};
 use integration_test_commons::{
     operator::setup::{TestCluster, TestClusterLabels, TestClusterOptions, TestClusterTimeouts},
     test::prelude::{Pod, Service, TemporaryResource, TestKubeClient},
@@ -6,16 +9,10 @@ use integration_test_commons::{
 use stackable_druid_crd::{DruidCluster, APP_NAME};
 use std::time::Duration;
 
-const APP_NAME_LABEL: &str = "app.kubernetes.io/name";
-const APP_INSTANCE_LABEL: &str = "app.kubernetes.io/instance";
-const APP_VERSION_LABEL: &str = "app.kubernetes.io/version";
-
 /// Predefined options and timeouts for the TestCluster.
 pub fn build_test_cluster() -> TestCluster<DruidCluster> {
     TestCluster::new(
         &TestClusterOptions::new(APP_NAME, "simple"),
-        // TODO: the app, instance and version labels should be recovered from kube-rs / k8s-openapi
-        //    independent crate in operator-rs
         &TestClusterLabels::new(APP_NAME_LABEL, APP_INSTANCE_LABEL, APP_VERSION_LABEL),
         &TestClusterTimeouts {
             cluster_ready: Duration::from_secs(300),
@@ -57,6 +54,7 @@ pub fn build_druid_cluster(
                     kubernetes.io/os: linux
                 config:
                   plaintextPort: 8082
+                  metricsPort: 9095
                 replicas: {replicas}
           coordinators:
             roleGroups:
@@ -66,6 +64,7 @@ pub fn build_druid_cluster(
                     kubernetes.io/os: linux
                 config:
                   plaintextPort: 8081
+                  metricsPort: 9090
                 replicas: {replicas}
           historicals:
             roleGroups:
@@ -75,6 +74,7 @@ pub fn build_druid_cluster(
                     kubernetes.io/os: linux
                 config:
                   plaintextPort: 8083
+                  metricsPort: 9091
                 replicas: {replicas}
           middleManagers:
             roleGroups:
@@ -84,6 +84,7 @@ pub fn build_druid_cluster(
                     kubernetes.io/os: linux
                 config:
                   plaintextPort: 8091
+                  metricsPort: 9098
                 replicas: {replicas}
           routers:
             roleGroups:
@@ -93,6 +94,7 @@ pub fn build_druid_cluster(
                     kubernetes.io/os: linux
                 config:
                   plaintextPort: 8888
+                  metricsPort: 9195
                 replicas: {replicas}
         ",
         name = name,

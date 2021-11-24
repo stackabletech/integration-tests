@@ -2,6 +2,7 @@ pub mod common;
 
 use anyhow::Result;
 use common::monitoring::{build_monitoring_cluster, build_test_cluster};
+use integration_test_commons::operator::setup::version_label;
 
 #[test]
 fn test_create_cluster() -> Result<()> {
@@ -22,7 +23,11 @@ fn test_create_cluster() -> Result<()> {
         federation_port,
     )?;
 
-    cluster.create_or_update(&monitoring_cr, expected_pod_count)?;
+    cluster.create_or_update(
+        &monitoring_cr,
+        &version_label(&version.to_string()),
+        expected_pod_count,
+    )?;
 
-    Ok(())
+    cluster.check_pod_version(&version.to_string())
 }

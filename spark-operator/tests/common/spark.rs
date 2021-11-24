@@ -2,26 +2,23 @@ use anyhow::Result;
 use integration_test_commons::operator::setup::{
     TestCluster, TestClusterLabels, TestClusterOptions, TestClusterTimeouts,
 };
+use integration_test_commons::stackable_operator::labels::{
+    APP_INSTANCE_LABEL, APP_NAME_LABEL, APP_VERSION_LABEL,
+};
 use serde::de::DeserializeOwned;
 use serde::Serialize;
 use stackable_spark_crd::{SparkCluster, SparkVersion};
 use std::fmt::Debug;
 use std::time::Duration;
 
-const APP_NAME_LABEL: &str = "app.kubernetes.io/name";
-const APP_INSTANCE_LABEL: &str = "app.kubernetes.io/instance";
-const APP_VERSION_LABEL: &str = "app.kubernetes.io/version";
-
 /// Predefined options and timeouts for the TestCluster.
 pub fn build_test_cluster() -> TestCluster<SparkCluster> {
     TestCluster::new(
         &TestClusterOptions::new("spark", "simple"),
-        // TODO: the app, instance and version labels should be recovered from kube-rs / k8s-openapi
-        //    independent crate in operator-rs
         &TestClusterLabels::new(APP_NAME_LABEL, APP_INSTANCE_LABEL, APP_VERSION_LABEL),
         &TestClusterTimeouts {
             cluster_ready: Duration::from_secs(300),
-            pods_terminated: Duration::from_secs(30),
+            pods_terminated: Duration::from_secs(120),
         },
     )
 }
@@ -49,21 +46,21 @@ pub fn build_spark_custom_resource(
               default:
                 selector:
                   matchLabels:
-                    kubernetes.io/arch: stackable-linux
+                    kubernetes.io/os: linux
                 replicas: {}
           workers:
             roleGroups:
               default:
                 selector:
                   matchLabels:
-                    kubernetes.io/arch: stackable-linux
+                    kubernetes.io/os: linux
                 replicas: {}
           historyServers:
             roleGroups:
               default:
                 selector:
                   matchLabels:
-                    kubernetes.io/arch: stackable-linux
+                    kubernetes.io/os: linux
                 replicas: {}
                 config:
                   historyWebUiPort: 10000 

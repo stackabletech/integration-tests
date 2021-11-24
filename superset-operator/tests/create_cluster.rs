@@ -7,12 +7,15 @@ use common::{
         build_command, build_superset_cluster, build_superset_credentials, build_test_cluster,
     },
 };
+use integration_test_commons::operator::service::create_node_port_service;
 use integration_test_commons::test::prelude::{Pod, Secret};
 use stackable_superset_crd::{commands::Init, SupersetVersion};
+use std::collections::BTreeMap;
 
 #[test]
 fn test_create_cluster_1_3_2() -> Result<()> {
     let version = SupersetVersion::v1_3_2;
+    let replicas: usize = 1;
     let mut cluster = build_test_cluster();
 
     let secret_name = "simple-superset-credentials";
@@ -24,9 +27,8 @@ fn test_create_cluster_1_3_2() -> Result<()> {
         .client
         .apply::<Secret>(&serde_yaml::to_string(&superset_secret)?);
 
-    let superset_cr = build_superset_cluster(cluster.name(), &version, secret_name)?;
-    let pod_count = 1;
-    cluster.create_or_update(&superset_cr, pod_count)?;
+    let superset_cr = build_superset_cluster(cluster.name(), &version, replicas, secret_name)?;
+    cluster.create_or_update(&superset_cr, &BTreeMap::new(), replicas)?;
     let created_pods = cluster.list::<Pod>(None);
 
     let init: Init = build_command(
@@ -45,10 +47,13 @@ fn test_create_cluster_1_3_2() -> Result<()> {
             .is_some()
     });
 
+    let admin_service =
+        create_node_port_service(&cluster.client, "superset-admin", "superset", 8088);
+
     custom_checks(
-        &cluster.client,
         &created_pods,
         admin_username,
         admin_password,
+        &admin_service,
     )
 }
