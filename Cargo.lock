@@ -1765,7 +1765,7 @@ dependencies = [
 [[package]]
 name = "stackable-hive-crd"
 version = "0.3.0-nightly"
-source = "git+https://github.com/stackabletech/hive-operator.git?branch=main#5c8e650a2bea9f679f34c8e84e29fc240908ecac"
+source = "git+https://github.com/stackabletech/hive-operator.git?branch=main#7742588d7cdb02a508c1d17366997981bfd19411"
 dependencies = [
  "duplicate",
  "semver",
