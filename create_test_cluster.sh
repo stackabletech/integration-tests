@@ -50,6 +50,9 @@ KIND_CONFIG
 }
 
 install_operator() {
+  local OPERATOR_NAME=$1
+  local OPERATOR_VERSION=$2
+
   local REPO=$(helm repo list | grep ${HELM_DEV_REPO_URL} | awk '{print $1}')
   if [ -z "${REPO}" ]; then
     helm repo add ${HELM_DEV_REPO_NAME} ${HELM_DEV_REPO_URL}
@@ -64,7 +67,7 @@ install_operator() {
     else
       helm install ${OPERATOR_NAME}-operator ${REPO}/${OPERATOR_NAME}-operator --version=${OPERATOR_VERSION} --devel
     fi
-    install_dependencies ${REPO}
+    install_dependencies ${OPERATOR_NAME} ${REPO}
   else
     echo Already running ${OPERATOR_NAME}-operator. You need to uninstall it first.
   fi
@@ -86,15 +89,54 @@ help() {
 
 
 install_dependencies() {
-  local REPO=$1
+  local OPERATOR_NAME=$1
+  local REPO=$2
 
   case ${OPERATOR_NAME} in
+    hbase)
+      install_dependencies_hbase $REPO
+      ;;
+    kafka)
+      install_dependencies_kafka $REPO
+      ;;
+    opa)
+      install_operator regorule ${REPO}
+      ;;
+    nifi|druid)
+      install_operator zookeeper ${REPO}
+      ;;
     superset)
       install_dependencies_superset $REPO
+      ;;
+    trino)
+      install_dependencies_trino $REPO
       ;;
     *)
       ;;
   esac
+}
+
+install_dependencies_hbase() {
+  local REPO=$1
+
+  install_operator zookeeper ${REPO}
+  install_operator hdfs ${REPO}
+}
+
+install_dependencies_kafka() {
+  local REPO=$1
+
+  install_operator hive ${REPO}
+  install_operator regorule ${REPO}
+  install_operator opa ${REPO}
+}
+
+install_dependencies_kafka() {
+  local REPO=$1
+
+  install_operator zookeeper ${REPO}
+  install_operator regorule ${REPO}
+  install_operator opa ${REPO}
 }
 
 install_dependencies_superset() {
@@ -156,18 +198,14 @@ spec:
   fi
 
   # Deploy Hive and Trino operators
-  if [ -z "$(helm ls | grep hive-operator | awk '{print $1}')" ]; then
-    helm install hive-operator ${REPO}/hive-operator
-  fi
-  if [ -z "$(helm ls | grep trino-operator | awk '{print $1}')" ]; then
-    helm install trino-operator ${REPO}/trino-operator
-  fi
+  install_operator hive
+  install_operator trino
 }
 
 {
   check_args
   create_kind_cluster
-  install_operator
+  install_operator ${OPERATOR_NAME} ${OPERATOR_VERSION}
 }
 
 
