@@ -59,24 +59,109 @@ install_operator() {
   local HELM_RELEASE=$(helm ls | grep ${OPERATOR_NAME}-operator | awk '{print $1}')
   if [ -z "${HELM_RELEASE}" ]; then
     helm repo update ${HELM_REPO_NAME}
-    helm install ${OPERATOR_NAME}-operator ${REPO}/${OPERATOR_NAME}-operator --version=${OPERATOR_VERSION} --devel
+    if [ -z "${OPERATOR_VERSION}" ]; then
+      helm install ${OPERATOR_NAME}-operator ${REPO}/${OPERATOR_NAME}-operator --devel
+    else
+      helm install ${OPERATOR_NAME}-operator ${REPO}/${OPERATOR_NAME}-operator --version=${OPERATOR_VERSION} --devel
+    fi
+    install_dependencies ${REPO}
   else
     echo Already running ${OPERATOR_NAME}-operator. You need to uninstall it first.
   fi
 }
 
 check_args() {
-  if [ -z "${OPERATOR_NAME}" ] || [ -z "${OPERATOR_VERSION}" ]; then
-    echo ERROR: Missing argument
+  if [ -z "${OPERATOR_NAME}" ]; then
+    echo ERROR: Missing operator name.
     help
     exit
   fi
 }
 
 help() {
-  echo "Usage: ./create_test-cluster.sh operator-name operator-version"
+  echo "Usage: ./create_test-cluster.sh operator-name [operator-version]"
   echo "operator-name     : Can be one of: zookeeper, regorule, kafka, nifi, ..."
-  echo "operator-version  : Helm chart version."
+  echo "operator-version  : Optional Helm chart version."
+}
+
+
+install_dependencies() {
+  local REPO=$1
+
+  case ${OPERATOR_NAME} in
+    superset)
+      install_dependencies_superset $REPO
+      ;;
+    *)
+      ;;
+  esac
+}
+
+install_dependencies_superset() {
+  local REPO=$1
+
+  if [ -z "$(helm repo list | grep minio)" ]; then
+    # Set up S3
+    helm repo add minio https://operator.min.io/
+    helm repo update minio
+  fi
+
+  if [ -z "$(helm ls --namespace minio-operator | grep minio-operator | awk '{print $1}')" ]; then
+    helm install \
+        --namespace minio-operator \
+        --create-namespace \
+        --generate-name \
+        --set 'tenants[0].name=minio1' \
+        --set 'tenants[0].namespace=default' \
+        --set 'tenants[0].pools[0].servers=1' \
+        --set 'tenants[0].pools[0].size=10Mi' \
+        --set 'tenants[0].pools[0].storageClassName=standard' \
+        --set 'tenants[0].secrets.enabled=true' \
+        --set 'tenants[0].secrets.name=minio1-secret' \
+        --set 'tenants[0].secrets.accessKey=minio' \
+        --set 'tenants[0].secrets.secretKey=minio123' \
+        --set 'tenants[0].certificate.requestAutoCert=false' \
+        minio/minio-operator
+
+    echo Waiting 90 seconds for MinIO service to be up and running ...
+    sleep 90
+
+    echo "
+apiVersion: v1
+kind: Service
+metadata:
+  name: minio-external
+spec:
+  type: NodePort
+  selector:
+    v1.min.io/tenant: minio1
+  ports:
+    - port: 80
+      targetPort: 9000
+  " | kubectl apply -f -
+
+    export minioNodeIp=$(kubectl get pod \
+            --selector='v1.min.io/tenant=minio1' \
+            --output=jsonpath="{.items[0].status.hostIP}")
+    export  minioNodePort=$(kubectl get service minio-external \
+            --output=jsonpath="{.spec.ports[0].nodePort}")
+     
+    export S3_ENDPOINT="http://$minioNodeIp:$minioNodePort"
+    export S3_ACCESS_KEY=$(kubectl get secret minio1-secret \
+            --output=jsonpath="{.data.accesskey}" | base64 --decode)
+    export S3_SECRET_KEY=$(kubectl get secret minio1-secret \
+            --output=jsonpath="{.data.secretkey}" | base64 --decode)
+  else
+    echo Minio is already running.
+  fi
+
+  # Deploy Hive and Trino operators
+  if [ -z "$(helm ls | grep hive-operator | awk '{print $1}')" ]; then
+    helm install hive-operator ${REPO}/hive-operator
+  fi
+  if [ -z "$(helm ls | grep trino-operator | awk '{print $1}')" ]; then
+    helm install trino-operator ${REPO}/trino-operator
+  fi
 }
 
 {
@@ -85,62 +170,4 @@ help() {
   install_operator
 }
 
-
-## Set up S3
-#helm repo add minio https://operator.min.io/
-#helm repo update minio
-#helm install \
-#    --namespace minio-operator \
-#    --create-namespace \
-#    --generate-name \
-#    --set tenants[0].name=minio1 \
-#    --set tenants[0].namespace=default \
-#    --set tenants[0].pools[0].servers=1 \
-#    --set tenants[0].pools[0].size=10Mi \
-#    --set tenants[0].pools[0].storageClassName=standard \
-#    --set tenants[0].secrets.enabled=true \
-#    --set tenants[0].secrets.name=minio1-secret \
-#    --set tenants[0].secrets.accessKey=minio \
-#    --set tenants[0].secrets.secretKey=minio123 \
-#    --set tenants[0].certificate.requestAutoCert=false \
-#    minio/minio-operator
-#
-#echo Waiting 90 seconds for MinIO service to be up and running ...
-#sleep 90
-#
-#echo "
-#apiVersion: v1
-#kind: Service
-#metadata:
-#  name: minio-external
-#spec:
-#  type: NodePort
-#  selector:
-#    v1.min.io/tenant: minio1
-#  ports:
-#    - port: 80
-#      targetPort: 9000
-#" | kubectl apply -f -
-#
-#set minioNodeIp \
-#    (kubectl get pod \
-#        --selector='v1.min.io/tenant=minio1' \
-#        --output=jsonpath="{.items[0].status.hostIP}")
-#set minioNodePort \
-#    (kubectl get service minio-external \
-#        --output=jsonpath="{.spec.ports[0].nodePort}")
-# 
-#set -Ux S3_ENDPOINT "http://$minioNodeIp:$minioNodePort"
-#set -Ux S3_ACCESS_KEY \
-#    (kubectl get secret minio1-secret \
-#        --output=jsonpath="{.data.accesskey}" | base64 --decode)
-#set -Ux S3_SECRET_KEY \
-#    (kubectl get secret minio1-secret \
-#        --output=jsonpath="{.data.secretkey}" | base64 --decode)
-#
-## Deploy Hive and Trino operators
-#helm repo add stackable https://repo.stackable.tech/repository/helm-dev
-#helm repo update stackable
-#helm install hive-operator stackable/hive-operator --version=0.3.0-nightly
-#helm install trino-operator stackable/trino-operator --version=0.1.0-nightly
 
