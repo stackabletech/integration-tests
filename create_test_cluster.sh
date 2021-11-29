@@ -61,7 +61,7 @@ install_operator() {
 
   local HELM_RELEASE=$(helm ls | grep ${OPERATOR_NAME}-operator | awk '{print $1}')
   if [ -z "${HELM_RELEASE}" ]; then
-    helm repo update ${HELM_REPO_NAME}
+    # helm repo update ${HELM_REPO_NAME}
     if [ -z "${OPERATOR_VERSION}" ]; then
       helm install ${OPERATOR_NAME}-operator ${REPO}/${OPERATOR_NAME}-operator --devel
     else
@@ -94,22 +94,22 @@ install_dependencies() {
 
   case ${OPERATOR_NAME} in
     hbase)
-      install_dependencies_hbase $REPO
+      install_dependencies_hbase
       ;;
     kafka)
-      install_dependencies_kafka $REPO
+      install_dependencies_kafka
       ;;
     opa)
-      install_operator regorule ${REPO}
+      install_operator regorule
       ;;
     nifi|druid)
-      install_operator zookeeper ${REPO}
+      install_operator zookeeper
       ;;
     superset)
-      install_dependencies_superset $REPO
+      install_dependencies_superset
       ;;
     trino)
-      install_dependencies_trino $REPO
+      install_dependencies_trino
       ;;
     *)
       ;;
@@ -117,31 +117,23 @@ install_dependencies() {
 }
 
 install_dependencies_hbase() {
-  local REPO=$1
+  install_operator zookeeper
+  install_operator hdfs
+}
 
-  install_operator zookeeper ${REPO}
-  install_operator hdfs ${REPO}
+install_dependencies_trino() {
+  install_operator hive
+  install_operator regorule
+  install_operator opa
 }
 
 install_dependencies_kafka() {
-  local REPO=$1
-
-  install_operator hive ${REPO}
-  install_operator regorule ${REPO}
-  install_operator opa ${REPO}
-}
-
-install_dependencies_kafka() {
-  local REPO=$1
-
-  install_operator zookeeper ${REPO}
-  install_operator regorule ${REPO}
-  install_operator opa ${REPO}
+  install_operator zookeeper
+  install_operator regorule
+  install_operator opa
 }
 
 install_dependencies_superset() {
-  local REPO=$1
-
   if [ -z "$(helm repo list | grep minio)" ]; then
     # Set up S3
     helm repo add minio https://operator.min.io/
