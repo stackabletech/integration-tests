@@ -28,7 +28,7 @@ nodes:
       kind: JoinConfiguration
       nodeRegistration:
         kubeletExtraArgs:
-          node-labels: "node=1"
+          node-labels: "node=1,nodeType=druid-data"
 - role: worker
   kubeadmConfigPatches:
     - |
