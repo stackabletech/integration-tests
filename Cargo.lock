@@ -1981,7 +1981,7 @@ dependencies = [
 [[package]]
 name = "stackable-zookeeper-crd"
 version = "0.6.0-nightly"
-source = "git+https://github.com/stackabletech/zookeeper-operator.git?branch=main#e2b3b2d6ed1b7ac42ec5bea53d06ba26975134f3"
+source = "git+https://github.com/stackabletech/zookeeper-operator.git?branch=main#8e3363366e1360a4d65bacdb3865c73a31cd4f78"
 dependencies = [
  "duplicate",
  "semver",
