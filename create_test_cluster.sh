@@ -61,7 +61,7 @@ install_operator() {
 
   local HELM_RELEASE=$(helm ls | grep ${OPERATOR_NAME}-operator | awk '{print $1}')
   if [ -z "${HELM_RELEASE}" ]; then
-    # helm repo update ${HELM_REPO_NAME}
+    helm repo update ${HELM_REPO_NAME}
     if [ -z "${OPERATOR_VERSION}" ]; then
       helm install ${OPERATOR_NAME}-operator ${REPO}/${OPERATOR_NAME}-operator --devel
     else
@@ -121,9 +121,8 @@ install_dependencies_hbase() {
   install_operator hdfs
 }
 
-install_dependencies_trino() {
+install_dependencies_superset() {
   install_operator hive
-  install_operator regorule
   install_operator opa
 }
 
@@ -133,7 +132,7 @@ install_dependencies_kafka() {
   install_operator opa
 }
 
-install_dependencies_superset() {
+install_dependencies_trino() {
   if [ -z "$(helm repo list | grep minio)" ]; then
     # Set up S3
     helm repo add minio https://operator.min.io/
@@ -185,13 +184,21 @@ spec:
             --output=jsonpath="{.data.accesskey}" | base64 --decode)
     export S3_SECRET_KEY=$(kubectl get secret minio1-secret \
             --output=jsonpath="{.data.secretkey}" | base64 --decode)
+
+    echo !!!! Make sure the following variables are set in your environment before running
+    echo !!!! the trino integration tests.
+    echo export minioNodeIp=${minioNodeIp}
+    echo export minioNodePort=${minioNodePort}
+    echo export S3_ENDPOINT=${S3_ENDPOINT}
+    echo export S3_ACCESS_KEY=${S3_ACCESS_KEY}
+    echo export S3_SECRET_KEY=${S3_SECRET_KEY}
+
   else
     echo Minio is already running.
   fi
 
   # Deploy Hive and Trino operators
   install_operator hive
-  install_operator trino
 }
 
 {
