@@ -26,7 +26,7 @@ echo Starting MinIO tenant ...
 while test (echo -n "Status: "; \
         kubectl get tenant minio1 \
         --ignore-not-found=true \
-        --output=jsonpath="{.status.currentState}"; or echo "") \
+        --output=jsonpath="{.status.currentState}") \
         != "Status: Initialized"
     sleep 2
 end
