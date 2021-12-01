@@ -1,33 +1,45 @@
 #!/usr/bin/env fish
 
+# MinIO operator chart versions from 4.2.4 to 4.3.5 (which is the latest
+# at the time of writing) seem to be affected by
+# https://github.com/minio/operator/issues/904
+set minioOperatorChartVersion 4.2.3
+set hiveOperatorVersion 0.3.0-nightly
+set trinoOperatorVersion 0.1.0-nightly
+
 # Create Kubernetes cluster
-kind create cluster
+echo "
+kind: Cluster
+apiVersion: kind.x-k8s.io/v1alpha4
+nodes:
+- role: control-plane
+- role: worker
+- role: worker
+- role: worker
+- role: worker
+" | kind create cluster --config -
 
 # Set up S3
 helm repo add minio https://operator.min.io/
 helm repo update minio
-helm install \
-    --namespace minio-operator \
-    --create-namespace \
+helm show values \
+    --version $minioOperatorChartVersion \
+    minio/minio-operator \
+| sed -e "
+    /requestAutoCert:/ s/:.*/: false/
+    /servers:/ s/:.*/: 1/g
+    /size:/ s/:.*/: 10Mi/" \
+| helm install \
+    --version $minioOperatorChartVersion \
     --generate-name \
-    --set tenants[0].name=minio1 \
-    --set tenants[0].namespace=default \
-    --set tenants[0].pools[0].servers=1 \
-    --set tenants[0].pools[0].size=10Mi \
-    --set tenants[0].pools[0].storageClassName=standard \
-    --set tenants[0].secrets.enabled=true \
-    --set tenants[0].secrets.name=minio1-secret \
-    --set tenants[0].secrets.accessKey=minio \
-    --set tenants[0].secrets.secretKey=minio123 \
-    --set tenants[0].certificate.requestAutoCert=false \
+    --values - \
     minio/minio-operator
 
 echo Starting MinIO tenant ...
-while test (echo -n "Status: "; \
-        kubectl get tenant minio1 \
-        --ignore-not-found=true \
-        --output=jsonpath="{.status.currentState}") \
-        != "Status: Initialized"
+while test (echo (kubectl get pod \
+        --selector=v1.min.io/tenant=minio1 \
+        --output=jsonpath='{range .items[*]}{.status.conditions[?(@.type=="Ready")].status}{end}')) \
+        != "True"
     sleep 2
 end
 
@@ -44,6 +56,7 @@ spec:
     - port: 80
       targetPort: 9000
 " | kubectl apply -f -
+sleep 30
 
 set minioNodeIp \
     (kubectl get pod \
@@ -64,5 +77,5 @@ set -Ux S3_SECRET_KEY \
 # Deploy Hive and Trino operators
 helm repo add stackable https://repo.stackable.tech/repository/helm-dev
 helm repo update stackable
-helm install hive-operator stackable/hive-operator --version=0.3.0-nightly
-helm install trino-operator stackable/trino-operator --version=0.1.0-nightly
+helm install hive-operator stackable/hive-operator --version=$hiveOperatorVersion
+helm install trino-operator stackable/trino-operator --version=$trinoOperatorVersion
