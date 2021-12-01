@@ -17,6 +17,7 @@ pub fn build_test_cluster() -> TestCluster<ZookeeperCluster> {
         &TestClusterTimeouts {
             cluster_ready: Duration::from_secs(300),
             pods_terminated: Duration::from_secs(60),
+            pods_terminated_delay: None,
         },
     )
 }

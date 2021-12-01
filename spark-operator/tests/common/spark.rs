@@ -19,6 +19,7 @@ pub fn build_test_cluster() -> TestCluster<SparkCluster> {
         &TestClusterTimeouts {
             cluster_ready: Duration::from_secs(300),
             pods_terminated: Duration::from_secs(120),
+            pods_terminated_delay: None,
         },
     )
 }

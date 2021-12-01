@@ -5,6 +5,7 @@ use integration_test_commons::operator::setup::{
 use integration_test_commons::stackable_operator::labels::{
     APP_INSTANCE_LABEL, APP_NAME_LABEL, APP_VERSION_LABEL,
 };
+use integration_test_commons::stackable_operator::product_config::PropertyValidationResult::Default;
 use integration_test_commons::test::kube::TestKubeClient;
 use stackable_nifi_crd::{NifiCluster, APP_NAME};
 use std::time::Duration;
@@ -22,6 +23,7 @@ pub fn build_test_cluster() -> TestCluster<NifiCluster> {
         &TestClusterTimeouts {
             cluster_ready: Duration::from_secs(300),
             pods_terminated: Duration::from_secs(30),
+            pods_terminated_delay: None,
         },
     )
 }

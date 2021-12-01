@@ -11,3 +11,5 @@
 **/*.rs.bk
 
 kind-config.yaml
+.idea
+

@@ -17,6 +17,7 @@ pub fn build_test_cluster() -> TestCluster<DruidCluster> {
         &TestClusterTimeouts {
             cluster_ready: Duration::from_secs(300),
             pods_terminated: Duration::from_secs(180),
+            pods_terminated_delay: None,
         },
     )
 }

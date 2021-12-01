@@ -1,5 +1,6 @@
 pub mod common;
 
+use crate::common::zookeeper::build_zk_test_cluster;
 use anyhow::Result;
 use common::kafka::{build_kafka_cluster_monitoring, build_test_cluster};
 use integration_test_commons::operator::checks::monitoring_checks;
@@ -15,8 +16,10 @@ fn test_monitoring_and_container_ports() -> Result<()> {
 
     let mut cluster = build_test_cluster();
 
+    let zk_client = build_zk_test_cluster("test-kafka-zk")?;
+
     let (kafka_cr, expected_pod_count) =
-        build_kafka_cluster_monitoring(cluster.name(), version, 1, metrics_port)?;
+        build_kafka_cluster_monitoring(cluster.name(), version, zk_client.name(), 1, metrics_port)?;
     cluster.create_or_update(&kafka_cr, &BTreeMap::new(), expected_pod_count)?;
 
     let metric_service = create_node_port_service(
