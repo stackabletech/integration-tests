@@ -136,28 +136,36 @@ install_dependencies_trino() {
   if [ -z "$(helm repo list | grep minio)" ]; then
     # Set up S3
     helm repo add minio https://operator.min.io/
-    helm repo update minio
   fi
 
-  if [ -z "$(helm ls --namespace minio-operator | grep minio-operator | awk '{print $1}')" ]; then
-    helm install \
-        --namespace minio-operator \
-        --create-namespace \
+  if [ -z "$(helm ls | grep minio-operator | awk '{print $1}')" ]; then
+    # MinIO operator chart versions from 4.2.4 to 4.3.5 (which is the latest
+    # at the time of writing) seem to be affected by
+    # https://github.com/minio/operator/issues/904
+    local minioOperatorChartVersion=4.2.3
+
+    helm repo update minio
+    helm show values \
+        --version $minioOperatorChartVersion \
+        minio/minio-operator \
+    | sed -e "
+        /requestAutoCert:/ s/:.*/: false/
+        /servers:/ s/:.*/: 1/g
+        /size:/ s/:.*/: 10Mi/" \
+    | helm install \
+        --version $minioOperatorChartVersion \
         --generate-name \
-        --set 'tenants[0].name=minio1' \
-        --set 'tenants[0].namespace=default' \
-        --set 'tenants[0].pools[0].servers=1' \
-        --set 'tenants[0].pools[0].size=10Mi' \
-        --set 'tenants[0].pools[0].storageClassName=standard' \
-        --set 'tenants[0].secrets.enabled=true' \
-        --set 'tenants[0].secrets.name=minio1-secret' \
-        --set 'tenants[0].secrets.accessKey=minio' \
-        --set 'tenants[0].secrets.secretKey=minio123' \
-        --set 'tenants[0].certificate.requestAutoCert=false' \
+        --values - \
         minio/minio-operator
 
-    echo Waiting 90 seconds for MinIO service to be up and running ...
-    sleep 90
+    echo Starting MinIO tenant ...
+    while [ "$(kubectl get pod \
+            --selector=v1.min.io/tenant=minio1 \
+            --output=jsonpath='{range .items[*]}{.status.conditions[?(@.type=="Ready")].status}{end}')" \
+            != "True" ]
+    do
+        sleep 2
+    done
 
     echo "
 apiVersion: v1
@@ -171,14 +179,15 @@ spec:
   ports:
     - port: 80
       targetPort: 9000
-  " | kubectl apply -f -
+" | kubectl apply -f -
+    sleep 30
 
-    export minioNodeIp=$(kubectl get pod \
-            --selector='v1.min.io/tenant=minio1' \
-            --output=jsonpath="{.items[0].status.hostIP}")
-    export  minioNodePort=$(kubectl get service minio-external \
-            --output=jsonpath="{.spec.ports[0].nodePort}")
-     
+    local minioNodeIp=$(kubectl get pod \
+        --selector='v1.min.io/tenant=minio1' \
+        --output=jsonpath="{.items[0].status.hostIP}")
+    local minioNodePort=$(kubectl get service minio-external \
+        --output=jsonpath="{.spec.ports[0].nodePort}")
+
     export S3_ENDPOINT="http://$minioNodeIp:$minioNodePort"
     export S3_ACCESS_KEY=$(kubectl get secret minio1-secret \
             --output=jsonpath="{.data.accesskey}" | base64 --decode)
@@ -187,8 +196,6 @@ spec:
 
     echo !!!! Make sure the following variables are set in your environment before running
     echo !!!! the trino integration tests.
-    echo export minioNodeIp=${minioNodeIp}
-    echo export minioNodePort=${minioNodePort}
     echo export S3_ENDPOINT=${S3_ENDPOINT}
     echo export S3_ACCESS_KEY=${S3_ACCESS_KEY}
     echo export S3_SECRET_KEY=${S3_SECRET_KEY}
