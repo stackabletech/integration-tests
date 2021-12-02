@@ -22,3 +22,12 @@ It is recommended to run the tests in the same shell the was used to create the 
 
     cargo build --package integration-tests-commons
 
+## Tips and tricks
+
+### Test images locally
+
+If you want to test product or operator images locally before publishing them to the image registry, you can build them locally and then load them in your `kind` cluster like this:
+
+   kind load docker-image docker.stackable.tech/stackable/superset:1.3.2-stackable0  --name integration-tests --verbosity 999
+
+
