@@ -194,8 +194,8 @@ fn generate_tls_certificate(
     cert_builder.set_subject_name(&subject_name)?;
     cert_builder.set_issuer_name(&subject_name)?;
     cert_builder.set_pubkey(key_pair)?;
-    cert_builder.set_not_before(&Asn1Time::days_from_now(0).unwrap())?;
-    cert_builder.set_not_after(&Asn1Time::days_from_now(1).unwrap())?;
+    cert_builder.set_not_before(&Asn1Time::from_str("19700101000000Z").unwrap())?;
+    cert_builder.set_not_after(&Asn1Time::from_str("99991231235959Z").unwrap())?;
     cert_builder.append_extension(BasicConstraints::new().build()?)?;
     cert_builder.append_extension(
         SubjectKeyIdentifier::new().build(&cert_builder.x509v3_context(None, None))?,
