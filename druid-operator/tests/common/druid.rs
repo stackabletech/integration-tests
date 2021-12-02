@@ -27,6 +27,7 @@ pub fn build_druid_cluster(
     name: &str,
     version: &str,
     replicas: usize,
+    zk_ref_name: &str,
 ) -> Result<(DruidCluster, usize)> {
     let spec = &format!(
         "
@@ -38,7 +39,7 @@ pub fn build_druid_cluster(
           version: {version}
           zookeeperReference:
             namespace: default
-            name: simple
+            name: {zk_ref_name}
           metadataStorageDatabase:
             dbType: derby
             connString: jdbc:derby://localhost:1527/var/druid/metadata.db;create=true
@@ -100,6 +101,7 @@ pub fn build_druid_cluster(
         ",
         name = name,
         version = version,
+        zk_ref_name = zk_ref_name,
         replicas = replicas
     );
 

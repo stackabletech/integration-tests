@@ -1,5 +1,6 @@
 pub mod common;
 
+use crate::common::zookeeper::build_zk_test_cluster;
 use anyhow::Result;
 use common::druid::{build_druid_cluster, build_test_cluster, TestService};
 use integration_test_commons::operator::setup::version_label;
@@ -9,9 +10,13 @@ use std::{thread, time};
 #[test]
 fn test_create_1_cluster_0_22_0() -> Result<()> {
     let version = "0.22.0";
+
+    let zk_client = build_zk_test_cluster("test-druid-zk")?;
+
     let mut cluster = build_test_cluster();
 
-    let (druid_cr, expected_pod_count) = build_druid_cluster(cluster.name(), version, 1)?;
+    let (druid_cr, expected_pod_count) =
+        build_druid_cluster(cluster.name(), version, 1, zk_client.name())?;
     cluster.create_or_update(
         &druid_cr,
         &version_label(&version.to_string()),
