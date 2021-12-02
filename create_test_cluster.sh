@@ -122,8 +122,20 @@ install_dependencies_hbase() {
 }
 
 install_dependencies_superset() {
-  install_operator hive
-  install_operator opa
+  if [ -z "$(helm repo list | grep 'https://charts.bitnami.com/bitnami')" ]; then
+    # Set bitnami repo for postgres charts
+    helm repo add bitnami 'https://charts.bitnami.com/bitnami'
+    helm repo update bitnami
+  fi
+
+  if [ -z "$(helm ls | grep 'postgresql' | awk '{print $1}')" ]; then
+    helm install postgresql bitnami/postgresql \
+      --set postgresqlUsername=superset \
+      --set postgresqlPassword=superset \
+      --set postgresqlDatabase=superset
+  else
+    echo Postgresql is already running.
+  fi
 }
 
 install_dependencies_kafka() {
@@ -136,6 +148,7 @@ install_dependencies_trino() {
   if [ -z "$(helm repo list | grep minio)" ]; then
     # Set up S3
     helm repo add minio https://operator.min.io/
+    helm repo update minio
   fi
 
   if [ -z "$(helm ls | grep minio-operator | awk '{print $1}')" ]; then
@@ -144,7 +157,6 @@ install_dependencies_trino() {
     # https://github.com/minio/operator/issues/904
     local minioOperatorChartVersion=4.2.3
 
-    helm repo update minio
     helm show values \
         --version $minioOperatorChartVersion \
         minio/minio-operator \
