@@ -26,9 +26,9 @@ fn test_create_cluster_362() -> Result<()> {
 }
 
 fn test_create_cluster(trino_version: TrinoVersion, hive_version: HiveVersion) -> Result<()> {
-    let trino_coordinator_replicas = 2;
+    let trino_coordinator_replicas = 1;
     let trino_worker_replicas = 2;
-    let hive_replicas = 2;
+    let hive_replicas = 1;
 
     let s3_endpoint = env::var("S3_ENDPOINT")?;
     let s3_access_key = env::var("S3_ACCESS_KEY")?;
