@@ -42,6 +42,7 @@ pub fn build_nifi_cluster(
     http_port: i32,
     protocol_port: i32,
     load_balance_port: i32,
+    zk_ref_name: &str,
 ) -> Result<(NifiCluster, usize)> {
     let spec = &format!(
         "
@@ -52,7 +53,7 @@ pub fn build_nifi_cluster(
         spec:
           version: {}
           zookeeperReference:
-            name: simple
+            name: {}
             namespace: default
             chroot: /nifi
           nodes:
@@ -66,7 +67,7 @@ pub fn build_nifi_cluster(
                   protocolPort: {}
                   loadBalancePort: {}
     ",
-        name, version, replicas, http_port, protocol_port, load_balance_port
+        name, version, zk_ref_name, replicas, http_port, protocol_port, load_balance_port
     );
 
     Ok((serde_yaml::from_str(spec)?, replicas))
@@ -78,6 +79,7 @@ pub fn build_nifi_cluster_monitoring(
     version: &str,
     replicas: usize,
     monitoring_port: i32,
+    zk_ref_name: &str,
 ) -> Result<(NifiCluster, usize)> {
     let spec = &format!(
         "
@@ -89,7 +91,7 @@ pub fn build_nifi_cluster_monitoring(
           version: {}
           metricsPort: {}
           zookeeperReference:
-            name: simple
+            name: {}
             namespace: default
             chroot: /nifi
           nodes:
@@ -103,7 +105,7 @@ pub fn build_nifi_cluster_monitoring(
                   protocolPort: 11443
                   loadBalancePort: 11342
     ",
-        name, version, monitoring_port, replicas
+        name, version, monitoring_port, zk_ref_name, replicas
     );
 
     Ok((serde_yaml::from_str(spec)?, replicas))

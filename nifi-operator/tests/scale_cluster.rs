@@ -1,6 +1,7 @@
 pub mod common;
 
 use crate::common::nifi::maximize_client_verification_time_out;
+use crate::common::zookeeper::build_zk_test_cluster;
 use anyhow::Result;
 use common::nifi::{build_nifi_cluster, build_test_cluster};
 use integration_test_commons::operator::checks::port_check;
@@ -15,6 +16,8 @@ fn test_scale_cluster_up() -> Result<()> {
     let protocol_port: i32 = 29010;
     let load_balance_port: i32 = 29020;
 
+    let zk_client = build_zk_test_cluster("test-kafka-zk")?;
+
     let mut cluster = build_test_cluster();
     maximize_client_verification_time_out(&mut cluster.client);
 
@@ -25,6 +28,7 @@ fn test_scale_cluster_up() -> Result<()> {
         http_port,
         protocol_port,
         load_balance_port,
+        zk_client.name(),
     )?;
 
     cluster.create_or_update(
@@ -40,6 +44,7 @@ fn test_scale_cluster_up() -> Result<()> {
         http_port,
         protocol_port,
         load_balance_port,
+        zk_client.name(),
     )?;
 
     cluster.create_or_update(
@@ -60,6 +65,8 @@ fn test_scale_cluster_down() -> Result<()> {
     let protocol_port: i32 = 30010;
     let load_balance_port: i32 = 30020;
 
+    let zk_client = build_zk_test_cluster("test-kafka-zk")?;
+
     let mut cluster = build_test_cluster();
     maximize_client_verification_time_out(&mut cluster.client);
 
@@ -70,6 +77,7 @@ fn test_scale_cluster_down() -> Result<()> {
         http_port,
         protocol_port,
         load_balance_port,
+        zk_client.name(),
     )?;
 
     cluster.create_or_update(
@@ -85,6 +93,7 @@ fn test_scale_cluster_down() -> Result<()> {
         http_port,
         protocol_port,
         load_balance_port,
+        zk_client.name(),
     )?;
 
     cluster.create_or_update(

@@ -1019,6 +1019,7 @@ dependencies = [
  "serde_json",
  "serde_yaml",
  "stackable-nifi-crd",
+ "stackable-zookeeper-crd 0.5.0",
 ]
 
 [[package]]
