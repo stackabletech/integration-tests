@@ -11,7 +11,7 @@ spec:
   location: "hel1"
   wireguard: false
   versions:
-    stackable-monitoring-operator: "$MONITORING_OPERATOR_VERSION"
+    monitoring-operator: "$MONITORING_OPERATOR_VERSION"
   nodes:
     main:
       numberOfNodes: 2

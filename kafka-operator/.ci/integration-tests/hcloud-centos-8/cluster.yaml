@@ -11,7 +11,8 @@ spec:
   location: "hel1"
   wireguard: false
   versions:
-    stackable-kafka-operator: "$KAFKA_OPERATOR_VERSION"
+    kafka-operator: "$KAFKA_OPERATOR_VERSION"
+    zookeeper-operator: NIGHTLY
   nodes:
     main:
       numberOfNodes: 3

@@ -11,7 +11,7 @@ spec:
   region: eu-central-1
   wireguard: false
   versions:
-    stackable-zookeeper-operator: "$ZOOKEEPER_OPERATOR_VERSION"
+    zookeeper-operator: "$ZOOKEEPER_OPERATOR_VERSION"
   nodes:
     main:
       numberOfNodes: 3
