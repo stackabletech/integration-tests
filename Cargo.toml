@@ -10,5 +10,6 @@ members = [
 "spark-operator",
 "zookeeper-operator",
 "hive-operator",
-"superset-operator"
+"superset-operator",
+"trino-operator"
 ]
