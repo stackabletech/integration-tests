@@ -1,4 +1,4 @@
-mod common;
+pub mod common;
 
 use anyhow::Result;
 use common::kafka::{build_kafka_cluster, build_test_cluster};
