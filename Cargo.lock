@@ -2096,15 +2096,15 @@ dependencies = [
 [[package]]
 name = "stackable-kafka-crd"
 version = "0.4.0-nightly"
-source = "git+https://github.com/stackabletech/kafka-operator.git?branch=main#6c927d0a282a6320a1a94da6e73b2c730417a358"
+source = "git+https://github.com/stackabletech/kafka-operator.git?branch=main#c529f0199363fe99b86dfa87094e223cd3653f38"
 dependencies = [
  "duplicate",
  "semver",
  "serde",
  "serde_json",
- "stackable-opa-crd 0.4.1",
- "stackable-operator 0.3.0",
- "stackable-zookeeper-crd 0.4.1",
+ "stackable-opa-crd 0.5.0",
+ "stackable-operator 0.4.0",
+ "stackable-zookeeper-crd 0.5.0",
  "strum 0.22.0",
  "strum_macros 0.22.0",
  "thiserror",
@@ -2142,14 +2142,14 @@ dependencies = [
 
 [[package]]
 name = "stackable-opa-crd"
-version = "0.4.1"
-source = "git+https://github.com/stackabletech/opa-operator.git?tag=0.4.1#ebe2c0b59abb5e959508fd1af0f0360426e49cdb"
+version = "0.5.0"
+source = "git+https://github.com/stackabletech/opa-operator.git?tag=0.5.0#f8a019b6fd78cd78e1507cc7ba9e4ae4501afdc3"
 dependencies = [
  "rand 0.8.4",
  "semver",
  "serde",
  "serde_json",
- "stackable-operator 0.3.0",
+ "stackable-operator 0.4.0",
  "strum 0.22.0",
  "strum_macros 0.22.0",
  "thiserror",
@@ -2303,22 +2303,6 @@ dependencies = [
  "stackable-regorule-crd",
  "strum 0.21.0",
  "strum_macros 0.21.1",
- "thiserror",
- "tracing",
-]
-
-[[package]]
-name = "stackable-zookeeper-crd"
-version = "0.4.1"
-source = "git+https://github.com/stackabletech/zookeeper-operator.git?tag=0.4.1#a95a0cb793d07ea9a7a8fcfc6cf4c4ea16452284"
-dependencies = [
- "duplicate",
- "semver",
- "serde",
- "serde_json",
- "stackable-operator 0.3.0",
- "strum 0.22.0",
- "strum_macros 0.22.0",
  "thiserror",
  "tracing",
 ]
