@@ -1,0 +1,38 @@
+---
+apiVersion: t2.stackable.tech/v1
+kind: Infra
+template: aws-centos-8
+metadata: 
+  name: druid-operator-integration-tests
+  description: "Cluster for Druid Operator Integration Tests (AWS EC2 / CentOS 8)"
+domain: stackable.test
+publicKeys: []
+spec:
+  region: eu-central-1
+  wireguard: false
+  versions:
+    druid-operator: "$DRUID_OPERATOR_VERSION"
+    zookeeper-operator: NIGHTLY
+  nodes:
+    main:
+      numberOfNodes: 3
+    testdriver:
+      numberOfNodes: 1
+      agent: false
+services:
+  zookeeper: |
+    apiVersion: zookeeper.stackable.tech/v1alpha1
+    kind: ZookeeperCluster
+    metadata:
+      name: simple
+    spec:
+      version: 3.5.8
+      servers:
+        roleGroups:
+          default:
+            selector:
+              matchLabels:
+                kubernetes.io/os: linux
+            config:
+              adminPort: 12000
+              metricsPort: 9505
