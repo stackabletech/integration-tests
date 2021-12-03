@@ -1,6 +1,6 @@
 pub mod common;
 
-use crate::common::zookeeper::build_zk_test_cluster;
+use common::zookeeper::build_zk_test_cluster;
 use anyhow::Result;
 use common::kafka::{build_kafka_cluster_monitoring, build_test_cluster};
 use integration_test_commons::operator::checks::monitoring_checks;
