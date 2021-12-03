@@ -1,9 +1,9 @@
 pub mod common;
 
-use common::nifi::maximize_client_verification_time_out;
-use common::zookeeper::build_zk_test_cluster;
 use anyhow::Result;
+use common::nifi::maximize_client_verification_time_out;
 use common::nifi::{build_nifi_cluster, build_test_cluster};
+use common::zookeeper::build_zk_test_cluster;
 use integration_test_commons::operator::checks::port_check;
 use integration_test_commons::operator::service::create_node_port_service;
 use integration_test_commons::operator::setup::version_label;

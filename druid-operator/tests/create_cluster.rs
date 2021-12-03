@@ -1,8 +1,8 @@
 pub mod common;
 
-use common::zookeeper::build_zk_test_cluster;
 use anyhow::Result;
 use common::druid::{build_druid_cluster, build_test_cluster, TestService};
+use common::zookeeper::build_zk_test_cluster;
 use integration_test_commons::operator::setup::version_label;
 use integration_test_commons::test::prelude::Pod;
 use std::{thread, time};

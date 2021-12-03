@@ -1,8 +1,8 @@
 pub mod common;
 
-use common::zookeeper::build_zk_test_cluster;
 use anyhow::Result;
 use common::kafka::{build_kafka_cluster_monitoring, build_test_cluster};
+use common::zookeeper::build_zk_test_cluster;
 use integration_test_commons::operator::checks::monitoring_checks;
 use integration_test_commons::operator::service::create_node_port_service;
 use integration_test_commons::test::prelude::Pod;
