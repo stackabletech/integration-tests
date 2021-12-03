@@ -20,7 +20,7 @@ It is recommended to run the tests in the same shell the was used to create the 
 
 ## Build commons
 
-    cargo build --package integration-tests-commons
+    cargo build --package integration-test-commons
 
 ## Tips and tricks
 
