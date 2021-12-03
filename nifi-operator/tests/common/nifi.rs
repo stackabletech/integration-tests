@@ -20,11 +20,7 @@ pub fn build_test_cluster() -> TestCluster<NifiCluster> {
     TestCluster::new(
         &TestClusterOptions::new(APP_NAME, "simple"),
         &TestClusterLabels::new(APP_NAME_LABEL, APP_INSTANCE_LABEL, APP_VERSION_LABEL),
-        &TestClusterTimeouts {
-            cluster_ready: Duration::from_secs(300),
-            pods_terminated: Duration::from_secs(30),
-            pods_terminated_delay: None,
-        },
+        &TestClusterTimeouts::default(),
     )
 }
 

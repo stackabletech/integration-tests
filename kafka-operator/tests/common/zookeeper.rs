@@ -20,7 +20,7 @@ pub fn build_zk_test_cluster(app_name: &str) -> Result<TestCluster<ZookeeperClus
         &TestClusterTimeouts {
             cluster_ready: Duration::from_secs(300),
             pods_terminated: Duration::from_secs(30),
-            pods_terminated_delay: Some(Duration::from_secs(5)),
+            pods_terminated_delay: Duration::from_secs(5),
         },
     );
 

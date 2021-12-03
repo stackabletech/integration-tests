@@ -18,8 +18,8 @@ create_kind_cluster() {
     return
   fi
 
-  # Write cluster config file
-  tee ${KIND_CLUSTER_CONFIG_FILE} > /dev/null << KIND_CONFIG
+  # Create Kubernetes cluster
+  echo "
 kind: Cluster
 apiVersion: kind.x-k8s.io/v1alpha4
 nodes:
@@ -30,25 +30,22 @@ nodes:
       kind: JoinConfiguration
       nodeRegistration:
         kubeletExtraArgs:
-          node-labels: "node=1,nodeType=druid-data"
+          node-labels: node=1,nodeType=druid-data
 - role: worker
   kubeadmConfigPatches:
     - |
       kind: JoinConfiguration
       nodeRegistration:
         kubeletExtraArgs:
-          node-labels: "node=2"
+          node-labels: node=2
 - role: worker
   kubeadmConfigPatches:
     - |
       kind: JoinConfiguration
       nodeRegistration:
         kubeletExtraArgs:
-          node-labels: "node=3"
-KIND_CONFIG
-
-  # Create Kubernetes cluster
-  kind create cluster --name ${KIND_CLUSTER_NAME} --config ${KIND_CLUSTER_CONFIG_FILE}
+          node-labels: node=3
+" | kind create cluster --name ${KIND_CLUSTER_NAME} --config -
 }
 
 install_operator() {
@@ -67,7 +64,7 @@ install_operator() {
     if [ -z "${OPERATOR_VERSION}" ]; then
       helm install ${OPERATOR_NAME}-operator ${REPO}/${OPERATOR_NAME}-operator --devel
     else
-      helm install ${OPERATOR_NAME}-operator ${REPO}/${OPERATOR_NAME}-operator --version=${OPERATOR_VERSION} --devel
+      helm install ${OPERATOR_NAME}-operator ${REPO}/${OPERATOR_NAME}-operator --version=${OPERATOR_VERSION}
     fi
     install_dependencies ${OPERATOR_NAME} ${REPO}
   else

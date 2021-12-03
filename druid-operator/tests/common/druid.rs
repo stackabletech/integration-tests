@@ -7,18 +7,13 @@ use integration_test_commons::{
     test::prelude::{Pod, Service, TemporaryResource, TestKubeClient},
 };
 use stackable_druid_crd::{DruidCluster, APP_NAME};
-use std::time::Duration;
 
 /// Predefined options and timeouts for the TestCluster.
 pub fn build_test_cluster() -> TestCluster<DruidCluster> {
     TestCluster::new(
         &TestClusterOptions::new(APP_NAME, "simple"),
         &TestClusterLabels::new(APP_NAME_LABEL, APP_INSTANCE_LABEL, APP_VERSION_LABEL),
-        &TestClusterTimeouts {
-            cluster_ready: Duration::from_secs(300),
-            pods_terminated: Duration::from_secs(180),
-            pods_terminated_delay: None,
-        },
+        &TestClusterTimeouts::default(),
     )
 }
 

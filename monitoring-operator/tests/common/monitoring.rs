@@ -17,7 +17,7 @@ pub fn build_test_cluster() -> TestCluster<MonitoringCluster> {
         &TestClusterTimeouts {
             cluster_ready: Duration::from_secs(300),
             pods_terminated: Duration::from_secs(30),
-            pods_terminated_delay: None,
+            pods_terminated_delay: Duration::ZERO,
         },
     )
 }
