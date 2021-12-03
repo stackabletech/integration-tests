@@ -81,7 +81,7 @@ check_args() {
 }
 
 help() {
-  echo "Usage: ./create_test-cluster.sh operator-name [operator-version]"
+  echo "Usage: ./create_test_cluster.sh operator-name [operator-version]"
   echo "operator-name     : Can be one of: zookeeper, regorule, kafka, nifi, ..."
   echo "operator-version  : Optional Helm chart version."
 }
