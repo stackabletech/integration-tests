@@ -59,7 +59,7 @@ pub struct TestClusterTimeouts {
     /// The amount of time to sleep after the pods have been terminated.
     /// This is necessary when host networking is used because even though the pods are terminated,
     /// some resources like ports are still allocated (for a while). To avoid port collisions,
-    /// set this property to an appropriate amount.
+    /// set this property to an appropriate amount. Start with 10 seconds and work from there.
     pub pods_terminated_delay: Option<Duration>,
 }
 
@@ -339,6 +339,13 @@ where
             }
         }
         if self.timeouts.pods_terminated_delay.is_some() {
+            println!(
+                "{}",
+                self.log(&format!(
+                    "Waiting for pod termination delay : {:?} ...",
+                    self.timeouts.pods_terminated_delay.unwrap()
+                ))
+            );
             thread::sleep(self.timeouts.pods_terminated_delay.unwrap());
         }
     }
