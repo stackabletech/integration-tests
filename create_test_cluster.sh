@@ -7,6 +7,8 @@ KIND_CLUSTER_CONFIG_FILE="kind-config.yaml"
 KIND_CLUSTER_NAME="integration-tests"
 HELM_DEV_REPO_NAME="stackable-dev"
 HELM_DEV_REPO_URL="https://repo.stackable.tech/repository/helm-dev"
+PYTHON=$(which python)
+PIP=$(which pip)
 
 create_kind_cluster() {
 
@@ -96,6 +98,9 @@ install_dependencies() {
     hbase)
       install_dependencies_hbase
       ;;
+    hive)
+      install_dependencies_hive
+      ;;
     kafka)
       install_dependencies_kafka
       ;;
@@ -116,6 +121,18 @@ install_dependencies() {
   esac
 }
 
+install_dependencies_hive() {
+  if [ -z "${PYTHON}" ] || [ -z "${PIP}" ]; then
+    echo "ERROR: you need python *and* pip (version 3) to run the Hive tests!"
+  else
+    python3 -c 'import hive_metastore_client' >/dev/null 2>&1
+    if [ $? -eq 1 ]; then
+      pip3 install --user --requirement hive-operator/python/requirements.txt
+    else
+      echo Python requirements already installed.
+    fi
+  fi
+}
 install_dependencies_hbase() {
   install_operator zookeeper
   install_operator hdfs
