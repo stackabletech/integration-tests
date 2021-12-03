@@ -49,25 +49,25 @@ fn build_zk_cluster(
         apiVersion: zookeeper.stackable.tech/v1alpha1
         kind: ZookeeperCluster
         metadata:
-          name: {}
+          name: {name}
         spec:
-          version: {}
+          version: {version}
           servers:
             roleGroups:
               default:
                 selector:
                   matchLabels:
                     kubernetes.io/os: linux
-                replicas: {}
+                replicas: {replicas}
                 config:
-                  adminPort: {}
-                  clientPort: {}
+                  adminPort: {admin_port}
+                  clientPort: {client_port}
     ",
-        name,
-        version.to_string(),
-        replicas,
-        admin_port.unwrap_or(8080),
-        client_port.unwrap_or(2181),
+        name = name,
+        version = version.to_string(),
+        replicas = replicas,
+        admin_port = admin_port.unwrap_or(8080),
+        client_port = client_port.unwrap_or(2181),
     );
 
     Ok((serde_yaml::from_str(spec)?, replicas))

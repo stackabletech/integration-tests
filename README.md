@@ -1,3 +1,12 @@
+## Requirements
+
+You need working versions of the following tools in your PATH:
+- kubectl
+- kind
+- helm
+- python (version 3) for hive tests
+- pip (version 3) for hive tests
+
 ## Set-up a test kind-cluster
 
 The `create_test_cluster.sh` utility script will set up a test kind cluster and install dependencies required for running the integration tests.

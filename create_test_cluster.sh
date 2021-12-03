@@ -143,7 +143,7 @@ install_dependencies_superset() {
   fi
 
   if [ -z "$(helm ls | grep 'postgresql' | awk '{print $1}')" ]; then
-    helm install postgresql bitnami/postgresql \
+    helm install superset bitnami/postgresql \
       --set postgresqlUsername=superset \
       --set postgresqlPassword=superset \
       --set postgresqlDatabase=superset
