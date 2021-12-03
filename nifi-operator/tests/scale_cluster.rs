@@ -1,7 +1,7 @@
 pub mod common;
 
-use crate::common::nifi::maximize_client_verification_time_out;
-use crate::common::zookeeper::build_zk_test_cluster;
+use common::nifi::maximize_client_verification_time_out;
+use common::zookeeper::build_zk_test_cluster;
 use anyhow::Result;
 use common::nifi::{build_nifi_cluster, build_test_cluster};
 use integration_test_commons::operator::checks::port_check;
