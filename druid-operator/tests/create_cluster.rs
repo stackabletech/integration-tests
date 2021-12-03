@@ -1,6 +1,6 @@
 pub mod common;
 
-use crate::common::zookeeper::build_zk_test_cluster;
+use common::zookeeper::build_zk_test_cluster;
 use anyhow::Result;
 use common::druid::{build_druid_cluster, build_test_cluster, TestService};
 use integration_test_commons::operator::setup::version_label;
