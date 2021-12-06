@@ -5,7 +5,6 @@
 # https://github.com/minio/operator/issues/904
 set minioOperatorChartVersion 4.2.3
 set hiveOperatorVersion 0.3.0
-set trinoOperatorVersion 0.1.0-nightly
 
 # Create Kubernetes cluster
 echo "
@@ -75,7 +74,8 @@ set -Ux S3_SECRET_KEY \
         --output=jsonpath="{.data.secretkey}" | base64 --decode)
 
 # Deploy Hive and Trino operators
-helm repo add stackable https://repo.stackable.tech/repository/helm-dev
-helm repo update stackable
-helm install hive-operator stackable/hive-operator --version=$hiveOperatorVersion
-helm install trino-operator stackable/trino-operator --version=$trinoOperatorVersion
+helm repo add stackable-dev https://repo.stackable.tech/repository/helm-dev
+helm repo add stackable-stable https://repo.stackable.tech/repository/helm-stable
+helm repo update
+helm install hive-operator stackable-stable/hive-operator --version=$hiveOperatorVersion
+helm install trino-operator stackable-dev/trino-operator --devel
