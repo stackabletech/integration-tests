@@ -1,0 +1,20 @@
+---
+apiVersion: t2.stackable.tech/v1
+kind: Infra
+template: hcloud-centos-8
+metadata: 
+  name: hive-hcloud-centos-8
+  description: "Cluster for Hive Operator Integration Tests (Hetzner / CentOS 8)"
+domain: stackable.demo
+publicKeys: []
+spec:
+  wireguard: false
+  location: "hel1"
+  versions:
+    hive-operator: "$HIVE_OPERATOR_VERSION"
+  nodes:
+    main:
+      numberOfNodes: 3
+    testdriver:
+      numberOfNodes: 1
+      k8s_node: false
