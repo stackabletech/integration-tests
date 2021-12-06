@@ -18,6 +18,18 @@ done
 echo Postgresql database started.
 echo
 
+# install stuff on testdriver
+ssh testdriver-1 sudo yum install vim procps curl gcc make pkgconfig openssl-devel systemd-devel python3-pip container-selinux selinux-policy-base git -y
+
+# install Rust with a script on testdriver
+echo "curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y" > install-rust.sh
+scp install-rust.sh testdriver-1:install-rust.sh
+ssh testdriver-1 chmod a+x install-rust.sh
+ssh testdriver-1 ./install-rust.sh
+
+# clone integration test repository on testdriver
+ssh testdriver-1 git clone -b $GIT_BRANCH https://github.com/stackabletech/integration-tests.git
+
 # create script which runs the test and execute it
 echo "cd integration-tests/superset-operator
 cargo test -- --nocapture
