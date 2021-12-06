@@ -4,7 +4,7 @@
 # at the time of writing) seem to be affected by
 # https://github.com/minio/operator/issues/904
 set minioOperatorChartVersion 4.2.3
-set hiveOperatorVersion 0.3.0-nightly
+set hiveOperatorVersion 0.3.0
 set trinoOperatorVersion 0.1.0-nightly
 
 # Create Kubernetes cluster
