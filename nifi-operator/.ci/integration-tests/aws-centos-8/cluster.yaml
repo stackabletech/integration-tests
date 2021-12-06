@@ -12,7 +12,6 @@ spec:
   wireguard: false
   versions:
     nifi-operator: "$NIFI_OPERATOR_VERSION"
-    zookeeper-operator: NIGHTLY
   nodes:
     main:
       numberOfNodes: 3
