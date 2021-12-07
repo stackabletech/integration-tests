@@ -9,6 +9,7 @@ domain: stackable.test
 publicKeys: []
 spec:
   location: "hel1"
+  k8sVersion: "$K8S_VERSION"
   wireguard: false
   versions:
     zookeeper-operator: "$ZOOKEEPER_OPERATOR_VERSION"
