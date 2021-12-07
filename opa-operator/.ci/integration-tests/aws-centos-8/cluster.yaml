@@ -9,6 +9,7 @@ domain: stackable.test
 publicKeys: []
 spec:
   region: eu-central-1
+  k8sVersion: "$K8S_VERSION"
   wireguard: false
   versions:
     opa-operator: "$OPA_OPERATOR_VERSION"

@@ -10,6 +10,7 @@ publicKeys: []
 spec:
   wireguard: false
   region: de/fra
+  k8sVersion: "$K8S_VERSION"
   versions:
     superset-operator: "$SUPERSET_OPERATOR_VERSION"
   nodes:
