@@ -11,7 +11,7 @@ spec:
   wireguard: false
   region: de/fra
   versions:
-    hive-operator: 0.3.0-nightly
+    hive-operator: 0.3.0
     trino-operator: "$TRINO_OPERATOR_VERSION"
   nodes:
     worker:
