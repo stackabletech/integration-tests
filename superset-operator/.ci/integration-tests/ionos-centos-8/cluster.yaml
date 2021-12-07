@@ -3,16 +3,15 @@ apiVersion: t2.stackable.tech/v1
 kind: Infra
 template: ionos-centos-8
 metadata: 
-  name: trino-ionos-centos-8
-  description: "Cluster for Trino Operator Integration Tests (IONOS / CentOS 8)"
+  name: superset-ionos-centos-8
+  description: "Cluster for Superset Operator Integration Tests (IONOS / CentOS 8)"
 domain: stackable.demo
 publicKeys: []
 spec:
   wireguard: false
   region: de/fra
   versions:
-    hive-operator: 0.3.0
-    trino-operator: "$TRINO_OPERATOR_VERSION"
+    superset-operator: "$SUPERSET_OPERATOR_VERSION"
   nodes:
     worker:
       numberOfNodes: 3
