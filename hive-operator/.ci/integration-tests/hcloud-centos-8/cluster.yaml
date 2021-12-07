@@ -10,6 +10,7 @@ publicKeys: []
 spec:
   wireguard: false
   location: "hel1"
+  k8sVersion: "$K8S_VERSION"
   versions:
     hive-operator: "$HIVE_OPERATOR_VERSION"
   nodes:
