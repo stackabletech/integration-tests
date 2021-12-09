@@ -56,8 +56,22 @@ impl TestClusterOptions {
 pub struct TestClusterTimeouts {
     pub cluster_ready: Duration,
     pub pods_terminated: Duration,
+    /// The amount of time to sleep after the pods have been terminated.
+    /// This is necessary when host networking is used because even though the pods are terminated,
+    /// some resources like ports are still allocated (for a while). To avoid port collisions,
+    /// set this property to an appropriate amount. Start with 10 seconds and work from there.
+    pub pods_terminated_delay: Duration,
 }
 
+impl Default for TestClusterTimeouts {
+    fn default() -> Self {
+        TestClusterTimeouts {
+            cluster_ready: Duration::from_secs(300),
+            pods_terminated: Duration::from_secs(180),
+            pods_terminated_delay: Duration::ZERO,
+        }
+    }
+}
 /// Some reoccurring common labels.
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub struct TestClusterLabels {
@@ -332,6 +346,16 @@ where
             if let Err(err) = self.wait_for_pods_terminated() {
                 self.log(&err.to_string());
             }
+        }
+        if self.timeouts.pods_terminated_delay != Duration::ZERO {
+            println!(
+                "{}",
+                self.log(&format!(
+                    "Waiting for pod termination delay : {:?} ...",
+                    self.timeouts.pods_terminated_delay
+                ))
+            );
+            thread::sleep(self.timeouts.pods_terminated_delay);
         }
     }
 }

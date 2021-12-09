@@ -5,6 +5,7 @@ use integration_test_commons::operator::setup::{
 use integration_test_commons::stackable_operator::labels::{
     APP_INSTANCE_LABEL, APP_NAME_LABEL, APP_VERSION_LABEL,
 };
+
 use integration_test_commons::test::kube::TestKubeClient;
 use stackable_nifi_crd::{NifiCluster, APP_NAME};
 use std::time::Duration;
@@ -19,10 +20,7 @@ pub fn build_test_cluster() -> TestCluster<NifiCluster> {
     TestCluster::new(
         &TestClusterOptions::new(APP_NAME, "simple"),
         &TestClusterLabels::new(APP_NAME_LABEL, APP_INSTANCE_LABEL, APP_VERSION_LABEL),
-        &TestClusterTimeouts {
-            cluster_ready: Duration::from_secs(300),
-            pods_terminated: Duration::from_secs(30),
-        },
+        &TestClusterTimeouts::default(),
     )
 }
 
@@ -40,6 +38,7 @@ pub fn build_nifi_cluster(
     http_port: i32,
     protocol_port: i32,
     load_balance_port: i32,
+    zk_ref_name: &str,
 ) -> Result<(NifiCluster, usize)> {
     let spec = &format!(
         "
@@ -50,7 +49,7 @@ pub fn build_nifi_cluster(
         spec:
           version: {}
           zookeeperReference:
-            name: simple
+            name: {}
             namespace: default
             chroot: /nifi
           nodes:
@@ -64,7 +63,7 @@ pub fn build_nifi_cluster(
                   protocolPort: {}
                   loadBalancePort: {}
     ",
-        name, version, replicas, http_port, protocol_port, load_balance_port
+        name, version, zk_ref_name, replicas, http_port, protocol_port, load_balance_port
     );
 
     Ok((serde_yaml::from_str(spec)?, replicas))
@@ -76,6 +75,7 @@ pub fn build_nifi_cluster_monitoring(
     version: &str,
     replicas: usize,
     monitoring_port: i32,
+    zk_ref_name: &str,
 ) -> Result<(NifiCluster, usize)> {
     let spec = &format!(
         "
@@ -87,7 +87,7 @@ pub fn build_nifi_cluster_monitoring(
           version: {}
           metricsPort: {}
           zookeeperReference:
-            name: simple
+            name: {}
             namespace: default
             chroot: /nifi
           nodes:
@@ -101,7 +101,7 @@ pub fn build_nifi_cluster_monitoring(
                   protocolPort: 11443
                   loadBalancePort: 11342
     ",
-        name, version, monitoring_port, replicas
+        name, version, monitoring_port, zk_ref_name, replicas
     );
 
     Ok((serde_yaml::from_str(spec)?, replicas))

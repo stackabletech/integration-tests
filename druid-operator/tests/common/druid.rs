@@ -7,17 +7,13 @@ use integration_test_commons::{
     test::prelude::{Pod, Service, TemporaryResource, TestKubeClient},
 };
 use stackable_druid_crd::{DruidCluster, APP_NAME};
-use std::time::Duration;
 
 /// Predefined options and timeouts for the TestCluster.
 pub fn build_test_cluster() -> TestCluster<DruidCluster> {
     TestCluster::new(
         &TestClusterOptions::new(APP_NAME, "simple"),
         &TestClusterLabels::new(APP_NAME_LABEL, APP_INSTANCE_LABEL, APP_VERSION_LABEL),
-        &TestClusterTimeouts {
-            cluster_ready: Duration::from_secs(300),
-            pods_terminated: Duration::from_secs(180),
-        },
+        &TestClusterTimeouts::default(),
     )
 }
 
@@ -26,6 +22,7 @@ pub fn build_druid_cluster(
     name: &str,
     version: &str,
     replicas: usize,
+    zk_ref_name: &str,
 ) -> Result<(DruidCluster, usize)> {
     let spec = &format!(
         "
@@ -37,7 +34,7 @@ pub fn build_druid_cluster(
           version: {version}
           zookeeperReference:
             namespace: default
-            name: simple
+            name: {zk_ref_name}
           metadataStorageDatabase:
             dbType: derby
             connString: jdbc:derby://localhost:1527/var/druid/metadata.db;create=true
@@ -99,6 +96,7 @@ pub fn build_druid_cluster(
         ",
         name = name,
         version = version,
+        zk_ref_name = zk_ref_name,
         replicas = replicas
     );
 

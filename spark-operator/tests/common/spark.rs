@@ -9,17 +9,13 @@ use serde::de::DeserializeOwned;
 use serde::Serialize;
 use stackable_spark_crd::{SparkCluster, SparkVersion};
 use std::fmt::Debug;
-use std::time::Duration;
 
 /// Predefined options and timeouts for the TestCluster.
 pub fn build_test_cluster() -> TestCluster<SparkCluster> {
     TestCluster::new(
         &TestClusterOptions::new("spark", "simple"),
         &TestClusterLabels::new(APP_NAME_LABEL, APP_INSTANCE_LABEL, APP_VERSION_LABEL),
-        &TestClusterTimeouts {
-            cluster_ready: Duration::from_secs(300),
-            pods_terminated: Duration::from_secs(120),
-        },
+        &TestClusterTimeouts::default(),
     )
 }
 
