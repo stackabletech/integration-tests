@@ -1,3 +1,6 @@
+kubectl label nodes main-1.stackable.test {node=1,nodeType=druid-data}
+kubectl label nodes main-2.stackable.test node=2
+kubectl label nodes main-3.stackable.test node=3
 ssh testdriver-1 'curl --proto "=https" --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y'
 ssh testdriver-1 'cargo --version'
 ssh testdriver-1 'sudo yum install vim procps curl gcc make pkgconfig openssl-devel systemd-devel python3-pip container-selinux selinux-policy-base git -y'
