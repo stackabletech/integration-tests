@@ -33,7 +33,7 @@ pub fn build_superset_credentials(
             kind: Secret
             metadata:
               name: {secret_name}
-            type: superset.stackable.tech/superset-credentials
+            type: Opaque
             stringData:
               adminUser.username: {admin_username}
               adminUser.firstname: Superset
