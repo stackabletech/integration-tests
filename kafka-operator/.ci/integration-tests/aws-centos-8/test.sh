@@ -6,4 +6,6 @@ ssh testdriver-1 'cd integration-tests/kafka-operator && cargo test -- --nocaptu
 exit_code=$?
 ./operator-logs.sh kafka > /target/kafka-operator.log
 ./operator-logs.sh zookeeper > /target/zookeeper-operator.log
+./operator-logs.sh opa > /target/opa-operator.log
+./operator-logs.sh regorule > /target/regorule-operator.log
 exit $exit_code
