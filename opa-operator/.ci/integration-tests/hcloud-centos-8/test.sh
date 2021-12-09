@@ -5,4 +5,5 @@ ssh testdriver-1 "git clone -b $GIT_BRANCH https://github.com/stackabletech/inte
 ssh testdriver-1 'cd integration-tests/opa-operator && cargo test -- --nocapture --test-threads=1'
 exit_code=$?
 ./operator-logs.sh opa > /target/opa-operator.log
+./operator-logs.sh regorule > /target/regorule-operator.log
 exit $exit_code
