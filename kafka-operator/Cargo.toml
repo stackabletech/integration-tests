@@ -15,3 +15,5 @@ serde = "1.0"
 serde_json = "1.0"
 serde_yaml = "0.8"
 stackable-kafka-crd = { git = "https://github.com/stackabletech/kafka-operator.git", branch = "main"}
+stackable-zookeeper-crd = { git = "https://github.com/stackabletech/zookeeper-operator.git", tag = "0.5.0"}
+

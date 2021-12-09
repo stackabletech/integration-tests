@@ -11,17 +11,13 @@ use integration_test_commons::stackable_operator::labels::{
 use integration_test_commons::test::prelude::Secret;
 use stackable_superset_crd::{SupersetCluster, SupersetVersion, APP_NAME};
 use std::fmt::Debug;
-use std::time::Duration;
 
 /// Predefined options and timeouts for the TestCluster.
 pub fn build_test_cluster() -> TestCluster<SupersetCluster> {
     TestCluster::new(
         &TestClusterOptions::new(APP_NAME, "simple"),
         &TestClusterLabels::new(APP_NAME_LABEL, APP_INSTANCE_LABEL, APP_VERSION_LABEL),
-        &TestClusterTimeouts {
-            cluster_ready: Duration::from_secs(300),
-            pods_terminated: Duration::from_secs(30),
-        },
+        &TestClusterTimeouts::default(),
     )
 }
 
