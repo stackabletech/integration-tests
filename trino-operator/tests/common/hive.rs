@@ -13,7 +13,6 @@ use integration_test_commons::stackable_operator::labels::{
 use stackable_hive_crd::discovery::S3Connection;
 use stackable_hive_crd::{HiveCluster, HiveVersion, APP_NAME};
 use std::fmt::Debug;
-use std::time::Duration;
 
 pub fn build_hive_test_cluster<T>() -> TestCluster<T>
 where
@@ -22,10 +21,7 @@ where
     TestCluster::new(
         &TestClusterOptions::new(APP_NAME, "test"),
         &TestClusterLabels::new(APP_NAME_LABEL, APP_INSTANCE_LABEL, APP_VERSION_LABEL),
-        &TestClusterTimeouts {
-            cluster_ready: Duration::from_secs(300),
-            pods_terminated: Duration::from_secs(30),
-        },
+        &TestClusterTimeouts::default(),
     )
 }
 

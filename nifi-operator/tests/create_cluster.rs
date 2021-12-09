@@ -2,6 +2,7 @@ pub mod common;
 
 use anyhow::Result;
 use common::nifi::{build_nifi_cluster, build_test_cluster, maximize_client_verification_time_out};
+use common::zookeeper::build_zk_test_cluster;
 use integration_test_commons::operator::checks::port_check;
 use integration_test_commons::operator::service::create_node_port_service;
 use integration_test_commons::operator::setup::version_label;
@@ -14,6 +15,8 @@ fn test_create_1_server_1_13_2() -> Result<()> {
     let protocol_port: i32 = 28010;
     let load_balance_port: i32 = 28020;
 
+    let zk_client = build_zk_test_cluster("test-kafka-zk")?;
+
     let mut cluster = build_test_cluster();
     maximize_client_verification_time_out(&mut cluster.client);
 
@@ -24,6 +27,7 @@ fn test_create_1_server_1_13_2() -> Result<()> {
         http_port,
         protocol_port,
         load_balance_port,
+        zk_client.name(),
     )?;
     cluster.create_or_update(
         &nifi_cr,
