@@ -9,12 +9,13 @@ domain: stackable.test
 publicKeys: []
 spec:
   location: "hel1"
+  k8sVersion: "$K8S_VERSION"
   wireguard: false
   versions:
-    stackable-zookeeper-operator: "$ZOOKEEPER_OPERATOR_VERSION"
+    zookeeper-operator: "$ZOOKEEPER_OPERATOR_VERSION"
   nodes:
     main:
       numberOfNodes: 3
     testdriver:
       numberOfNodes: 1
-      agent: false
+      k8s_node: false
