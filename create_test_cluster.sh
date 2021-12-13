@@ -1,12 +1,11 @@
 #!/usr/bin/env sh
 
-OPERATOR_NAME=${1}
-OPERATOR_VERSION=${2}
-
 KIND_CLUSTER_CONFIG_FILE="kind-config.yaml"
 KIND_CLUSTER_NAME="integration-tests"
 HELM_DEV_REPO_NAME="stackable-dev"
 HELM_DEV_REPO_URL="https://repo.stackable.tech/repository/helm-dev"
+# Make PVC Size configurable since some CSI provider require minimal sizes higher than 10Mi.
+MINIO_PVC_SIZE=${MINIO_PVC_SIZE-"10Mi"}
 PYTHON=$(which python)
 PIP=$(which pip)
 
@@ -68,11 +67,17 @@ install_operator() {
     fi
     install_dependencies ${OPERATOR_NAME} ${REPO}
   else
-    echo Already running ${OPERATOR_NAME}-operator. You need to uninstall it first.
+    if [ -z "${REUSE_CLUSTER}" ]; then
+      echo Already running ${OPERATOR_NAME}-operator. You need to uninstall it first.
+    else
+      install_dependencies ${OPERATOR_NAME} ${REPO}
+    fi
   fi
 }
 
+
 check_args() {
+  echo $OPERATOR_NAME
   if [ -z "${OPERATOR_NAME}" ]; then
     echo ERROR: Missing operator name.
     help
@@ -81,9 +86,10 @@ check_args() {
 }
 
 help() {
-  echo "Usage: ./create_test_cluster.sh operator-name [operator-version]"
+  echo "Usage: ./create_test_cluster.sh -o operator-name [ -v operator-version] [-r]"
   echo "operator-name     : Can be one of: zookeeper, regorule, kafka, nifi, ..."
   echo "operator-version  : Optional Helm chart version."
+  echo "-r                : Reuse existing kubernetes cluster."
 }
 
 
@@ -177,7 +183,7 @@ install_dependencies_trino() {
     | sed -e "
         /requestAutoCert:/ s/:.*/: false/
         /servers:/ s/:.*/: 1/g
-        /size:/ s/:.*/: 10Mi/" \
+        /size:/ s/:.*/: ${MINIO_PVC_SIZE}/" \
     | helm install \
         --version $minioOperatorChartVersion \
         --generate-name \
@@ -235,9 +241,19 @@ spec:
 }
 
 {
+  while getopts ro:v:h flag
+  do
+      case "${flag}" in
+          r) REUSE_CLUSTER="true";;
+          o) OPERATOR_NAME=${OPTARG};;
+          v) OPERATOR_VERSION=${OPTARG};;
+          h) help;exit;;
+          *) echo"unknown flag";help;exit;;
+      esac
+  done
   check_args
-  create_kind_cluster
-  install_operator ${OPERATOR_NAME} ${OPERATOR_VERSION}
+  if [ -z "${REUSE_CLUSTER}" ]; then
+    create_kind_cluster
+  fi
+  install_operator "${OPERATOR_NAME}" "${OPERATOR_VERSION}"
 }
-
-
