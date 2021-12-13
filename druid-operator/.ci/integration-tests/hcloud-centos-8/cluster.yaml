@@ -3,18 +3,19 @@ apiVersion: t2.stackable.tech/v1
 kind: Infra
 template: hcloud-centos-8
 metadata: 
-  name: monitoring-operator-integration-tests
-  description: "Cluster for Monitoring Operator Integration Tests (Hetzner Cloud / CentOS 8)"
+  name: druid-operator-integration-tests
+  description: "Cluster for Druid Operator Integration Tests (Hetzner Cloud / CentOS 8)"
 domain: stackable.test
 publicKeys: []
 spec:
   location: "hel1"
+  k8sVersion: "$K8S_VERSION"
   wireguard: false
   versions:
-    stackable-monitoring-operator: "$MONITORING_OPERATOR_VERSION"
+    druid-operator: "$DRUID_OPERATOR_VERSION"
   nodes:
     main:
-      numberOfNodes: 2
+      numberOfNodes: 3
     testdriver:
       numberOfNodes: 1
       agent: false

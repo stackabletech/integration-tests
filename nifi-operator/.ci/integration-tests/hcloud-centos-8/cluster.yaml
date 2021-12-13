@@ -9,29 +9,13 @@ domain: stackable.test
 publicKeys: []
 spec:
   location: "hel1"
+  k8sVersion: "$K8S_VERSION"
   wireguard: false
   versions:
-    stackable-nifi-operator: "$NIFI_OPERATOR_VERSION"
+    nifi-operator: "$NIFI_OPERATOR_VERSION"
   nodes:
     main:
       numberOfNodes: 3
     testdriver:
       numberOfNodes: 1
-      agent: false
-services:
-  zookeeper: |
-    apiVersion: zookeeper.stackable.tech/v1alpha1
-    kind: ZookeeperCluster
-    metadata:
-      name: simple
-    spec:
-      version: 3.5.8
-      servers:
-        roleGroups:
-          default:
-            selector:
-              matchLabels:
-                kubernetes.io/os: linux
-            config:
-              adminPort: 12000
-              metricsPort: 9505
+      k8s_node: false

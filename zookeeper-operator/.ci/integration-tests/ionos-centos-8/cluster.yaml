@@ -1,14 +1,14 @@
 ---
 apiVersion: t2.stackable.tech/v1
 kind: Infra
-template: aws-centos-8
+template: ionos-centos-8
 metadata: 
   name: zookeper-operator-integration-tests
-  description: "Cluster for Zookeeper Operator Integration Tests (AWS EC2 / CentOS 8)"
+  description: "Cluster for Zookeeper Operator Integration Tests (IONOS Cloud / CentOS 8)"
 domain: stackable.test
 publicKeys: []
 spec:
-  region: eu-central-1
+  region: de/fra
   k8sVersion: "$K8S_VERSION"
   wireguard: false
   versions:
@@ -16,6 +16,14 @@ spec:
   nodes:
     main:
       numberOfNodes: 3
+      numberOfCores: 2
+      memoryMb: 4096
+      diskType: HDD 
+      diskSizeGb: 15
     testdriver:
       numberOfNodes: 1
+      numberOfCores: 2
+      memoryMb: 4096
+      diskType: HDD 
+      diskSizeGb: 15
       k8s_node: false
