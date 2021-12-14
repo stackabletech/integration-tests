@@ -1,7 +1,5 @@
 # zookeeper-operator-integration-tests
 
-[![Build Actions Status](https://github.com/stackabletech/zookeeper-operator-integration-tests/workflows/Rust/badge.svg)](https://github.com/stackabletech/zookeeper-operator-integration-tests/actions)
-[![Build Actions Status](https://github.com/stackabletech/zookeeper-operator-integration-tests/workflows/Security%20audit/badge.svg)](https://github.com/stackabletech/zookeeper-operator-integration-tests/actions)
 [![Build Actions Status](https://ci.stackable.tech/job/Zookeeper%20Operator%20Integration%20Tests/badge/icon?subject=Integration%20Tests)](https://ci.stackable.tech/job/Zookeeper%20Operator%20Integration%20Tests)
 
 This repository bundles integration tests for the [Stackable Operator](https://github.com/stackabletech/zookeeper-operator) for Apache ZooKeeper.
