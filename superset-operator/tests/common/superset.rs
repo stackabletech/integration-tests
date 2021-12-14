@@ -9,7 +9,7 @@ use integration_test_commons::stackable_operator::labels::{
     APP_INSTANCE_LABEL, APP_NAME_LABEL, APP_VERSION_LABEL,
 };
 use integration_test_commons::test::prelude::Secret;
-use stackable_superset_crd::{SupersetCluster, SupersetVersion, APP_NAME};
+use stackable_superset_crd::{SupersetCluster, APP_NAME};
 use std::fmt::Debug;
 
 /// Predefined options and timeouts for the TestCluster.
@@ -54,7 +54,7 @@ pub fn build_superset_credentials(
 /// This returns a Superset custom resource.
 pub fn build_superset_cluster(
     name: &str,
-    version: &SupersetVersion,
+    version: &str,
     replicas: usize,
     secret_name: &str,
 ) -> Result<SupersetCluster> {
@@ -98,7 +98,8 @@ where
             metadata:
               name: {name}
             spec:
-              name: {cluster_reference}
+              clusterRef:
+                name: {cluster_reference}
               credentialsSecret: {secret_name}
               loadExamples: false
         ",

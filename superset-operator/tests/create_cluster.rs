@@ -9,12 +9,12 @@ use common::{
 };
 use integration_test_commons::operator::service::create_node_port_service;
 use integration_test_commons::test::prelude::{Pod, Secret};
-use stackable_superset_crd::{commands::Init, SupersetVersion};
+use stackable_superset_crd::commands::Init;
 use std::collections::BTreeMap;
 
 #[test]
 fn test_create_cluster_1_3_2() -> Result<()> {
-    let version = SupersetVersion::v1_3_2;
+    let version = "1.3.2";
     let replicas: usize = 1;
     let mut cluster = build_test_cluster();
 
@@ -27,7 +27,7 @@ fn test_create_cluster_1_3_2() -> Result<()> {
         .client
         .apply::<Secret>(&serde_yaml::to_string(&superset_secret)?);
 
-    let superset_cr = build_superset_cluster(cluster.name(), &version, replicas, secret_name)?;
+    let superset_cr = build_superset_cluster(cluster.name(), version, replicas, secret_name)?;
     cluster.create_or_update(&superset_cr, &BTreeMap::new(), replicas)?;
     let created_pods = cluster.list::<Pod>(None);
 

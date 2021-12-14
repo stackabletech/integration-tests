@@ -27,9 +27,11 @@ const REPO_SPEC: &str = "
     group = "stable.stackable.de",
     version = "v1",
     namespaced,
-    kube_core = "stackable_operator::kube::core",
-    k8s_openapi = "stackable_operator::k8s_openapi",
-    schemars = "stackable_operator::schemars"
+    crates(
+        kube_core = "stackable_operator::kube::core",
+        k8s_openapi = "stackable_operator::k8s_openapi",
+        schemars = "stackable_operator::schemars"
+    )
 )]
 pub struct RepositorySpec {
     pub repo_type: RepoType,
