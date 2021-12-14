@@ -54,7 +54,7 @@ pub fn build_spark_custom_resource(
                     kubernetes.io/os: linux
                 replicas: {}
                 config:
-                  masterWebUiPort: 8083
+                  workerWebUiPort: 8083
           historyServers:
             roleGroups:
               default:
