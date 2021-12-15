@@ -56,6 +56,14 @@ exceptions = [
     { name = "zookeeper-operator-integration-tests", allow = ["OSL-3.0"] },
 ]
 
+[[licenses.clarify]]
+name = "encoding_rs"
+version = "*"
+expression = "(Apache-2.0 OR MIT) AND BSD-3-Clause"
+license-files = [
+    { path = "COPYRIGHT", hash = 0x39f8ad31 }
+]
+
 [sources]
 unknown-registry = "deny"
 unknown-git = "deny"
