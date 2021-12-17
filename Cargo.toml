@@ -2,7 +2,7 @@
 
 members = [
 "commons",
-# "druid-operator",
+"druid-operator",
 # "kafka-operator",
 # "monitoring-operator",
 # "nifi-operator",

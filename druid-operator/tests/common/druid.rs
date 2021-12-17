@@ -34,7 +34,7 @@ pub fn build_druid_cluster(
           version: {version}
           zookeeperReference:
             namespace: default
-            name: {zk_ref_name}
+            configMapName: {zk_ref_name}
           metadataStorageDatabase:
             dbType: derby
             connString: jdbc:derby://localhost:1527/var/druid/metadata.db;create=true
