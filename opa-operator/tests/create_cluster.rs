@@ -1,5 +1,6 @@
 pub mod common;
 
+use crate::common::opa::get_worker_nodes;
 use anyhow::Result;
 use common::opa::{build_opa_cluster, build_test_cluster};
 use integration_test_commons::operator::setup::version_label;
@@ -10,12 +11,10 @@ fn test_create_cluster_0_27_1() -> Result<()> {
 
     let mut cluster = build_test_cluster();
 
-    let (opa_cr, expected_pod_count) = build_opa_cluster(cluster.name(), version, 1)?;
-    cluster.create_or_update(
-        &opa_cr,
-        &version_label(&version.to_string()),
-        expected_pod_count,
-    )?;
+    let replicas = get_worker_nodes(&cluster);
 
-    cluster.check_pod_version(&version.to_string())
+    let (opa_cr, expected_pod_count) = build_opa_cluster(cluster.name(), version, replicas)?;
+    cluster.create_or_update(&opa_cr, &version_label(version), expected_pod_count)?;
+
+    cluster.check_pod_version(version)
 }

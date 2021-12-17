@@ -246,7 +246,7 @@ where
     }
 
     /// List all nodes registered in the api server that have an agent running (or default to
-    /// `kubernetes.io/arch=stackable-linux` label).
+    /// `kubernetes.io/os=linux` label).
     /// May be used to determine the expected pods for tests (depending on the custom resource).
     pub fn list_nodes(&self, selector: Option<&str>) -> Vec<Node> {
         self.client
