@@ -3,7 +3,7 @@ use std::iter::FromIterator;
 use std::time::Duration;
 
 use anyhow::Result;
-use stackable_zookeeper_crd::{ZookeeperCluster};
+use stackable_zookeeper_crd::ZookeeperCluster;
 
 use integration_test_commons::operator::setup::{
     TestCluster, TestClusterLabels, TestClusterOptions, TestClusterTimeouts,
@@ -26,8 +26,7 @@ pub fn build_zk_test_cluster(app_name: &str) -> Result<TestCluster<ZookeeperClus
 
     let zk_version = "3.5.8";
 
-    let (zk_cr, zk_replicas) =
-        build_zk_cluster(zk_client.name(), zk_version, 1, Some(8080), None)?;
+    let (zk_cr, zk_replicas) = build_zk_cluster(zk_client.name(), zk_version, 1, Some(8080), None)?;
     zk_client.create_or_update(
         &zk_cr,
         &BTreeMap::from_iter([(String::from(APP_VERSION_LABEL), zk_version.to_string())]),
