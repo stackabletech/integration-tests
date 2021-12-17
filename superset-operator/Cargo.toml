@@ -13,4 +13,4 @@ indoc = "1.0"
 integration-test-commons = { path = "../commons" }
 reqwest = { version = "0.11", features = ["blocking", "json"] }
 serde_yaml = "0.8"
-stackable-superset-crd = { git = "https://github.com/stackabletech/superset-operator.git", branch = "rework"}
+stackable-superset-crd = { git = "https://github.com/stackabletech/superset-operator.git", branch = "main"}
