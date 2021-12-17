@@ -220,8 +220,6 @@ where
             .map(|(key, value)| format!("{}={}", key, value))
             .collect::<Vec<String>>();
 
-        println!("{}", transformed_labels.join(", "));
-
         self.client
             .list_labeled::<R>(&transformed_labels.join(","))
             .items
