@@ -530,6 +530,18 @@ dependencies = [
 ]
 
 [[package]]
+name = "hive-operator-integration-tests"
+version = "0.1.0"
+dependencies = [
+ "anyhow",
+ "integration-test-commons",
+ "serde",
+ "serde_json",
+ "serde_yaml",
+ "stackable-hive-crd",
+]
+
+[[package]]
 name = "http"
 version = "0.2.5"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1476,9 +1488,9 @@ checksum = "568a8e6258aa33c13358f81fd834adb854c6f7c9468520910a9b1e8fac068012"
 
 [[package]]
 name = "serde"
-version = "1.0.131"
+version = "1.0.132"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "b4ad69dfbd3e45369132cc64e6748c2d65cdfb001a2b1c232d128b4ad60561c1"
+checksum = "8b9875c23cf305cd1fd7eb77234cbb705f21ea6a72c637a5c6db5fe4b8e7f008"
 dependencies = [
  "serde_derive",
 ]
@@ -1495,9 +1507,9 @@ dependencies = [
 
 [[package]]
 name = "serde_derive"
-version = "1.0.131"
+version = "1.0.132"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "b710a83c4e0dff6a3d511946b95274ad9ca9e5d3ae497b63fda866ac955358d2"
+checksum = "ecc0db5cb2556c0e558887d9bbdcf6ac4471e83ff66cf696e5419024d1606276"
 dependencies = [
  "proc-macro2",
  "quote",
@@ -1622,6 +1634,19 @@ dependencies = [
 ]
 
 [[package]]
+name = "stackable-hive-crd"
+version = "0.4.0-nightly"
+source = "git+https://github.com/stackabletech/hive-operator.git?branch=switch_to_stateful_set#e22470693b68547aa0c31777a1878ebc7b9af620"
+dependencies = [
+ "serde",
+ "serde_json",
+ "snafu",
+ "stackable-operator",
+ "strum 0.22.0",
+ "strum_macros 0.23.1",
+]
+
+[[package]]
 name = "stackable-operator"
 version = "0.6.0"
 source = "git+https://github.com/stackabletech/operator-rs.git?tag=0.6.0#80a91d3de3b5fe4384d30a5adbb122288098f619"
@@ -1711,6 +1736,9 @@ name = "strum"
 version = "0.22.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "f7ac893c7d471c8a21f31cfe213ec4f6d9afeed25537c772e08ef3f005f8729e"
+dependencies = [
+ "strum_macros 0.22.0",
+]
 
 [[package]]
 name = "strum"
@@ -1849,11 +1877,10 @@ checksum = "cda74da7e1a664f795bb1f8a87ec406fb89a02522cf6e50620d016add6dbbf5c"
 
 [[package]]
 name = "tokio"
-version = "1.14.0"
+version = "1.15.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "70e992e41e0d2fb9f755b37446f20900f64446ef54874f40a60c78f021ac6144"
+checksum = "fbbf1c778ec206785635ce8ad57fe52b3009ae9e0c9f574a728f3049d3e55838"
 dependencies = [
- "autocfg",
  "bytes",
  "libc",
  "memchr",
@@ -1878,9 +1905,9 @@ dependencies = [
 
 [[package]]
 name = "tokio-macros"
-version = "1.6.0"
+version = "1.7.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "c9efc1aba077437943f7515666aa2b882dfabfbfdf89c819ea75a8d6e9eaba5e"
+checksum = "b557f72f448c511a979e2564e55d74e6c4432fc96ff4f6241bc6bded342643b7"
 dependencies = [
  "proc-macro2",
  "quote",

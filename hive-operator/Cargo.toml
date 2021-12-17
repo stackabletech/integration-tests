@@ -1,17 +1,16 @@
 [package]
-name = "hive-operator-integration-tests"
-version = "0.1.0"
-edition = "2018"
-license = "OSL-3.0"
-repository = "https://github.com/stackabletech/hive-operator-integration-tests"
+authors = ["Stackable GmbH <info@stackable.de>"]
 description = "Integration tests for the Stackable Operator for Apache Hive"
-
-# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+edition = "2021"
+license = "OSL-3.0"
+name = "hive-operator-integration-tests"
+repository = "https://github.com/stackabletech/integration-tests"
+version = "0.1.0"
 
 [dependencies]
 anyhow = "1.0"
 integration-test-commons = { path = "../commons" }
-stackable-hive-crd = { git = "https://github.com/stackabletech/hive-operator.git", branch = "main"}
+stackable-hive-crd = { git = "https://github.com/stackabletech/hive-operator.git", branch = "switch_to_stateful_set" }
 serde = "1.0"
 serde_json = "1.0"
 serde_yaml = "0.8"
