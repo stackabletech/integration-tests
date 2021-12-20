@@ -16,5 +16,4 @@ serde_yaml = "0.8"
 reqwest = { version = "0.11", features = ["blocking"] }
 
 [dev-dependencies]
-#stackable-zookeeper-crd = { git = "https://github.com/stackabletech/zookeeper-operator.git", tag = "0.6.0"}
-stackable-zookeeper-crd = { git = "https://github.com/stackabletech/zookeeper-operator.git", branch="main"}
+stackable-zookeeper-crd = { git = "https://github.com/stackabletech/zookeeper-operator.git", tag = "0.7.0"}
