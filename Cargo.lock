@@ -1613,6 +1613,17 @@ dependencies = [
 ]
 
 [[package]]
+name = "spark-operator-integration-tests"
+version = "0.1.0"
+dependencies = [
+ "anyhow",
+ "integration-test-commons",
+ "serde",
+ "serde_yaml",
+ "stackable-spark-crd",
+]
+
+[[package]]
 name = "spectral"
 version = "0.6.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1654,6 +1665,21 @@ dependencies = [
  "tracing-futures",
  "tracing-subscriber",
  "uuid",
+]
+
+[[package]]
+name = "stackable-spark-crd"
+version = "0.5.0-nightly"
+source = "git+https://github.com/stackabletech/spark-operator.git?branch=feature/stateful-sets#4e6f9a716a7c8d32d0e41ad7c05604a961621751"
+dependencies = [
+ "semver",
+ "serde",
+ "serde_json",
+ "serde_yaml",
+ "snafu",
+ "stackable-operator",
+ "strum 0.22.0",
+ "strum_macros 0.22.0",
 ]
 
 [[package]]
@@ -1711,6 +1737,9 @@ name = "strum"
 version = "0.22.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "f7ac893c7d471c8a21f31cfe213ec4f6d9afeed25537c772e08ef3f005f8729e"
+dependencies = [
+ "strum_macros 0.22.0",
+]
 
 [[package]]
 name = "strum"

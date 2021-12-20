@@ -3,11 +3,10 @@ pub mod common;
 use anyhow::Result;
 use common::spark::{build_spark_custom_resource, build_test_cluster};
 use integration_test_commons::operator::setup::version_label;
-use stackable_spark_crd::SparkVersion;
 
 #[test]
 fn test_scale_cluster_up() -> Result<()> {
-    let version = SparkVersion::v3_0_1;
+    let version = "3.0.1";
     let mut cluster = build_test_cluster();
 
     let (spark_cr, expected_pod_count_before) =
@@ -35,7 +34,7 @@ fn test_scale_cluster_up() -> Result<()> {
 
 #[test]
 fn test_scale_cluster_down() -> Result<()> {
-    let version = SparkVersion::v3_0_1;
+    let version = "3.0.1";
     let mut cluster = build_test_cluster();
 
     let (spark_cr, expected_pod_count_before) =
