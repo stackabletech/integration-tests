@@ -5,10 +5,7 @@ use integration_test_commons::operator::setup::{
 use integration_test_commons::stackable_operator::labels::{
     APP_INSTANCE_LABEL, APP_NAME_LABEL, APP_VERSION_LABEL,
 };
-use serde::de::DeserializeOwned;
-use serde::Serialize;
 use stackable_spark_crd::{SparkCluster};
-use std::fmt::Debug;
 
 /// Predefined options and timeouts for the TestCluster.
 pub fn build_test_cluster() -> TestCluster<SparkCluster> {
@@ -36,7 +33,7 @@ pub fn build_spark_custom_resource(
         spec:
           version: {}
           config:
-            logDir: file:///tmp/spark-events
+            logDir: /tmp/spark-events
           masters:
             roleGroups:
               default:
