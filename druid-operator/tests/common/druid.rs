@@ -60,7 +60,7 @@ pub fn build_druid_cluster(
                   matchLabels:
                     kubernetes.io/os: linux
                 config:
-                  plaintextPort: 8081
+                  plaintextPort: 8084
                   metricsPort: 9090
                 replicas: {replicas}
           historicals:

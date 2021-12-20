@@ -14,7 +14,7 @@ fn test_restart_command() -> Result<()> {
     let command_name = "spark-restart-command";
     let command_kind = "Restart";
     let version = SparkVersion::v3_0_1;
-    let http_port: i32 = 8080;
+    let http_port: i32 = 8082;
 
     let mut cluster = build_test_cluster();
 
