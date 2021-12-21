@@ -5,7 +5,7 @@ use integration_test_commons::operator::setup::{
 use integration_test_commons::stackable_operator::labels::{
     APP_INSTANCE_LABEL, APP_NAME_LABEL, APP_VERSION_LABEL,
 };
-use stackable_spark_crd::{SparkCluster};
+use stackable_spark_crd::SparkCluster;
 
 /// Predefined options and timeouts for the TestCluster.
 pub fn build_test_cluster() -> TestCluster<SparkCluster> {
