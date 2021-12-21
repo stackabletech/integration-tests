@@ -1702,14 +1702,14 @@ dependencies = [
 
 [[package]]
 name = "stackable-zookeeper-crd"
-version = "0.7.0-nightly"
-source = "git+https://github.com/stackabletech/zookeeper-operator.git?branch=main#643855a7d4041054798c0eb0b1e074ee922c171b"
+version = "0.7.0"
+source = "git+https://github.com/stackabletech/zookeeper-operator.git?tag=0.7.0#c736090cdb4ec5e499b48ca9a24fad65ae6f0d63"
 dependencies = [
  "serde",
  "serde_json",
  "snafu",
  "stackable-operator",
- "strum 0.22.0",
+ "strum 0.23.0",
 ]
 
 [[package]]
@@ -1753,9 +1753,6 @@ name = "strum"
 version = "0.22.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "f7ac893c7d471c8a21f31cfe213ec4f6d9afeed25537c772e08ef3f005f8729e"
-dependencies = [
- "strum_macros 0.22.0",
-]
 
 [[package]]
 name = "strum"

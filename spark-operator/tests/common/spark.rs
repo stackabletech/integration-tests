@@ -44,6 +44,8 @@ pub fn build_spark_custom_resource(
                   matchLabels:
                     kubernetes.io/os: linux
                 replicas: {}
+                config:
+                  masterWebUiPort: 8082
           workers:
             roleGroups:
               default:
@@ -51,6 +53,8 @@ pub fn build_spark_custom_resource(
                   matchLabels:
                     kubernetes.io/os: linux
                 replicas: {}
+                config:
+                  workerWebUiPort: 8083
           historyServers:
             roleGroups:
               default:

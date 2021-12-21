@@ -37,7 +37,7 @@ fn test_create_1_cluster_0_22_0() -> Result<()> {
     );
 
     // for each process/pod, create a NodePort service and check the health status
-    let s1 = TestService::new(&cluster.client, "druid", "coordinator", 8081, 30081);
+    let s1 = TestService::new(&cluster.client, "druid", "coordinator", 8084, 30081);
     let s2 = TestService::new(&cluster.client, "druid", "broker", 8082, 30082);
     let s3 = TestService::new(&cluster.client, "druid", "historical", 8083, 30083);
     let s4 = TestService::new(&cluster.client, "druid", "middleManager", 8091, 30091);
