@@ -106,7 +106,7 @@ pub fn build_trino_cluster(
             config: Some(CommonConfiguration {
                 config: Some(TrinoConfig {
                     coordinator: None,
-                    http_server_http_port: Some(8081),
+                    http_server_http_port: Some(8082),
                     http_server_https_port: None,
                     query_max_memory: None,
                     query_max_memory_per_node: None,
