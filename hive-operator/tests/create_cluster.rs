@@ -30,19 +30,25 @@ fn test_create_1_server_2_3_9() -> Result<()> {
     }
 
     let admin_service = create_node_port_service(&cluster.client, "hive-admin", APP_NAME, 9083);
+    let metrics_service = create_node_port_service(&cluster.client, "hive-metrics", APP_NAME, 9084);
 
     // Check if the metastore is running on the pod
     for pod in created_pods {
-        let address = admin_service.address(&pod);
+        let hive_address = admin_service.address(&pod);
+        let metrics_address = metrics_service.address(&pod);
 
-        wait_for_scan_port(&address, Duration::from_secs(60))?;
+        wait_for_scan_port(&hive_address, Duration::from_secs(60))?;
+        wait_for_scan_port(&metrics_address, Duration::from_secs(60))?;
 
-        let split: Vec<_> = address.split(':').collect();
+        let split: Vec<_> = hive_address.split(':').collect();
 
         let ip = split.get(0).unwrap();
         let port = split.get(1).unwrap();
 
-        println!("Running python health check script for [{}] ...", address);
+        println!(
+            "Running python health check script for [{}] ...",
+            hive_address
+        );
         let status = Command::new("python/test_metastore.py")
             .args(["-a", ip])
             .args(["-p", port])
