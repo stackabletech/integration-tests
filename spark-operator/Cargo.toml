@@ -12,4 +12,4 @@ anyhow = "1.0"
 integration-test-commons = { path = "../commons" }
 serde = "1.0"
 serde_yaml = "0.8"
-stackable-spark-crd = { git = "https://github.com/stackabletech/spark-operator.git", branch = "feature/stateful-sets" }
+stackable-spark-crd = { git = "https://github.com/stackabletech/spark-operator.git", branch = "main" }
