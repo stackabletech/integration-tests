@@ -1709,7 +1709,7 @@ dependencies = [
 [[package]]
 name = "stackable-zookeeper-crd"
 version = "0.8.0-nightly"
-source = "git+https://github.com/stackabletech/zookeeper-operator.git?branch=main#ae415a2dd530bdddba66907176808ac2c2993979"
+source = "git+https://github.com/stackabletech/zookeeper-operator.git?branch=main#949867e968ffe395328fd8248dda12dc3c5f9756"
 dependencies = [
  "serde",
  "serde_json",

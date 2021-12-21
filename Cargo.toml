@@ -8,7 +8,7 @@ members = [
 # "nifi-operator",
 "opa-operator",
 "spark-operator",
-# "zookeeper-operator",
+"zookeeper-operator",
 # "hive-operator",
 "superset-operator",
 # "trino-operator"
