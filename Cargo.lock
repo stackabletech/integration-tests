@@ -1638,7 +1638,7 @@ dependencies = [
 [[package]]
 name = "stackable-druid-crd"
 version = "0.2.0-nightly"
-source = "git+https://github.com/stackabletech/druid-operator.git?branch=special-task-force-unicorn#c34f7bee14df59efcc07fa7da299b8a11df81926"
+source = "git+https://github.com/stackabletech/druid-operator.git?branch=main#d74e1cdc1337bf57efe9aed4568dbb1fad2bdd6d"
 dependencies = [
  "duplicate",
  "semver",
