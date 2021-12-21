@@ -5,10 +5,7 @@ use integration_test_commons::operator::setup::{
 use integration_test_commons::stackable_operator::labels::{
     APP_INSTANCE_LABEL, APP_NAME_LABEL, APP_VERSION_LABEL,
 };
-use serde::de::DeserializeOwned;
-use serde::Serialize;
-use stackable_spark_crd::{SparkCluster, SparkVersion};
-use std::fmt::Debug;
+use stackable_spark_crd::SparkCluster;
 
 /// Predefined options and timeouts for the TestCluster.
 pub fn build_test_cluster() -> TestCluster<SparkCluster> {
@@ -22,7 +19,7 @@ pub fn build_test_cluster() -> TestCluster<SparkCluster> {
 /// This returns a SparkCluster custom resource and the expected pod count.
 pub fn build_spark_custom_resource(
     name: &str,
-    version: &SparkVersion,
+    version: &str,
     masters: usize,
     workers: usize,
     history_servers: usize,
@@ -36,7 +33,7 @@ pub fn build_spark_custom_resource(
         spec:
           version: {}
           config:
-            logDir: file:///tmp
+            logDir: /tmp/spark-events
           masters:
             roleGroups:
               default:
@@ -76,23 +73,4 @@ pub fn build_spark_custom_resource(
         serde_yaml::from_str(&spec)?,
         masters + workers + history_servers,
     ))
-}
-
-pub fn build_command<T>(name: &str, kind: &str, cluster_reference: &str) -> Result<T>
-where
-    T: Clone + Debug + DeserializeOwned + Serialize,
-{
-    let spec = format!(
-        "
-        apiVersion: command.spark.stackable.tech/v1alpha1
-        kind: {}
-        metadata:
-          name: {}
-        spec:
-          name: {}
-    ",
-        kind, name, cluster_reference
-    );
-
-    Ok(serde_yaml::from_str(&spec)?)
 }

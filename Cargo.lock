@@ -1050,6 +1050,19 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "da32515d9f6e6e489d7bc9d84c71b060db7247dc035bbe44eac88cf87486d8d5"
 
 [[package]]
+name = "opa-operator-integration-tests"
+version = "0.1.0"
+dependencies = [
+ "anyhow",
+ "integration-test-commons",
+ "reqwest",
+ "serde",
+ "serde_json",
+ "serde_yaml",
+ "stackable-opa-crd",
+]
+
+[[package]]
 name = "openssl"
 version = "0.10.38"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1596,12 +1609,37 @@ dependencies = [
 ]
 
 [[package]]
+name = "spark-operator-integration-tests"
+version = "0.1.0"
+dependencies = [
+ "anyhow",
+ "integration-test-commons",
+ "serde",
+ "serde_yaml",
+ "stackable-spark-crd",
+]
+
+[[package]]
 name = "spectral"
 version = "0.6.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "ae3c15181f4b14e52eeaac3efaeec4d2764716ce9c86da0c934c3e318649c5ba"
 dependencies = [
  "num",
+]
+
+[[package]]
+name = "stackable-opa-crd"
+version = "0.7.0-nightly"
+source = "git+https://github.com/stackabletech/opa-operator.git?branch=main#63e9db053f6e71c585f20f25c6a19c4e69e59a57"
+dependencies = [
+ "semver",
+ "serde",
+ "serde_json",
+ "stackable-operator",
+ "strum 0.22.0",
+ "strum_macros 0.22.0",
+ "tracing",
 ]
 
 [[package]]
@@ -1637,6 +1675,21 @@ dependencies = [
  "tracing-futures",
  "tracing-subscriber",
  "uuid",
+]
+
+[[package]]
+name = "stackable-spark-crd"
+version = "0.5.0-nightly"
+source = "git+https://github.com/stackabletech/spark-operator.git?branch=main#7cea0800b524f5f6c3296dd730dfbd4d041aece4"
+dependencies = [
+ "semver",
+ "serde",
+ "serde_json",
+ "serde_yaml",
+ "snafu",
+ "stackable-operator",
+ "strum 0.22.0",
+ "strum_macros 0.22.0",
 ]
 
 [[package]]
@@ -1706,6 +1759,9 @@ name = "strum"
 version = "0.22.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "f7ac893c7d471c8a21f31cfe213ec4f6d9afeed25537c772e08ef3f005f8729e"
+dependencies = [
+ "strum_macros 0.22.0",
+]
 
 [[package]]
 name = "strum"

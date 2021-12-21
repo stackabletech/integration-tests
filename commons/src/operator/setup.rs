@@ -112,7 +112,7 @@ where
     /// Applies a custom resource, stores the returned cluster object and sleeps for
     /// two seconds to give the operator time to react on the custom resource.
     /// Without the sleep it can happen that tests run without any pods being created.
-    fn apply(&mut self, cluster: &T) -> Result<()> {
+    pub fn apply(&mut self, cluster: &T) -> Result<()> {
         self.cluster = Some(self.client.apply(&serde_yaml::to_string(cluster)?));
 
         // we wait here to give the operator time to react to the custom resource
@@ -246,7 +246,7 @@ where
     }
 
     /// List all nodes registered in the api server that have an agent running (or default to
-    /// `kubernetes.io/arch=stackable-linux` label).
+    /// `kubernetes.io/os=linux` label).
     /// May be used to determine the expected pods for tests (depending on the custom resource).
     pub fn list_nodes(&self, selector: Option<&str>) -> Vec<Node> {
         self.client
