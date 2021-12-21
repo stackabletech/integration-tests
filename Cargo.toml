@@ -9,7 +9,7 @@ members = [
 "opa-operator",
 "spark-operator",
 # "zookeeper-operator",
-# "hive-operator",
+"hive-operator",
 "superset-operator",
 # "trino-operator"
 ]
