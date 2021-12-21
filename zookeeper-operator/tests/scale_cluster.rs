@@ -15,27 +15,19 @@ fn test_scale_cluster_up() -> Result<()> {
 
     let mut cluster = build_test_cluster();
 
-    let (zookeeper_cr, expected_pod_count) = build_zk_cluster(cluster.name(), &version, 1)?;
+    let (zookeeper_cr, expected_pod_count) = build_zk_cluster(cluster.name(), version, 1)?;
 
-    cluster.create_or_update(
-        &zookeeper_cr,
-        &version_label(&version.to_string()),
-        expected_pod_count,
-    )?;
+    cluster.create_or_update(&zookeeper_cr, &version_label(version), expected_pod_count)?;
 
-    let (zookeeper_cr, expected_pod_count) = build_zk_cluster(cluster.name(), &version, 3)?;
+    let (zookeeper_cr, expected_pod_count) = build_zk_cluster(cluster.name(), version, 3)?;
 
-    cluster.create_or_update(
-        &zookeeper_cr,
-        &version_label(&version.to_string()),
-        expected_pod_count,
-    )?;
+    cluster.create_or_update(&zookeeper_cr, &version_label(version), expected_pod_count)?;
     let created_pods = cluster.list::<Pod>(None);
 
     let admin_service =
         create_node_port_service(&cluster.client, "zookeeper-admin", "zookeeper", admin_port);
 
-    custom_checks(created_pods.as_slice(), &version, &admin_service)?;
+    custom_checks(created_pods.as_slice(), version, &admin_service)?;
 
     Ok(())
 }

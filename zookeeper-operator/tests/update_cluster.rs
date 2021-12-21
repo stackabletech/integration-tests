@@ -17,22 +17,18 @@ fn test_cluster_update() -> Result<()> {
 
     let mut cluster = build_test_cluster();
 
-    let (zookeeper_cr, expected_pod_count) = build_zk_cluster(cluster.name(), &version, replicas)?;
+    let (zookeeper_cr, expected_pod_count) = build_zk_cluster(cluster.name(), version, replicas)?;
 
-    cluster.create_or_update(
-        &zookeeper_cr,
-        &version_label(&version.to_string()),
-        expected_pod_count,
-    )?;
+    cluster.create_or_update(&zookeeper_cr, &version_label(version), expected_pod_count)?;
 
-    cluster.check_pod_version(&version.to_string())?;
+    cluster.check_pod_version(version)?;
 
     let (zookeeper_cr, expected_pod_count) =
-        build_zk_cluster(cluster.name(), &version_update, replicas)?;
+        build_zk_cluster(cluster.name(), version_update, replicas)?;
 
     cluster.create_or_update(
         &zookeeper_cr,
-        &version_label(&version_update.to_string()),
+        &version_label(version_update),
         expected_pod_count,
     )?;
 
@@ -41,9 +37,9 @@ fn test_cluster_update() -> Result<()> {
     let admin_service =
         create_node_port_service(&cluster.client, "zookeeper-admin", "zookeeper", admin_port);
 
-    custom_checks(created_pods.as_slice(), &version_update, &admin_service)?;
+    custom_checks(created_pods.as_slice(), version_update, &admin_service)?;
 
-    cluster.check_pod_version(&version_update.to_string())?;
+    cluster.check_pod_version(version_update)?;
 
     Ok(())
 }
