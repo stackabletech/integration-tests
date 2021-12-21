@@ -1636,7 +1636,7 @@ dependencies = [
 [[package]]
 name = "stackable-hive-crd"
 version = "0.4.0-nightly"
-source = "git+https://github.com/stackabletech/hive-operator.git?branch=switch_to_stateful_set#e22470693b68547aa0c31777a1878ebc7b9af620"
+source = "git+https://github.com/stackabletech/hive-operator.git?branch=main#7cc92ed9eb164230e69957f025dd10fc7e56e768"
 dependencies = [
  "serde",
  "serde_json",

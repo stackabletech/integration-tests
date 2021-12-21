@@ -10,7 +10,7 @@ version = "0.1.0"
 [dependencies]
 anyhow = "1.0"
 integration-test-commons = { path = "../commons" }
-stackable-hive-crd = { git = "https://github.com/stackabletech/hive-operator.git", branch = "switch_to_stateful_set" }
+stackable-hive-crd = { git = "https://github.com/stackabletech/hive-operator.git", branch = "main" }
 serde = "1.0"
 serde_json = "1.0"
 serde_yaml = "0.8"
