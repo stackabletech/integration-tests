@@ -2,6 +2,7 @@ use anyhow::Result;
 use integration_test_commons::operator::setup::{
     TestCluster, TestClusterLabels, TestClusterOptions, TestClusterTimeouts,
 };
+use integration_test_commons::stackable_operator::k8s_openapi::api::apps::v1::DaemonSet;
 use integration_test_commons::stackable_operator::kube::Resource;
 use integration_test_commons::stackable_operator::labels::{
     APP_INSTANCE_LABEL, APP_NAME_LABEL, APP_VERSION_LABEL,
@@ -49,13 +50,20 @@ pub fn build_opa_cluster(
     Ok((serde_yaml::from_str(spec)?, replicas))
 }
 
-/// The Opa operator runs based on a [`DaemonSet`]. Therefore we need to determine the number of
-/// available worker nodes in order to wait for all pods to be ready.
-pub fn get_worker_nodes<T>(cluster: &TestCluster<T>) -> usize
+/// The Opa operator runs based on a [`DaemonSet`]. We use the `desired_number_scheduled` status
+/// field to retrieve the expected amount of created pods / replicas.
+pub fn get_worker_nodes<T>(cluster: &TestCluster<T>) -> i32
 where
     T: Clone + Debug + DeserializeOwned + Resource<DynamicType = ()> + Serialize,
 {
-    cluster
-        .list_nodes(Some("node-role.kubernetes.io/master!="))
-        .len()
+    let daemon_sets = cluster.list::<DaemonSet>(None);
+    let ds = daemon_sets.get(0).expect("No opa daemon set found!");
+    let ds_status = ds.status.as_ref().expect("Opa daemon set has no status!");
+
+    println!(
+        "DaemonSet - desired_number_scheduled: {}",
+        ds_status.desired_number_scheduled
+    );
+
+    ds_status.desired_number_scheduled
 }
