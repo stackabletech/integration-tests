@@ -13,22 +13,14 @@ fn test_update_cluster() -> Result<()> {
     let (spark_cr, expected_pod_count) =
         build_spark_custom_resource(cluster.name(), version, 1, 2, 1)?;
 
-    cluster.create_or_update(
-        &spark_cr,
-        &version_label(version),
-        expected_pod_count,
-    )?;
+    cluster.create_or_update(&spark_cr, &version_label(version), expected_pod_count)?;
 
     cluster.check_pod_version(&version.to_string())?;
 
     let (spark_cr, expected_pod_count) =
         build_spark_custom_resource(cluster.name(), version_update, 1, 2, 1)?;
 
-    cluster.create_or_update(
-        &spark_cr,
-        &version_label(version),
-        expected_pod_count,
-    )?;
+    cluster.create_or_update(&spark_cr, &version_label(version), expected_pod_count)?;
 
     cluster.check_pod_version(version)
 }

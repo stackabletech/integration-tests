@@ -1670,7 +1670,7 @@ dependencies = [
 [[package]]
 name = "stackable-spark-crd"
 version = "0.5.0-nightly"
-source = "git+https://github.com/stackabletech/spark-operator.git?branch=feature/stateful-sets#4e6f9a716a7c8d32d0e41ad7c05604a961621751"
+source = "git+https://github.com/stackabletech/spark-operator.git?branch=main#7cea0800b524f5f6c3296dd730dfbd4d041aece4"
 dependencies = [
  "semver",
  "serde",

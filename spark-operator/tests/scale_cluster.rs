@@ -23,11 +23,7 @@ fn test_scale_cluster_up() -> Result<()> {
     let (spark_cr, expected_pod_count_after) =
         build_spark_custom_resource(cluster.name(), version, 2, 2, 1)?;
 
-    cluster.create_or_update(
-        &spark_cr,
-        &version_label(version),
-        expected_pod_count_after,
-    )?;
+    cluster.create_or_update(&spark_cr, &version_label(version), expected_pod_count_after)?;
 
     cluster.check_pod_version(version)
 }
@@ -51,11 +47,7 @@ fn test_scale_cluster_down() -> Result<()> {
     let (spark_cr, expected_pod_count_after) =
         build_spark_custom_resource(cluster.name(), version, 1, 1, 1)?;
 
-    cluster.create_or_update(
-        &spark_cr,
-        &version_label(version),
-        expected_pod_count_after,
-    )?;
+    cluster.create_or_update(&spark_cr, &version_label(version), expected_pod_count_after)?;
 
     cluster.check_pod_version(version)
 }
