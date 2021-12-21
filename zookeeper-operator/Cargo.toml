@@ -1,10 +1,10 @@
 [package]
 authors = ["Razvan-Daniel Mihai <84674+razvan@users.noreply.github.com>"]
 description = "Integration tests for the Stackable Operator for Apache ZooKeeper"
-edition = "2018"
+edition = "2021"
 license = "OSL-3.0"
 name = "zookeeper-operator-integration-tests"
-repository = "https://github.com/stackabletech/zookeeper-operator-integration-tests"
+repository = "https://github.com/stackabletech/integration-tests"
 version = "0.1.0"
 
 [dependencies]

@@ -6,12 +6,12 @@ use integration_test_commons::operator::setup::{
 use integration_test_commons::stackable_operator::labels::{
     APP_INSTANCE_LABEL, APP_NAME_LABEL, APP_VERSION_LABEL,
 };
-use stackable_zookeeper_crd::{ZookeeperCluster, ZookeeperVersion, APP_NAME};
+use stackable_zookeeper_crd::ZookeeperCluster;
 
 /// Predefined options and timeouts for the TestCluster.
 pub fn build_test_cluster() -> TestCluster<ZookeeperCluster> {
     TestCluster::new(
-        &TestClusterOptions::new(APP_NAME, "simple"),
+        &TestClusterOptions::new("zookeeper", "simple"),
         &TestClusterLabels::new(APP_NAME_LABEL, APP_INSTANCE_LABEL, APP_VERSION_LABEL),
         &TestClusterTimeouts::default(),
     )
@@ -20,7 +20,7 @@ pub fn build_test_cluster() -> TestCluster<ZookeeperCluster> {
 /// This returns a ZooKeeper custom resource and the expected pod count.
 pub fn build_zk_cluster(
     name: &str,
-    version: &ZookeeperVersion,
+    version: &str,
     replicas: usize,
     admin_port: Option<i32>,
     client_port: Option<i32>,
@@ -45,7 +45,7 @@ pub fn build_zk_cluster(
                   clientPort: {}
     ",
         name,
-        version.to_string(),
+        version,
         replicas,
         admin_port.unwrap_or(8080),
         client_port.unwrap_or(2181),
@@ -57,7 +57,7 @@ pub fn build_zk_cluster(
 /// This returns a ZooKeeper custom resource with metrics enabled and the expected pod count.
 pub fn build_zk_cluster_with_metrics(
     name: &str,
-    version: &ZookeeperVersion,
+    version: &str,
     replicas: usize,
     admin_port: Option<i32>,
     client_port: Option<i32>,
@@ -84,7 +84,7 @@ pub fn build_zk_cluster_with_metrics(
                   metricsPort: {}
     ",
         name,
-        version.to_string(),
+        version,
         replicas,
         admin_port.unwrap_or(8080),
         client_port.unwrap_or(2181),
