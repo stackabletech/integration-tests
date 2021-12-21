@@ -1,5 +1,5 @@
 [package]
-authors = ["Razvan-Daniel Mihai <84674+razvan@users.noreply.github.com>"]
+authors = ["Stackable GmbH <info@stackable.de>"]
 description = "Integration tests for the Stackable Operator for Apache ZooKeeper"
 edition = "2021"
 license = "OSL-3.0"

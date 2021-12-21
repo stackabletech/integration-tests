@@ -22,8 +22,6 @@ pub fn build_zk_cluster(
     name: &str,
     version: &str,
     replicas: usize,
-    admin_port: Option<i32>,
-    client_port: Option<i32>,
 ) -> Result<(ZookeeperCluster, usize)> {
     let spec = &formatdoc!(
         "
@@ -41,54 +39,11 @@ pub fn build_zk_cluster(
                     kubernetes.io/os: linux
                 replicas: {}
                 config:
-                  adminPort: {}
-                  clientPort: {}
+                  adminPort: 8080
     ",
         name,
         version,
         replicas,
-        admin_port.unwrap_or(8080),
-        client_port.unwrap_or(2181),
-    );
-
-    Ok((serde_yaml::from_str(spec)?, replicas))
-}
-
-/// This returns a ZooKeeper custom resource with metrics enabled and the expected pod count.
-pub fn build_zk_cluster_with_metrics(
-    name: &str,
-    version: &str,
-    replicas: usize,
-    admin_port: Option<i32>,
-    client_port: Option<i32>,
-    metrics_port: Option<i32>,
-) -> Result<(ZookeeperCluster, usize)> {
-    let spec = &formatdoc!(
-        "
-        apiVersion: zookeeper.stackable.tech/v1alpha1
-        kind: ZookeeperCluster
-        metadata:
-          name: {}
-        spec:
-          version: {}
-          servers:
-            roleGroups:
-              default:
-                selector:
-                  matchLabels:
-                    kubernetes.io/os: linux
-                replicas: {}
-                config:
-                  adminPort: {}
-                  clientPort: {}
-                  metricsPort: {}
-    ",
-        name,
-        version,
-        replicas,
-        admin_port.unwrap_or(8080),
-        client_port.unwrap_or(2181),
-        metrics_port.unwrap_or(9505),
     );
 
     Ok((serde_yaml::from_str(spec)?, replicas))

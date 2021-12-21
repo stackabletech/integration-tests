@@ -525,6 +525,18 @@ dependencies = [
 ]
 
 [[package]]
+name = "hive-operator-integration-tests"
+version = "0.1.0"
+dependencies = [
+ "anyhow",
+ "integration-test-commons",
+ "serde",
+ "serde_json",
+ "serde_yaml",
+ "stackable-hive-crd",
+]
+
+[[package]]
 name = "http"
 version = "0.2.5"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1626,6 +1638,19 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "ae3c15181f4b14e52eeaac3efaeec4d2764716ce9c86da0c934c3e318649c5ba"
 dependencies = [
  "num",
+]
+
+[[package]]
+name = "stackable-hive-crd"
+version = "0.4.0-nightly"
+source = "git+https://github.com/stackabletech/hive-operator.git?branch=main#7cc92ed9eb164230e69957f025dd10fc7e56e768"
+dependencies = [
+ "serde",
+ "serde_json",
+ "snafu",
+ "stackable-operator",
+ "strum 0.22.0",
+ "strum_macros 0.23.1",
 ]
 
 [[package]]
