@@ -1,7 +1,6 @@
 use anyhow::{anyhow, Result};
 use semver::Version;
 use serde::{Deserialize, Serialize};
-use stackable_zookeeper_crd::ZookeeperVersion;
 use std::io::{Read, Write};
 use std::net::TcpStream;
 use std::thread;
@@ -17,10 +16,10 @@ pub const ARE_YOU_OK: &str = "ruok";
 pub const I_AM_OK: &str = "imok";
 
 /// Send "ruok" to a pod and check if the response is "imok"
-pub fn send_4lw_i_am_ok(version: &ZookeeperVersion, host: &str) -> Result<()> {
+pub fn send_4lw_i_am_ok(version: &str, host: &str) -> Result<()> {
     // 3.4.14 answers with "imok", while 3.5.X onwards the command is mirrored
     // which results in the "ruok" response we have to differentiate here.
-    let ver = if Version::parse(&version.to_string())? > Version::parse("3.5.2")? {
+    let ver = if Version::parse(version)? > Version::parse("3.5.2")? {
         ARE_YOU_OK.to_string()
     } else {
         I_AM_OK.to_string()
@@ -60,8 +59,8 @@ pub fn send_4lw_i_am_ok(version: &ZookeeperVersion, host: &str) -> Result<()> {
 /// statistics. We have to differentiate between the ZooKeeper versions.
 /// Up to 3.5.2 the standard four letter word can be used.
 /// From 3.5.3 onwards we query the admin server via http request.
-pub fn send_4lw(version: &ZookeeperVersion, four_letter_word: &str, host: &str) -> Result<String> {
-    if Version::parse(&version.to_string())? > Version::parse("3.5.2")? {
+pub fn send_4lw(version: &str, four_letter_word: &str, host: &str) -> Result<String> {
+    if Version::parse(version)? > Version::parse("3.5.2")? {
         send_cmd_to_admin_server(four_letter_word, host)
     } else {
         send_4lw_to_host(four_letter_word, host)
