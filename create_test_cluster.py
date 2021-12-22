@@ -2,9 +2,11 @@ import argparse
 import importlib
 import json
 import logging
+import re
 import shutil
 import sys
 import subprocess
+import time
 from argparse import Namespace
 
 KIND_CLUSTER_NAME="integration-tests"
@@ -39,6 +41,20 @@ nodes:
       nodeRegistration:
         kubeletExtraArgs:
           node-labels: node=3
+"""
+
+MINIO_SERVICE = """
+apiVersion: v1
+kind: Service
+metadata:
+  name: minio-external
+spec:
+  type: NodePort
+  selector:
+    v1.min.io/tenant: minio1
+  ports:
+    - port: 80
+      targetPort: 9000
 """
 
 
@@ -203,15 +219,54 @@ def install_dependencies_superset():
 
 
 def install_dependencies_trino():
-  repo = helper_add_helm_repo("minio", "https://operator.min.io/")
+  install_stackable_operator("hive")
+
   release = helper_find_helm_release("minio-operator", "minio-operator")
   if release:
     logging.info(f"MinIO already running release with name [{release['name']}] and chart [{release['chart']}] - skipping installation")
     return
 
-  helper_install_helm_release("minio", "minio", "https://operator.min.io/")
-  # TODO - the line above is wrong because it's not capturing any of the customization from the bash version
-  pass
+  # MinIO operator chart versions from 4.2.4 to 4.3.5 (which is the latest
+  # at the time of writing) seem to be affected by
+  # https://github.com/minio/operator/issues/904
+  minio_operator_chart_version = "4.2.3"
+
+  minio_values = helper_execute(['helm', 'show', 'values', '--version', minio_operator_chart_version, 'minio/minio-operator'])
+  minio_values = re.sub('requestAutoCert:.*', 'requestAutoCert: false', minio_values)
+  minio_values = re.sub('servers:.*', 'servers: 1', minio_values)
+  minio_values = re.sub('size:.*', 'size: 10Mi', minio_values)
+
+  helper_add_helm_repo("minio", "https://operator.min.io")
+  logging.info(f"Installing Helm release from chart [minio-operator] now")
+  args = ['helm', 'install', '--version', minio_operator_chart_version, '--generate-name', '--values', '-', 'minio/minio-operator']
+  helper_execute(args, minio_values)
+  logging.info("Helm release was installed successfully, waiting for MinIO to start")
+
+  logging.info("Waiting for MinIO pod to become available")
+  while helper_execute(['kubectl', 'get', 'pod', '--selector=v1.min.io/tenant=minio1',
+                        "--output=jsonpath={range .items[*]}{.status.conditions[?(@.type=='Ready')].status}{end}"]) != 'True':
+    logging.debug("Still waiting for MinIO Pod to become available...")
+    time.sleep(2)
+  logging.info("MinIO pod now available - continuing")
+
+  logging.info("Creating MinIO service now and wait 30s until it is available")
+  helper_execute(['kubectl', 'apply', '-f', '-'], MINIO_SERVICE)
+  time.sleep(30)
+  logging.info("MinIO service created")
+
+  minio_node_ip = helper_execute(['kubectl', 'get', 'pod', '--selector=v1.min.io/tenant=minio1', '--output=jsonpath={.items[0].status.hostIP}'])
+
+  minio_node_port = helper_execute(['kubectl', 'get', 'service', 'minio-external', '--output=jsonpath={.spec.ports[0].nodePort}'])
+
+  s3_endpoint = f"http://{minio_node_ip}:{minio_node_port}"
+  s3_access_key = helper_execute(['kubectl', 'get', 'secret', 'minio1-secret', '--output=jsonpath="{.data.accesskey}"'])
+  s3_secret_key = helper_execute(['kubectl', 'get', 'secret', 'minio1-secret', '--output=jsonpath="{.data.secretkey}"'])
+
+  logging.info("!!!! Make sure the following variables are set in your environment before running")
+  logging.info("!!!! the trino integration tests.")
+  logging.info(f'export S3_ENDPOINT="{s3_endpoint}"')
+  logging.info(f'export S3_ACCESS_KEY={s3_access_key}')
+  logging.info(f'export S3_SECRET_KEY={s3_secret_key}')
 
 
 def helper_install_helm_release(name: str, chart_name: str, repo_name: str = None, repo_url: str = None, install_args: list = None):
@@ -255,7 +310,8 @@ def helper_command_exists(command: str):
 def helper_execute(args, stdin: str = None) -> str:
   """ This will execute the passed in program and exit the program if it failed.
 
-  In case of a failure or if debug is enabled it will also print the stderr and stdout of the program, otherwise it'll be silen
+  In case of a failure or if debug is enabled it will also print the stderr and stdout of the program, otherwise it'll be silent.
+  In case of success it will return the stdout.
   """
   args_string = " ".join(args)
   logging.debug("Running now: " + args_string)
