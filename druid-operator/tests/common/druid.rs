@@ -50,8 +50,6 @@ pub fn build_druid_cluster(
                   matchLabels:
                     kubernetes.io/os: linux
                 config:
-                  plaintextPort: 8082
-                  metricsPort: 9095
                 replicas: {replicas}
           coordinators:
             roleGroups:
@@ -60,8 +58,6 @@ pub fn build_druid_cluster(
                   matchLabels:
                     kubernetes.io/os: linux
                 config:
-                  plaintextPort: 8084
-                  metricsPort: 9090
                 replicas: {replicas}
           historicals:
             roleGroups:
@@ -70,8 +66,6 @@ pub fn build_druid_cluster(
                   matchLabels:
                     kubernetes.io/os: linux
                 config:
-                  plaintextPort: 8083
-                  metricsPort: 9091
                 replicas: {replicas}
           middleManagers:
             roleGroups:
@@ -80,8 +74,6 @@ pub fn build_druid_cluster(
                   matchLabels:
                     kubernetes.io/os: linux
                 config:
-                  plaintextPort: 8091
-                  metricsPort: 9098
                 replicas: {replicas}
           routers:
             roleGroups:
@@ -90,8 +82,6 @@ pub fn build_druid_cluster(
                   matchLabels:
                     kubernetes.io/os: linux
                 config:
-                  plaintextPort: 8888
-                  metricsPort: 9195
                 replicas: {replicas}
         ",
         name = name,
