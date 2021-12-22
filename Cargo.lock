@@ -525,6 +525,18 @@ dependencies = [
 ]
 
 [[package]]
+name = "hive-operator-integration-tests"
+version = "0.1.0"
+dependencies = [
+ "anyhow",
+ "integration-test-commons",
+ "serde",
+ "serde_json",
+ "serde_yaml",
+ "stackable-hive-crd",
+]
+
+[[package]]
 name = "http"
 version = "0.2.5"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1629,6 +1641,19 @@ dependencies = [
 ]
 
 [[package]]
+name = "stackable-hive-crd"
+version = "0.4.0-nightly"
+source = "git+https://github.com/stackabletech/hive-operator.git?branch=main#7cc92ed9eb164230e69957f025dd10fc7e56e768"
+dependencies = [
+ "serde",
+ "serde_json",
+ "snafu",
+ "stackable-operator",
+ "strum 0.22.0",
+ "strum_macros 0.23.1",
+]
+
+[[package]]
 name = "stackable-opa-crd"
 version = "0.7.0-nightly"
 source = "git+https://github.com/stackabletech/opa-operator.git?branch=main#63e9db053f6e71c585f20f25c6a19c4e69e59a57"
@@ -1704,6 +1729,18 @@ dependencies = [
  "stackable-operator",
  "strum 0.23.0",
  "strum_macros 0.23.1",
+]
+
+[[package]]
+name = "stackable-zookeeper-crd"
+version = "0.8.0-nightly"
+source = "git+https://github.com/stackabletech/zookeeper-operator.git?branch=main#949867e968ffe395328fd8248dda12dc3c5f9756"
+dependencies = [
+ "serde",
+ "serde_json",
+ "snafu",
+ "stackable-operator",
+ "strum 0.23.0",
 ]
 
 [[package]]
@@ -2300,4 +2337,19 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "56c1936c4cc7a1c9ab21a1ebb602eb942ba868cbd44a99cb7cdc5892335e1c85"
 dependencies = [
  "linked-hash-map",
+]
+
+[[package]]
+name = "zookeeper-operator-integration-tests"
+version = "0.1.0"
+dependencies = [
+ "anyhow",
+ "indoc",
+ "integration-test-commons",
+ "reqwest",
+ "semver",
+ "serde",
+ "serde_json",
+ "serde_yaml",
+ "stackable-zookeeper-crd",
 ]
