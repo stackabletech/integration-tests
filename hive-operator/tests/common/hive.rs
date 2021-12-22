@@ -37,7 +37,6 @@ pub fn build_hive_cluster(
                   kubernetes.io/os: linux
                 replicas: {}
                 config:
-                  metricsPort: 11111
                   database:
                     connString: jdbc:derby:;databaseName=/stackable/data/metadata_db;create=true
                     user: APP

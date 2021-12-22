@@ -2,14 +2,14 @@
 
 members = [
 "commons",
-"druid-operator",
-"kafka-operator",
-"monitoring-operator",
-"nifi-operator",
+# "druid-operator",
+# "kafka-operator",
+# "monitoring-operator",
+# "nifi-operator",
 "opa-operator",
 "spark-operator",
-"zookeeper-operator",
+# "zookeeper-operator",
 "hive-operator",
 "superset-operator",
-"trino-operator"
+# "trino-operator"
 ]
