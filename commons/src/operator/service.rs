@@ -24,6 +24,25 @@ pub fn create_node_port_service<'a>(
     )
 }
 
+/// Helper to provide a temporary service for custom checks
+pub fn create_node_port_service_with_component<'a>(
+    client: &'a TestKubeClient,
+    name: &'a str,
+    app: &'a str,
+    component: &'a str,
+    port: i32,
+) -> TemporaryService<'a> {
+    TemporaryService::new(
+        client,
+        &ServiceBuilder::new(name)
+            .with_port(port, port)
+            .with_selector("app.kubernetes.io/name", app)
+            .with_selector("app.kubernetes.io/component", component)
+            .with_type(ServiceType::NodePort)
+            .build(),
+    )
+}
+
 #[derive(Clone, Display)]
 pub enum ServiceType {
     /// Exposes the Service on a cluster-internal IP. Choosing this value makes the Service only

@@ -250,6 +250,22 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "fea41bba32d969b513997752735605054bc0dfa92b4c56bf1189f2e174be7a10"
 
 [[package]]
+name = "druid-operator-integration-tests"
+version = "0.1.0"
+dependencies = [
+ "anyhow",
+ "integration-test-commons",
+ "reqwest",
+ "serde",
+ "serde_json",
+ "serde_yaml",
+ "stackable-druid-crd",
+ "stackable-zookeeper-crd",
+ "strum 0.23.0",
+ "strum_macros 0.23.1",
+]
+
+[[package]]
 name = "duplicate"
 version = "0.3.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -682,7 +698,7 @@ dependencies = [
  "serde_json",
  "serde_yaml",
  "spectral",
- "stackable-operator",
+ "stackable-operator 0.6.0",
  "strum 0.22.0",
  "strum_macros 0.22.0",
  "tokio",
@@ -1641,14 +1657,30 @@ dependencies = [
 ]
 
 [[package]]
+name = "stackable-druid-crd"
+version = "0.2.0-nightly"
+source = "git+https://github.com/stackabletech/druid-operator.git?branch=main#bdb92202ddff594a19d216f1f54e0981d4aabc09"
+dependencies = [
+ "duplicate",
+ "semver",
+ "serde",
+ "serde_json",
+ "stackable-operator 0.7.0",
+ "strum 0.23.0",
+ "strum_macros 0.23.1",
+ "thiserror",
+ "tracing",
+]
+
+[[package]]
 name = "stackable-hive-crd"
 version = "0.4.0-nightly"
-source = "git+https://github.com/stackabletech/hive-operator.git?branch=main#7cc92ed9eb164230e69957f025dd10fc7e56e768"
+source = "git+https://github.com/stackabletech/hive-operator.git?branch=main#0db7b329c0b263dd03406cfaf9dfd854da473846"
 dependencies = [
  "serde",
  "serde_json",
  "snafu",
- "stackable-operator",
+ "stackable-operator 0.6.0",
  "strum 0.22.0",
  "strum_macros 0.23.1",
 ]
@@ -1656,12 +1688,12 @@ dependencies = [
 [[package]]
 name = "stackable-opa-crd"
 version = "0.7.0-nightly"
-source = "git+https://github.com/stackabletech/opa-operator.git?branch=main#63e9db053f6e71c585f20f25c6a19c4e69e59a57"
+source = "git+https://github.com/stackabletech/opa-operator.git?branch=main#a79d413b42d2eb9f8e8c26c40fb2d03f5c82f099"
 dependencies = [
  "semver",
  "serde",
  "serde_json",
- "stackable-operator",
+ "stackable-operator 0.6.0",
  "strum 0.22.0",
  "strum_macros 0.22.0",
  "tracing",
@@ -1703,16 +1735,51 @@ dependencies = [
 ]
 
 [[package]]
+name = "stackable-operator"
+version = "0.7.0"
+source = "git+https://github.com/stackabletech/operator-rs.git?tag=0.7.0#75296fdfa8252470bc810076a94c8fe84f353a77"
+dependencies = [
+ "async-trait",
+ "backoff",
+ "chrono",
+ "clap",
+ "const_format",
+ "derivative",
+ "either",
+ "futures",
+ "json-patch",
+ "k8s-openapi",
+ "kube",
+ "lazy_static",
+ "product-config",
+ "rand 0.8.4",
+ "regex",
+ "schemars",
+ "serde",
+ "serde_json",
+ "serde_yaml",
+ "structopt",
+ "strum 0.23.0",
+ "strum_macros 0.23.1",
+ "thiserror",
+ "tokio",
+ "tracing",
+ "tracing-futures",
+ "tracing-subscriber",
+ "uuid",
+]
+
+[[package]]
 name = "stackable-spark-crd"
 version = "0.5.0-nightly"
-source = "git+https://github.com/stackabletech/spark-operator.git?branch=main#7cea0800b524f5f6c3296dd730dfbd4d041aece4"
+source = "git+https://github.com/stackabletech/spark-operator.git?branch=main#0506c30c71665912e1979b984ead067e3bea8656"
 dependencies = [
  "semver",
  "serde",
  "serde_json",
  "serde_yaml",
  "snafu",
- "stackable-operator",
+ "stackable-operator 0.6.0",
  "strum 0.22.0",
  "strum_macros 0.22.0",
 ]
@@ -1720,26 +1787,26 @@ dependencies = [
 [[package]]
 name = "stackable-superset-crd"
 version = "0.3.0-nightly"
-source = "git+https://github.com/stackabletech/superset-operator.git?branch=main#03fef41666821136934d9803e844924c7bd20001"
+source = "git+https://github.com/stackabletech/superset-operator.git?branch=main#4c08925d8fbfb34e057e66b96a60dd922a02c492"
 dependencies = [
  "duplicate",
  "serde",
  "serde_json",
  "snafu",
- "stackable-operator",
+ "stackable-operator 0.6.0",
  "strum 0.23.0",
  "strum_macros 0.23.1",
 ]
 
 [[package]]
 name = "stackable-zookeeper-crd"
-version = "0.8.0-nightly"
-source = "git+https://github.com/stackabletech/zookeeper-operator.git?branch=main#949867e968ffe395328fd8248dda12dc3c5f9756"
+version = "0.7.0"
+source = "git+https://github.com/stackabletech/zookeeper-operator.git?tag=0.7.0#c736090cdb4ec5e499b48ca9a24fad65ae6f0d63"
 dependencies = [
  "serde",
  "serde_json",
  "snafu",
- "stackable-operator",
+ "stackable-operator 0.6.0",
  "strum 0.23.0",
 ]
 
@@ -1836,9 +1903,9 @@ dependencies = [
 
 [[package]]
 name = "syn"
-version = "1.0.82"
+version = "1.0.83"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "8daf5dd0bb60cbd4137b1b587d2fc0ae729bc07cf01cd70b36a1ed5ade3b9d59"
+checksum = "23a1dfb999630e338648c83e91c59a4e9fb7620f520c3194b6b89e276f2f1959"
 dependencies = [
  "proc-macro2",
  "quote",
@@ -2337,19 +2404,4 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "56c1936c4cc7a1c9ab21a1ebb602eb942ba868cbd44a99cb7cdc5892335e1c85"
 dependencies = [
  "linked-hash-map",
-]
-
-[[package]]
-name = "zookeeper-operator-integration-tests"
-version = "0.1.0"
-dependencies = [
- "anyhow",
- "indoc",
- "integration-test-commons",
- "reqwest",
- "semver",
- "serde",
- "serde_json",
- "serde_yaml",
- "stackable-zookeeper-crd",
 ]
