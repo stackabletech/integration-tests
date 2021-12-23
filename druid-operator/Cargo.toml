@@ -13,6 +13,8 @@ stackable-druid-crd = { git = "https://github.com/stackabletech/druid-operator.g
 serde = "1.0"
 serde_json = "1.0"
 serde_yaml = "0.8"
+strum = "0.23"
+strum_macros = "0.23"
 reqwest = { version = "0.11", features = ["blocking"] }
 
 [dev-dependencies]

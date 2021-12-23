@@ -1,11 +1,15 @@
 pub mod common;
 
 use anyhow::Result;
-use common::druid::{build_druid_cluster, build_test_cluster, TestService};
+use common::druid::{build_druid_cluster, build_test_cluster};
 use common::zookeeper::build_zk_test_cluster;
+use integration_test_commons::operator::checks::wait_for_scan_port;
+use integration_test_commons::operator::service::create_node_port_service_with_component;
 use integration_test_commons::operator::setup::version_label;
-use integration_test_commons::test::prelude::Pod;
-use std::{thread, time};
+use integration_test_commons::test::prelude::{Pod, TestKubeClient};
+use stackable_druid_crd::DruidRole;
+use std::time::Duration;
+use strum::IntoEnumIterator;
 
 #[test]
 fn test_create_1_cluster_0_22_0() -> Result<()> {
@@ -23,34 +27,45 @@ fn test_create_1_cluster_0_22_0() -> Result<()> {
         expected_pod_count,
     )?;
 
-    // Wait for the cluster to have started fully
-    // The pods are shown as running but are not able to respond to the healthcheck immediately
-    let delay_time = time::Duration::from_secs(60);
-    thread::sleep(delay_time);
-
+    // Check pod count
     let created_pods = cluster.list::<Pod>(None);
     let actual_pod_count = created_pods.len();
-
     assert_eq!(
         actual_pod_count, expected_pod_count,
         "Expected different amount of pods"
     );
 
-    // for each process/pod, create a NodePort service and check the health status
-    let s1 = TestService::new(&cluster.client, "druid", "coordinator", 8084, 30081);
-    let s2 = TestService::new(&cluster.client, "druid", "broker", 8082, 30082);
-    let s3 = TestService::new(&cluster.client, "druid", "historical", 8083, 30083);
-    let s4 = TestService::new(&cluster.client, "druid", "middleManager", 8091, 30091);
-    let s5 = TestService::new(&cluster.client, "druid", "router", 8888, 30888);
+    for role in DruidRole::iter() {
+        health_check(&cluster.client, &role)?;
+    }
 
-    let delay_time = time::Duration::from_secs(3);
-    thread::sleep(delay_time);
+    Ok(())
+}
 
-    s1.conduct_healthcheck(&cluster.client)?;
-    s2.conduct_healthcheck(&cluster.client)?;
-    s3.conduct_healthcheck(&cluster.client)?;
-    s4.conduct_healthcheck(&cluster.client)?;
-    s5.conduct_healthcheck(&cluster.client)?;
-
+/// On every process, call the health check endpoint.
+fn health_check(client: &TestKubeClient, role: &DruidRole) -> Result<()> {
+    let role_string = role.to_string();
+    let service_name = format!("{}-service", role_string);
+    let service = create_node_port_service_with_component(
+        &client,
+        &service_name,
+        "druid",
+        &role_string,
+        role.get_http_port().into(),
+    );
+    let service_pods = client.list_labeled(&format!(
+        "app.kubernetes.io/name=druid,app.kubernetes.io/component={}",
+        role_string
+    )); // TODO select on instance
+    for pod in service_pods {
+        let address = &service.address(&pod);
+        wait_for_scan_port(address, Duration::from_secs(150))?;
+        let url = format!("http://{}/status/health", address);
+        println!("Requesting [{}]", url);
+        let res = reqwest::blocking::get(&url)?;
+        let resp = res.text()?;
+        println!("Response: {}", resp);
+        assert_eq!(resp, "true", "Response from the healthcheck wasn't 'true'");
+    }
     Ok(())
 }
