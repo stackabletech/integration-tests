@@ -47,7 +47,7 @@ fn health_check(client: &TestKubeClient, role: &DruidRole) -> Result<()> {
     let role_string = role.to_string();
     let service_name = format!("{}-service", role_string);
     let service = create_node_port_service_with_component(
-        &client,
+        client,
         &service_name,
         "druid",
         &role_string,
