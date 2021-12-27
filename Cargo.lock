@@ -260,7 +260,7 @@ dependencies = [
  "serde_json",
  "serde_yaml",
  "stackable-druid-crd",
- "stackable-zookeeper-crd",
+ "stackable-zookeeper-crd 0.7.0",
  "strum 0.23.0",
  "strum_macros 0.23.1",
 ]
@@ -1772,7 +1772,7 @@ dependencies = [
 [[package]]
 name = "stackable-spark-crd"
 version = "0.5.0-nightly"
-source = "git+https://github.com/stackabletech/spark-operator.git?branch=main#0506c30c71665912e1979b984ead067e3bea8656"
+source = "git+https://github.com/stackabletech/spark-operator.git?branch=main#4c6ad6c63a8f8dfff20e37f90025407b190a6b78"
 dependencies = [
  "semver",
  "serde",
@@ -1802,6 +1802,18 @@ dependencies = [
 name = "stackable-zookeeper-crd"
 version = "0.7.0"
 source = "git+https://github.com/stackabletech/zookeeper-operator.git?tag=0.7.0#c736090cdb4ec5e499b48ca9a24fad65ae6f0d63"
+dependencies = [
+ "serde",
+ "serde_json",
+ "snafu",
+ "stackable-operator 0.6.0",
+ "strum 0.23.0",
+]
+
+[[package]]
+name = "stackable-zookeeper-crd"
+version = "0.9.0-nightly"
+source = "git+https://github.com/stackabletech/zookeeper-operator.git?branch=main#45088acd97f28bb8eafe6ac9e0053ced58d3b5b0"
 dependencies = [
  "serde",
  "serde_json",
@@ -2404,4 +2416,19 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "56c1936c4cc7a1c9ab21a1ebb602eb942ba868cbd44a99cb7cdc5892335e1c85"
 dependencies = [
  "linked-hash-map",
+]
+
+[[package]]
+name = "zookeeper-operator-integration-tests"
+version = "0.1.0"
+dependencies = [
+ "anyhow",
+ "indoc",
+ "integration-test-commons",
+ "reqwest",
+ "semver",
+ "serde",
+ "serde_json",
+ "serde_yaml",
+ "stackable-zookeeper-crd 0.9.0-nightly",
 ]
