@@ -11,6 +11,8 @@ import subprocess
 import time
 from argparse import Namespace
 
+VALID_OPERATORS=["druid", "hbase", "hive", "kafka", "nifi", "opa", "spark", "superset", "trino", "zookeeper"]
+
 KIND_CLUSTER_NAME="integration-tests"
 
 HELM_DEV_REPO_NAME="stackable-dev"
@@ -62,10 +64,10 @@ spec:
 
 def check_args() -> Namespace:
   parser = argparse.ArgumentParser()
-  parser.add_argument('--operator', '-o', help='The Stackable operator to install', required=True)
+  parser.add_argument('--operator', '-o', help='The Stackable operator to install', required=True, choices=VALID_OPERATORS)
   parser.add_argument('--version', '-v', required=False, help='The version of the operator to install, if left empty it will install the latest development version')
   parser.add_argument('--kind', '-k', action='store_true', required=False, help="When set we'll automatically create a 4 node kind cluster")
-  parser.add_argument('--debug', action='store_true', required=False)
+  parser.add_argument('--debug', '-d', action='store_true', required=False)
   args = parser.parse_args()
 
   log_level = 'DEBUG' if args.debug else 'INFO'
@@ -225,6 +227,7 @@ def install_dependencies_superset():
 def install_dependencies_trino():
   install_stackable_operator("hive")
 
+  helper_add_helm_repo("minio", "https://operator.min.io")
   release = helper_find_helm_release("minio-operator", "minio-operator")
   if release:
     logging.info(f"MinIO already running release with name [{release['name']}] and chart [{release['chart']}] - skipping installation")
@@ -240,7 +243,6 @@ def install_dependencies_trino():
   minio_values = re.sub('servers:.*', 'servers: 1', minio_values)
   minio_values = re.sub('size:.*', 'size: 10Mi', minio_values)
 
-  helper_add_helm_repo("minio", "https://operator.min.io")
   logging.info(f"Installing Helm release from chart [minio-operator] now")
   args = ['helm', 'install', '--version', minio_operator_chart_version, '--generate-name', '--values', '-', 'minio/minio-operator']
   helper_execute(args, minio_values)

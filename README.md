@@ -26,15 +26,16 @@ If this happens please add a (any) repository to Helm manually (this can be dele
 
 To be more precise: Helm needs to find a valid `repositories.yaml` file in its config directory. 
 
+    ./create_test_cluster.py --debug --kind --operator <operator>
 ## Set up a test kind-cluster
 
 The `create_test_cluster.py` utility script will set up a test kind cluster (if requested with the `--kind` parameter) and install dependencies required for running the integration tests.
 
-    . create_test_cluster.py -o <operator> -v [version] --kind
+    . create_test_cluster.py --debug --kind --ooperator <operator>
 
 Example
 
-    . create_test_cluster.py -o trino --kind
+    ./create_test_cluster.py --debug --kind --operator trino
 
 This will set up a three node kind cluster called `integration-tests` and install the `trino-operator` along with a MiniIO cluster and the `hive-operator`. When this is done, you can run the integration tests for the `trino-operator` by following the instructions below.
 
@@ -44,7 +45,7 @@ IMPORTANT: The script might ask you to set environment variables that are needed
 
 It is recommended to run the tests in the same shell the was used to create the Kind cluster. This is to ensure that any required environment variables are available to the test process.
 
-    cargo test --package zookeeper-operator-integration-tests -- --nocapture --test-threads=1
+    cargo test --package trino-operator-integration-tests -- --nocapture --test-threads=1
 
 ## Build commons
 
@@ -56,6 +57,6 @@ It is recommended to run the tests in the same shell the was used to create the 
 
 If you want to test product or operator images locally before publishing them to the image registry, you can build them locally and then load them in your `kind` cluster like this:
 
-   kind load docker-image docker.stackable.tech/stackable/superset:1.3.2-stackable0  --name integration-tests --verbosity 999
+   kind load docker-image docker.stackable.tech/stackable/trino:362-stackable0  --name integration-tests --verbosity 999
 
 
