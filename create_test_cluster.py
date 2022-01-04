@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 import argparse
 import importlib
 import json
@@ -60,7 +62,7 @@ spec:
 
 def check_args() -> Namespace:
   parser = argparse.ArgumentParser()
-  parser.add_argument('--operator', '-o', help='The Stackable operator to install')
+  parser.add_argument('--operator', '-o', help='The Stackable operator to install', required=True)
   parser.add_argument('--version', '-v', required=False, help='The version of the operator to install, if left empty it will install the latest development version')
   parser.add_argument('--kind', '-k', action='store_true', required=False, help="When set we'll automatically create a 4 node kind cluster")
   parser.add_argument('--debug', action='store_true', required=False)
@@ -137,6 +139,8 @@ def helper_add_helm_repo(name: str, url: str) -> str:
   :return: The name of the repository, might differ from the passed name if it did already exist
   """
   logging.debug(f"Checking whether Helm repository [{name}] already exists")
+
+  # WARNING: This can fail due to https://github.com/helm/helm/pull/10519
   output = json.loads(helper_execute(['helm', 'repo', 'list', '-o', 'json']))
   repo = next((item for item in output if item['url'] == url), None)
 
