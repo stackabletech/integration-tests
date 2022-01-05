@@ -8,11 +8,11 @@ There is a helper script called `create_test_cluster.py` which can be used to in
 ## Requirements
 
 You need working versions of the following tools in your PATH:
-- kubectl
-- kind
-- helm
-- python (version 3, tested with 3.9) 
-- pip (version 3) for hive tests
+- [kubectl](https://kubernetes.io/docs/tasks/tools/#kubectl)
+- [kind](https://kind.sigs.k8s.io/), optional - only if the `--kind` option is used (tested with 0.11)
+- [helm](https://helm.sh/) (tested with 3.7.2)
+- [python](https://www.python.org/) (version 3.7 or above) 
+- [pip](https://pip.pypa.io/en/stable/) (version 3.x), optional for Hive tests
 
 ### WARN: Helm bug
 
@@ -57,6 +57,6 @@ It is recommended to run the tests in the same shell the was used to create the 
 
 If you want to test product or operator images locally before publishing them to the image registry, you can build them locally and then load them in your `kind` cluster like this:
 
-   kind load docker-image docker.stackable.tech/stackable/trino:362-stackable0  --name integration-tests --verbosity 999
+    kind load docker-image docker.stackable.tech/stackable/trino:362-stackable0  --name integration-tests --verbosity 999
 
 
