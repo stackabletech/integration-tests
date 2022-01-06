@@ -11,12 +11,12 @@ import subprocess
 import time
 from argparse import Namespace
 
-VALID_OPERATORS=["druid", "hbase", "hive", "kafka", "nifi", "opa", "spark", "superset", "trino", "zookeeper"]
+VALID_OPERATORS = ["druid", "hbase", "hive", "kafka", "nifi", "opa", "spark", "superset", "trino", "zookeeper"]
 
-KIND_CLUSTER_NAME="integration-tests"
+DEFAULT_KIND_CLUSTER_NAME = "integration-tests"
 
-HELM_DEV_REPO_NAME="stackable-dev"
-HELM_DEV_REPO_URL="https://repo.stackable.tech/repository/helm-dev"
+HELM_DEV_REPO_NAME = "stackable-dev"
+HELM_DEV_REPO_URL = "https://repo.stackable.tech/repository/helm-dev"
 
 
 KIND_CLUSTER_DEFINITION = """
@@ -63,11 +63,18 @@ spec:
 
 
 def check_args() -> Namespace:
-  parser = argparse.ArgumentParser()
+  parser = argparse.ArgumentParser(
+    description="This tool can be used to install the Stackable Kubernetes Operators into a Kubernetes cluster using Helm. "
+                "It can optionally also create a kind cluster."
+  )
   parser.add_argument('--operator', '-o', help='The Stackable operator to install', required=True, choices=VALID_OPERATORS)
   parser.add_argument('--version', '-v', required=False, help='The version of the operator to install, if left empty it will install the latest development version')
-  parser.add_argument('--kind', '-k', action='store_true', required=False, help="When set we'll automatically create a 4 node kind cluster")
-  parser.add_argument('--debug', '-d', action='store_true', required=False)
+  parser.add_argument('--kind', '-k', required=False, nargs='?', default=False, const=DEFAULT_KIND_CLUSTER_NAME, metavar="CLUSTER NAME",
+                      help="When provided we'll automatically create a 4 node kind cluster. "
+                           f"If this was provided with no argument the kind cluster will have the name '{DEFAULT_KIND_CLUSTER_NAME}' "
+                           "Otherwise the provided name will be used",
+                      )
+  parser.add_argument('--debug', '-d', action='store_true', required=False, help="Will print additional debug statements (e.g. output from all run commands)")
   args = parser.parse_args()
 
   log_level = 'DEBUG' if args.debug else 'INFO'
@@ -102,6 +109,7 @@ def create_kind_cluster(name: str):
 
 
 def check_kubernetes_available():
+  """ Checks if Kubernetes is available, this is a naive approach but better than nothing """
   logging.info("Checking if Kubernetes is available")
   helper_execute(['kubectl', 'cluster-info'])
   logging.debug("Successfully tested for Kubernetes, seems to be available")
@@ -125,6 +133,8 @@ def install_stackable_operator(name: str, version: str = None):
 
 def helper_check_docker_running():
   """Check if Docker is running, exit the program if not"""
+
+  # Pylint suggests using check=True here, I didn't know about it at the time and don't think it's worth changing now
   output = subprocess.run(['docker', 'info'], stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True)
   if output.returncode != 0:
     logging.error("This script uses docker, and it isn't running - please start docker and try again")
@@ -218,9 +228,11 @@ def install_dependencies_opa():
 
 def install_dependencies_superset():
   logging.info("Installing dependencies for Superset")
-  args = ['--set', 'postgresqlUsername=superset',
-          '--set', 'postgresqlPassword=superset',
-          '--set', 'postgresqlDatabase=superset']
+  args = [
+    '--set', 'postgresqlUsername=superset',
+    '--set', 'postgresqlPassword=superset',
+    '--set', 'postgresqlDatabase=superset'
+  ]
   helper_install_helm_release("superset-postgresql", "postgresql", "bitnami", "https://charts.bitnami.com/bitnami", args)
 
 
@@ -243,7 +255,7 @@ def install_dependencies_trino():
   minio_values = re.sub('servers:.*', 'servers: 1', minio_values)
   minio_values = re.sub('size:.*', 'size: 10Mi', minio_values)
 
-  logging.info(f"Installing Helm release from chart [minio-operator] now")
+  logging.info("Installing Helm release from chart [minio-operator] now")
   args = ['helm', 'install', '--version', minio_operator_chart_version, '--generate-name', '--values', '-', 'minio/minio-operator']
   helper_execute(args, minio_values)
   logging.info("Helm release was installed successfully, waiting for MinIO to start")
@@ -283,9 +295,8 @@ def helper_install_helm_release(name: str, chart_name: str, repo_name: str = Non
   if release:
     logging.info(f"Helm already running release with name [{release['name']}] and chart [{release['chart']}] - will not take any further action for this release")
     return
-  else:
-    logging.debug(f"No Helm release with the name {name} found")
 
+  logging.debug(f"No Helm release with the name {name} found")
   logging.info(f"Installing Helm release [{name}] from chart [{chart_name}] now")
   args = ['helm', 'install', name, f"{repo_name}/{chart_name}"]
   args = args + install_args
@@ -335,19 +346,19 @@ def helper_execute(args, stdin: str = None) -> str:
       logging.debug("Output of the program:")
       logging.debug("\n>>>>>>>>>>>>>>>>>>>>>>>\n" + output.stdout.strip("\n") + "\n<<<<<<<<<<<<<<<<<<<<<<<")
     return output.stdout
-  else:
-    logging.error('Error running: ' + args_string)
-    if output.stdout:
-      logging.error("Output of the program:")
-      logging.error("\n>>>>>>>>>>>>>>>>>>>>>>>\n" + output.stdout.strip("\n") + "\n<<<<<<<<<<<<<<<<<<<<<<<")
-    sys.exit(1)
+
+  logging.error('Error running: ' + args_string)
+  if output.stdout:
+    logging.error("Output of the program:")
+    logging.error("\n>>>>>>>>>>>>>>>>>>>>>>>\n" + output.stdout.strip("\n") + "\n<<<<<<<<<<<<<<<<<<<<<<<")
+  sys.exit(1)
 
 
 def main() -> int:
   args = check_args()
   check_prerequisites()
   if args.kind:
-    create_kind_cluster(KIND_CLUSTER_NAME)
+    create_kind_cluster(args.kind)
   check_kubernetes_available()
   install_stackable_operator(args.operator, args.version)
   logging.info(f"Successfully installed operator for {args.operator}")
