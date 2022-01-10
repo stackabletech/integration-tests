@@ -1686,7 +1686,7 @@ dependencies = [
 [[package]]
 name = "stackable-opa-crd"
 version = "0.7.0-nightly"
-source = "git+https://github.com/stackabletech/opa-operator.git?branch=main#e1cc8ccf693abefafe6c0e3950a4459a6c7e4f80"
+source = "git+https://github.com/stackabletech/opa-operator.git?branch=main#cb7e21598a1d41893564db59819114e404bc86ee"
 dependencies = [
  "semver",
  "serde",
