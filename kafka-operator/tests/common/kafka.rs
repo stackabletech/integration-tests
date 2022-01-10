@@ -30,57 +30,16 @@ pub fn build_kafka_cluster(
         metadata:
           name: {}
         spec:
-          version:
-            kafka_version: {}
-          zookeeperReference:
-            namespace: default
-            name: {}
+          version: {}
+          zookeeperConfigMapName: {}
           brokers:
             roleGroups:
               default:
                 selector:
                   kubernetes.io/os: linux
                 replicas: {}
-                config:
-                  logDirs: /stackable/logs/kafka
     ",
         name, version, zk_ref_name, replicas,
-    );
-
-    Ok((serde_yaml::from_str(spec)?, replicas))
-}
-
-/// This returns a Kafka custom resource and the expected pod count with monitoring enabled.
-pub fn build_kafka_cluster_monitoring(
-    name: &str,
-    version: &str,
-    zk_ref_name: &str,
-    replicas: usize,
-    metric_port: i32,
-) -> Result<(KafkaCluster, usize)> {
-    let spec = &format!(
-        "
-        apiVersion: kafka.stackable.tech/v1alpha1
-        kind: KafkaCluster
-        metadata:
-          name: {}
-        spec:
-          version:
-            kafka_version: {}
-          zookeeperReference:
-            namespace: default
-            name: {}
-          brokers:
-            roleGroups:
-              default:
-                selector:
-                  kubernetes.io/os: linux
-                replicas: {}
-                config:
-                  logDirs: /stackable/logs/kafka
-                  metricsPort: {}
-    ",
-        name, version, zk_ref_name, replicas, metric_port
     );
 
     Ok((serde_yaml::from_str(spec)?, replicas))

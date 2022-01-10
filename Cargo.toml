@@ -4,7 +4,7 @@ members = [
     "commons",
     "druid-operator",
     "hive-operator",
-    # "kafka-operator",
+    "kafka-operator",
     # "monitoring-operator",
     # "nifi-operator",
     "opa-operator",
