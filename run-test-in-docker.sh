@@ -9,4 +9,4 @@ package=$1
 shift
 params=$@
 
-cargo test --package $package $params
+cargo test --workspace --package $package $params

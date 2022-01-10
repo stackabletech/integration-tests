@@ -26,7 +26,7 @@ COPY . /integration-tests
 
 # build tests
 WORKDIR /integration-tests
-RUN cargo test --no-run
+RUN cargo build --tests
 
 # make script executable
 RUN chmod u+x /integration-tests/run-test-in-docker.sh
