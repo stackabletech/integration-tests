@@ -1657,9 +1657,8 @@ dependencies = [
 [[package]]
 name = "stackable-druid-crd"
 version = "0.3.0-nightly"
-source = "git+https://github.com/stackabletech/druid-operator.git?branch=main#6d215005b448095f406ff8b9d72b9b7983454eac"
+source = "git+https://github.com/stackabletech/druid-operator.git?branch=main#fbc45378602c57eff9d2a7e693fef266850f43f8"
 dependencies = [
- "duplicate",
  "semver",
  "serde",
  "serde_json",
