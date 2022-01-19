@@ -79,9 +79,9 @@ checksum = "bef38d45163c2f1dde094a7dfd33ccf595c92905c8f8f4fdc18d06fb1037718a"
 
 [[package]]
 name = "bumpalo"
-version = "3.9.0"
+version = "3.9.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "fe438c9d2f2b0fb88a112154ed81e30b0a491c29322afe1db3b6eec5811f5ba0"
+checksum = "a4a45a46ab1f2412e53d3a0ade76ffad2025804294569aae387231a0cd6e0899"
 
 [[package]]
 name = "bytes"
@@ -266,16 +266,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "duplicate"
-version = "0.3.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "3cdaf23abc9bcc47fda1ae3af68425a22b4dfbd745f9077be0eaad5320f75f52"
-dependencies = [
- "heck",
- "proc-macro-error",
-]
-
-[[package]]
 name = "dyn-clone"
 version = "1.0.4"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -358,6 +348,15 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "7896dc8abb250ffdda33912550faa54c88ec8b998dec0b2c55ab224921ce11df"
 dependencies = [
  "cfg-if",
+]
+
+[[package]]
+name = "fastrand"
+version = "1.6.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "779d043b6a0b90cc4c0ed7ee380a6504394cee7efd7db050e3774eee387324b2"
+dependencies = [
+ "instant",
 ]
 
 [[package]]
@@ -499,9 +498,9 @@ dependencies = [
 
 [[package]]
 name = "h2"
-version = "0.3.9"
+version = "0.3.10"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "8f072413d126e57991455e0a922b31e4c8ba7c2ffbebf6b78b4f8521397d65cd"
+checksum = "0c9de88456263e249e241fcd211d3954e2c9b0ef7ccfc235a444eb367cae3689"
 dependencies = [
  "bytes",
  "fnv",
@@ -524,9 +523,9 @@ checksum = "ab5ef0d4909ef3724cc8cce6ccc8572c5c817592e9285f5464f8e86f8bd3726e"
 
 [[package]]
 name = "heck"
-version = "0.3.2"
+version = "0.3.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "87cbf45460356b7deeb5e3415b5563308c0a9b057c85e12b06ad551f98d0a6ac"
+checksum = "6d621efb26863f0e9924c6ac577e8275e5e6b77455db64ffa6c65c904e9e132c"
 dependencies = [
  "unicode-segmentation",
 ]
@@ -660,9 +659,9 @@ dependencies = [
 
 [[package]]
 name = "indexmap"
-version = "1.7.0"
+version = "1.8.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "bc633605454125dec4b66843673f01c7df2b89479b32e0ed634e43a91cff62a5"
+checksum = "282a6247722caba404c065016bbfa522806e51714c34f5dfc3e4a3a46fcb4223"
 dependencies = [
  "autocfg",
  "hashbrown",
@@ -778,6 +777,20 @@ dependencies = [
  "serde",
  "serde-value",
  "serde_json",
+]
+
+[[package]]
+name = "kafka-operator-integration-tests"
+version = "0.1.0"
+dependencies = [
+ "anyhow",
+ "integration-test-commons",
+ "reqwest",
+ "serde",
+ "serde_json",
+ "serde_yaml",
+ "stackable-kafka-crd",
+ "stackable-zookeeper-crd 0.8.0",
 ]
 
 [[package]]
@@ -1610,7 +1623,17 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "eab12d3c261b2308b0d80c26fffb58d17eba81a4be97890101f416b478c79ca7"
 dependencies = [
  "doc-comment",
- "snafu-derive",
+ "snafu-derive 0.6.10",
+]
+
+[[package]]
+name = "snafu"
+version = "0.7.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "2eba135d2c579aa65364522eb78590cdf703176ef71ad4c32b00f58f7afb2df5"
+dependencies = [
+ "doc-comment",
+ "snafu-derive 0.7.0",
 ]
 
 [[package]]
@@ -1619,6 +1642,18 @@ version = "0.6.10"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "1508efa03c362e23817f96cde18abed596a25219a8b2c66e8db33c03543d315b"
 dependencies = [
+ "proc-macro2",
+ "quote",
+ "syn",
+]
+
+[[package]]
+name = "snafu-derive"
+version = "0.7.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "7a7fe9b0669ef117c5cabc5549638528f36771f058ff977d7689deb517833a75"
+dependencies = [
+ "heck",
  "proc-macro2",
  "quote",
  "syn",
@@ -1657,9 +1692,8 @@ dependencies = [
 [[package]]
 name = "stackable-druid-crd"
 version = "0.3.0-nightly"
-source = "git+https://github.com/stackabletech/druid-operator.git?branch=main#6d215005b448095f406ff8b9d72b9b7983454eac"
+source = "git+https://github.com/stackabletech/druid-operator.git?branch=main#d5b1b1ca291c1e5acceb6014d18b8653f0b6358f"
 dependencies = [
- "duplicate",
  "semver",
  "serde",
  "serde_json",
@@ -1673,20 +1707,35 @@ dependencies = [
 [[package]]
 name = "stackable-hive-crd"
 version = "0.4.0-nightly"
-source = "git+https://github.com/stackabletech/hive-operator.git?branch=main#9885644f121fbf3a7447dd2ef7729d8977eb94c9"
+source = "git+https://github.com/stackabletech/hive-operator.git?branch=main#be42b8fcf61f36b9b411a40cbb5125a9057dd44f"
 dependencies = [
  "serde",
  "serde_json",
- "snafu",
- "stackable-operator 0.6.0",
+ "snafu 0.7.0",
+ "stackable-operator 0.7.0",
  "strum 0.23.0",
  "strum_macros 0.23.1",
 ]
 
 [[package]]
+name = "stackable-kafka-crd"
+version = "0.5.0-nightly"
+source = "git+https://github.com/stackabletech/kafka-operator.git?branch=main#13afda76a5c9cd50dff1d4e3637c1988e8fd3a0c"
+dependencies = [
+ "semver",
+ "serde",
+ "serde_json",
+ "snafu 0.7.0",
+ "stackable-operator 0.7.0",
+ "strum 0.23.0",
+ "strum_macros 0.23.1",
+ "thiserror",
+]
+
+[[package]]
 name = "stackable-opa-crd"
 version = "0.7.0-nightly"
-source = "git+https://github.com/stackabletech/opa-operator.git?branch=main#e1cc8ccf693abefafe6c0e3950a4459a6c7e4f80"
+source = "git+https://github.com/stackabletech/opa-operator.git?branch=main#cb7e21598a1d41893564db59819114e404bc86ee"
 dependencies = [
  "semver",
  "serde",
@@ -1770,13 +1819,13 @@ dependencies = [
 [[package]]
 name = "stackable-spark-crd"
 version = "0.5.0-nightly"
-source = "git+https://github.com/stackabletech/spark-operator.git?branch=main#4c6ad6c63a8f8dfff20e37f90025407b190a6b78"
+source = "git+https://github.com/stackabletech/spark-operator.git?branch=main#a2bd614a5ec58cb38bffb83d7e55d50e23eb0692"
 dependencies = [
  "semver",
  "serde",
  "serde_json",
  "serde_yaml",
- "snafu",
+ "snafu 0.6.10",
  "stackable-operator 0.6.0",
  "strum 0.22.0",
  "strum_macros 0.22.0",
@@ -1785,12 +1834,11 @@ dependencies = [
 [[package]]
 name = "stackable-superset-crd"
 version = "0.3.0-nightly"
-source = "git+https://github.com/stackabletech/superset-operator.git?branch=main#38883562cbe973f32ff32387fc5faba16ac9be09"
+source = "git+https://github.com/stackabletech/superset-operator.git?branch=main#020d61a56eaeb69e4d55e15448fc533153182e66"
 dependencies = [
- "duplicate",
  "serde",
  "serde_json",
- "snafu",
+ "snafu 0.6.10",
  "stackable-operator 0.6.0",
  "strum 0.23.0",
  "strum_macros 0.23.1",
@@ -1803,7 +1851,19 @@ source = "git+https://github.com/stackabletech/zookeeper-operator.git?tag=0.7.0#
 dependencies = [
  "serde",
  "serde_json",
- "snafu",
+ "snafu 0.6.10",
+ "stackable-operator 0.6.0",
+ "strum 0.23.0",
+]
+
+[[package]]
+name = "stackable-zookeeper-crd"
+version = "0.8.0"
+source = "git+https://github.com/stackabletech/zookeeper-operator.git?tag=0.8.0#f0e97cf7dba7979a7405abb2aa0b855b683dcbd2"
+dependencies = [
+ "serde",
+ "serde_json",
+ "snafu 0.6.10",
  "stackable-operator 0.6.0",
  "strum 0.23.0",
 ]
@@ -1811,11 +1871,11 @@ dependencies = [
 [[package]]
 name = "stackable-zookeeper-crd"
 version = "0.9.0-nightly"
-source = "git+https://github.com/stackabletech/zookeeper-operator.git?branch=main#cc8709a42d3c969c6494bec21d0f78975e3b094d"
+source = "git+https://github.com/stackabletech/zookeeper-operator.git?branch=main#558b53247ee10d81c682480c376243ef4d006152"
 dependencies = [
  "serde",
  "serde_json",
- "snafu",
+ "snafu 0.6.10",
  "stackable-operator 0.6.0",
  "strum 0.23.0",
 ]
@@ -1924,13 +1984,13 @@ dependencies = [
 
 [[package]]
 name = "tempfile"
-version = "3.2.0"
+version = "3.3.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "dac1c663cfc93810f88aed9b8941d48cabf856a1b111c29a40439018d870eb22"
+checksum = "5cdb1ef4eaeeaddc8fbd371e5017057064af0911902ef36b39801f67cc6d79e4"
 dependencies = [
  "cfg-if",
+ "fastrand",
  "libc",
- "rand 0.8.4",
  "redox_syscall",
  "remove_dir_all",
  "winapi",
