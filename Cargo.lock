@@ -698,7 +698,7 @@ dependencies = [
  "serde_yaml",
  "spectral",
  "stackable-operator 0.6.0",
- "strum 0.22.0",
+ "strum 0.23.0",
  "strum_macros 0.22.0",
  "tokio",
  "uuid",
