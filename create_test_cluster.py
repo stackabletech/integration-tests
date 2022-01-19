@@ -327,7 +327,7 @@ def helper_command_exists(command: str):
 def helper_execute(args, stdin: str = None) -> str:
   """ This will execute the passed in program and exit the program if it failed.
 
-  In case of a failure or if debug is enabled it will also print the stderr and stdout of the program, otherwise it'll be silent.
+  In case of a failure or if debug is enabled it will also print the stdout of the program, stderr is always streamed.
   In case of success it will return the stdout.
   """
   args_string = " ".join(args)
@@ -335,7 +335,6 @@ def helper_execute(args, stdin: str = None) -> str:
   output = subprocess.run(
     args,
     stdout=subprocess.PIPE,
-    stderr=subprocess.STDOUT,
     input=stdin,
     text=True
   )
