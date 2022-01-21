@@ -165,7 +165,7 @@ where
                         "Pod [{}] has version [{}] but should have version [{}]. This should not happen!",
                         pod.metadata.name.as_ref().unwrap(),
                         pod_version,
-                        version.to_string()
+                        version
                     ))));
                 }
             } else {

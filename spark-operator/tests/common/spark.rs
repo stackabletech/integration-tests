@@ -62,11 +62,7 @@ pub fn build_spark_custom_resource(
                 config:
                   historyWebUiPort: 10000 
     ",
-        name,
-        version.to_string(),
-        masters,
-        workers,
-        history_servers
+        name, version, masters, workers, history_servers
     );
 
     Ok((
