@@ -1,8 +1,5 @@
 ---
-apiVersion: apps/v1
-kind: StatefulSet
-metadata:
-  name: test-nifi-node-default
-status:
-  readyReplicas: 3
-  replicas: 3
+apiVersion: kuttl.dev/v1beta1
+kind: TestAssert
+commands:
+  - script: telepresence connect -- tests/kuttl/smoke/02-assert.py -u admin -p supersecretpassword -n $NAMESPACE

@@ -7,14 +7,12 @@ spec:
   version: "1.15.0"
   zookeeperReference:
     name: test-zk
-    namespace: default
     chroot: /nifiytest
   authenticationConfig:
     method:
       SingleUser:
         adminCredentialsSecret:
           name: nifi-admin-credentials-simple
-          namespace: default
     allowAnonymousAccess: true
   nodes:
     roleGroups:
