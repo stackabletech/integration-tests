@@ -1,0 +1,13 @@
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: test-nifi-node-default
+status:
+  readyReplicas: 2
+  replicas: 2
+---
+apiVersion: kuttl.dev/v1beta1
+kind: TestAssert
+commands:
+  - command: telepresence --namespace $NAMESPACE connect -- ./01-assert.py
