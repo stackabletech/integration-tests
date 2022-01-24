@@ -1,0 +1,13 @@
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: test-hive-derby-metastore-default
+status:
+  readyReplicas: 1
+  replicas: 1
+---
+apiVersion: kuttl.dev/v1beta1
+kind: TestAssert
+commands:
+  - command: telepresence --namespace $NAMESPACE connect -- ./00-assert.py -a 127.0.0.1 -p 9083
