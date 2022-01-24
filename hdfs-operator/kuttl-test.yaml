@@ -1,5 +1,5 @@
 apiVersion: kuttl.dev/v1beta1
-kind: Apache HDFS Operator Integration Tests
+kind: TestSuite
 testDirs:
 - ./tests/kuttl
 startKIND: false
