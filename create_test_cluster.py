@@ -11,7 +11,7 @@ import subprocess
 import time
 from argparse import Namespace
 
-VALID_OPERATORS = ["druid", "hbase", "hive", "kafka", "nifi", "opa", "spark", "superset", "trino", "zookeeper"]
+VALID_OPERATORS = ["druid", "hbase", "hive", "kafka", "nifi", "opa", "spark", "superset", "trino", "zookeeper", "airflow"]
 
 DEFAULT_KIND_CLUSTER_NAME = "integration-tests"
 
