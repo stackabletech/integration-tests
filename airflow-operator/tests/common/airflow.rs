@@ -11,6 +11,7 @@ use integration_test_commons::stackable_operator::labels::{
 use integration_test_commons::test::prelude::Secret;
 use stackable_airflow_crd::{AirflowCluster, APP_NAME};
 use std::fmt::Debug;
+use integration_test_commons::stackable_operator::k8s_openapi::Resource;
 
 /// Predefined options and timeouts for the TestCluster.
 pub fn build_test_cluster() -> TestCluster<AirflowCluster> {
@@ -57,7 +58,7 @@ pub fn build_airflow_credentials(
 pub fn build_airflow_cluster(
     name: &str,
     version: &str,
-    _replicas: usize,
+    replicas: usize,
     secret_name: &str,
 ) -> Result<AirflowCluster> {
     let spec = &formatdoc!(

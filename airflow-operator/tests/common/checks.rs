@@ -31,6 +31,7 @@ pub fn health_check(service: &TemporaryService, pod: &Pod) -> Result<()> {
         .send()?;
     println!("{:?}", &response);
 
+
     if response.status().is_success() {
         Ok(())
     } else {
