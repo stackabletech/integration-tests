@@ -15,18 +15,14 @@ use std::fmt::Debug;
 /// Predefined options and timeouts for the TestCluster.
 pub fn build_test_cluster() -> TestCluster<OpenPolicyAgent> {
     TestCluster::new(
-        &TestClusterOptions::new(APP_NAME, "simple"),
+        &TestClusterOptions::new(APP_NAME, "simple-opa"),
         &TestClusterLabels::new(APP_NAME_LABEL, APP_INSTANCE_LABEL, APP_VERSION_LABEL),
         &TestClusterTimeouts::default(),
     )
 }
 
-/// This returns an OPA custom resource and the expected pod count.
-pub fn build_opa_cluster(
-    name: &str,
-    version: &str,
-    replicas: usize,
-) -> Result<(OpenPolicyAgent, usize)> {
+/// This returns an OPA custom resource.
+pub fn build_opa_cluster(name: &str, version: &str) -> Result<OpenPolicyAgent> {
     let spec = &format!(
         "
         apiVersion: opa.stackable.tech/v1alpha1
@@ -39,15 +35,15 @@ pub fn build_opa_cluster(
             roleGroups:
               default:
                 selector:
-                  kubernetes.io/os: linux
+                  matchLabels:
+                    kubernetes.io/os: linux
                 config:
-                  port: 8181
-                  regoRuleReference: regorule-service:3030/opa/v1
+                  regoRuleReference: regorule-operator:3030/opa/v1
     ",
         name, version,
     );
 
-    Ok((serde_yaml::from_str(spec)?, replicas))
+    Ok(serde_yaml::from_str(spec)?)
 }
 
 /// The Opa operator runs based on a [`DaemonSet`]. We use the `desired_number_scheduled` status

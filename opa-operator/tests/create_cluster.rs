@@ -12,9 +12,10 @@ fn test_create_cluster_0_27_1() -> Result<()> {
 
     let mut cluster = build_test_cluster();
 
-    let (opa_cr, _) = build_opa_cluster(cluster.name(), version, 0)?;
+    let opa_cr = build_opa_cluster(cluster.name(), version)?;
 
     cluster.apply(&opa_cr)?;
+
     let replicas = get_worker_nodes(&cluster);
     cluster.wait_ready(&BTreeMap::new(), replicas.try_into().unwrap())?;
     cluster.check_pod_version(version)
