@@ -11,5 +11,6 @@ members = [
     "spark-operator",
     "superset-operator",
     # "trino-operator",
-    "zookeeper-operator"
+    "zookeeper-operator",
+    "airflow-operator"
 ]
