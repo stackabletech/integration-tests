@@ -1,3 +1,4 @@
+use crate::Service;
 use anyhow::{anyhow, Result};
 use integration_test_commons::operator::checks;
 use integration_test_commons::operator::service::TemporaryService;
