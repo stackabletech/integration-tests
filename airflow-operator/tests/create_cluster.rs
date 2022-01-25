@@ -7,9 +7,12 @@ use common::{
     },
     checks::custom_checks,
 };
-use integration_test_commons::operator::service::create_node_port_service;
-use integration_test_commons::test::prelude::{Pod, Secret};
+use integration_test_commons::operator::service::{
+    create_node_port_service, create_node_port_service_with_component,
+};
+use integration_test_commons::test::prelude::{Pod, Secret, Service};
 use stackable_airflow_crd::commands::Init;
+use stackable_airflow_crd::AirflowRole;
 use std::collections::BTreeMap;
 
 #[test]
@@ -27,9 +30,12 @@ fn test_create_cluster_223() -> Result<()> {
         .client
         .apply::<Secret>(&serde_yaml::to_string(&airflow_secret)?);
 
-    let airflow_cr = build_airflow_cluster(cluster.name(), version, expected_pod_count, secret_name)?;
+    let airflow_cr =
+        build_airflow_cluster(cluster.name(), version, expected_pod_count, secret_name)?;
     cluster.create_or_update(&airflow_cr, &BTreeMap::new(), expected_pod_count)?;
+
     let created_pods = cluster.list::<Pod>(None);
+    assert_eq!(created_pods.len(), expected_pod_count);
 
     let init: Init = build_command(
         "airflow-cluster-command-init",
@@ -47,11 +53,22 @@ fn test_create_cluster_223() -> Result<()> {
             .is_some()
     });
 
-    let admin_service =
-        create_node_port_service(&cluster.client, "airflow-admin", "airflow", 8080);
+    let admin_service = create_node_port_service_with_component(
+        &cluster.client,
+        "airflow-admin",
+        "airflow",
+        "webserver",
+        8080,
+    );
+
+    let service_pods = cluster.list(Some(BTreeMap::from([(
+        "app.kubernetes.io/component".to_string(),
+        "webserver".to_string(),
+    )])));
+    println!("Checking {} service pods", &service_pods.len());
 
     let result = custom_checks(
-        &created_pods,
+        &service_pods,
         admin_username,
         admin_password,
         &admin_service,

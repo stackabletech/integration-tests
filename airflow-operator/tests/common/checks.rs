@@ -1,3 +1,4 @@
+use crate::Service;
 use anyhow::{anyhow, Result};
 use integration_test_commons::operator::checks;
 use integration_test_commons::operator::service::TemporaryService;
@@ -5,16 +6,26 @@ use integration_test_commons::stackable_operator::kube::ResourceExt;
 use integration_test_commons::test::prelude::{json, Pod};
 use reqwest::blocking::Client;
 
-/// Collect and gather all checks that may be performed on airflow node pods.
+/// Collect and gather all checks that may be performed on airflow node services.
 pub fn custom_checks(
-    pods: &[Pod],
+    service_pods: &[Pod],
     admin_username: &str,
     admin_password: &str,
     service: &TemporaryService,
 ) -> Result<()> {
-    for pod in pods {
-        println!("{}", &service.address(pod));
-        checks::scan_port(&service.address(pod))?;
+    for service_pod in service_pods {
+        let named_pod = service_pod
+            .metadata
+            .generate_name
+            .as_ref()
+            .unwrap()
+            .as_str();
+        if named_pod.ends_with("webserver-default-") {
+            println!("{:?}/{}", named_pod, &service.address(service_pod));
+            checks::scan_port(&service.address(service_pod))?;
+        } else {
+            println!("{}", named_pod);
+        }
         //login(service, pod, admin_username, admin_password)?;
     }
 
