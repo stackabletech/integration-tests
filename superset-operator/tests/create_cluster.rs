@@ -50,18 +50,10 @@ fn test_create_cluster_1_3_2() -> Result<()> {
     let admin_service =
         create_node_port_service(&cluster.client, "superset-admin", "superset", 8088);
 
-    /*custom_checks(
+    custom_checks(
         &created_pods,
         admin_username,
         admin_password,
         &admin_service,
-    )*/
-    let result = custom_checks(
-        &created_pods,
-        admin_username,
-        admin_password,
-        &admin_service,
-    );
-    println!("Finishing with {:?}", &result);
-    Ok(())
+    )
 }
