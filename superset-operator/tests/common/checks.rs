@@ -13,6 +13,7 @@ pub fn custom_checks(
     service: &TemporaryService,
 ) -> Result<()> {
     for pod in pods {
+        println!("{}", &service.address(pod));
         checks::scan_port(&service.address(pod))?;
         login(service, pod, admin_username, admin_password)?;
     }
