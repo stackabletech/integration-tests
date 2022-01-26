@@ -43,7 +43,7 @@ spec:
         replicas: {masters}
   workers:
     roleGroups:
-      2core2g:
+      default:
         selector:
           matchLabels:
             kubernetes.io/os: linux
