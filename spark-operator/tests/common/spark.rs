@@ -26,44 +26,36 @@ pub fn build_spark_custom_resource(
 ) -> Result<(SparkCluster, usize)> {
     let spec = format!(
         "
-        apiVersion: spark.stackable.tech/v1alpha1
-        kind: SparkCluster
-        metadata:
-          name: {}
-        spec:
-          version: {}
-          config:
-            logDir: /tmp/spark-events
-          masters:
-            roleGroups:
-              default:
-                selector:
-                  matchLabels:
-                    kubernetes.io/os: linux
-                replicas: {}
-                config:
-                  masterWebUiPort: 8082
-          workers:
-            roleGroups:
-              default:
-                selector:
-                  matchLabels:
-                    kubernetes.io/os: linux
-                replicas: {}
-                config:
-                  workerWebUiPort: 8083
-          historyServers:
-            roleGroups:
-              default:
-                selector:
-                  matchLabels:
-                    kubernetes.io/os: linux
-                replicas: {}
-                config:
-                  historyWebUiPort: 10000 
-    ",
-        name, version, masters, workers, history_servers
-    );
+apiVersion: spark.stackable.tech/v1alpha1
+kind: SparkCluster
+metadata:
+  name: {name}
+spec:
+  version: {version}
+  config:
+    enableMonitoring: true
+  masters:
+    roleGroups:
+      default:
+        selector:
+          matchLabels:
+            kubernetes.io/os: linux
+        replicas: {masters}
+  workers:
+    roleGroups:
+      2core2g:
+        selector:
+          matchLabels:
+            kubernetes.io/os: linux
+        replicas: {workers} 
+  historyServers:
+    roleGroups:
+      default:
+        selector:
+          matchLabels:
+            kubernetes.io/os: linux
+        replicas: {history_servers}
+    ");
 
     Ok((
         serde_yaml::from_str(&spec)?,
