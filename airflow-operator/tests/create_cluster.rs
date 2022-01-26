@@ -7,12 +7,9 @@ use common::{
     },
     checks::custom_checks,
 };
-use integration_test_commons::operator::service::{
-    create_node_port_service, create_node_port_service_with_component,
-};
-use integration_test_commons::test::prelude::{Pod, Secret, Service};
+use integration_test_commons::operator::service::create_node_port_service_with_component;
+use integration_test_commons::test::prelude::{Pod, Secret};
 use stackable_airflow_crd::commands::Init;
-use stackable_airflow_crd::AirflowRole;
 use std::collections::BTreeMap;
 
 #[test]
@@ -67,12 +64,5 @@ fn test_create_cluster_223() -> Result<()> {
     )])));
     println!("Checking {} service pods", &service_pods.len());
 
-    let result = custom_checks(
-        &service_pods,
-        admin_username,
-        admin_password,
-        &admin_service,
-    );
-    println!("Finishing with {:?}", &result);
-    Ok(())
+    custom_checks(&service_pods, &admin_service)
 }
