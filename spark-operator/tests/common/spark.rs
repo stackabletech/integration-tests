@@ -55,7 +55,8 @@ spec:
           matchLabels:
             kubernetes.io/os: linux
         replicas: {history_servers}
-    ");
+    "
+    );
 
     Ok((
         serde_yaml::from_str(&spec)?,
