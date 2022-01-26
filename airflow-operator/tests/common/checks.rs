@@ -1,4 +1,3 @@
-use crate::Service;
 use anyhow::{anyhow, Result};
 use integration_test_commons::operator::checks;
 use integration_test_commons::operator::service::TemporaryService;
@@ -31,7 +30,6 @@ pub fn health_check(service: &TemporaryService, pod: &Pod) -> Result<()> {
         .get(format!("http://{}/api/v1/health", address))
         .send()?;
     println!("{:?}", &response);
-
 
     if response.status().is_success() {
         Ok(())

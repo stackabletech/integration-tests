@@ -10,7 +10,6 @@ use common::{
 use integration_test_commons::operator::service::create_node_port_service_with_component;
 use integration_test_commons::test::prelude::{Pod, Secret};
 use stackable_airflow_crd::commands::Init;
-use stackable_airflow_crd::AirflowRole;
 use std::collections::BTreeMap;
 
 #[test]
