@@ -1,18 +1,12 @@
-use crate::Service;
 use anyhow::{anyhow, Result};
 use integration_test_commons::operator::checks;
 use integration_test_commons::operator::service::TemporaryService;
 use integration_test_commons::stackable_operator::kube::ResourceExt;
-use integration_test_commons::test::prelude::{json, Pod};
+use integration_test_commons::test::prelude::Pod;
 use reqwest::blocking::Client;
 
 /// Collect and gather all checks that may be performed on airflow node services.
-pub fn custom_checks(
-    service_pods: &[Pod],
-    admin_username: &str,
-    admin_password: &str,
-    service: &TemporaryService,
-) -> Result<()> {
+pub fn custom_checks(service_pods: &[Pod], service: &TemporaryService) -> Result<()> {
     for service_pod in service_pods {
         let named_pod = service_pod
             .metadata
@@ -20,44 +14,28 @@ pub fn custom_checks(
             .as_ref()
             .unwrap()
             .as_str();
-        if named_pod.ends_with("webserver-default-") {
-            println!("{:?}/{}", named_pod, &service.address(service_pod));
-            checks::scan_port(&service.address(service_pod))?;
-        } else {
-            println!("{}", named_pod);
-        }
-        //login(service, pod, admin_username, admin_password)?;
+        println!("{:?}/{}", named_pod, &service.address(service_pod));
+        checks::scan_port(&service.address(service_pod))?;
+        health_check(service, service_pod)?;
     }
-
     Ok(())
 }
 
-/// Login to Superset as admin
-pub fn login(
-    service: &TemporaryService,
-    pod: &Pod,
-    admin_username: &str,
-    admin_password: &str,
-) -> Result<()> {
+pub fn health_check(service: &TemporaryService, pod: &Pod) -> Result<()> {
     let client = Client::new();
 
     let address = service.address(pod);
 
     let response = client
-        .post(format!("http://{}/api/v1/security/login", address))
-        .json(&json!({
-            "password": admin_password,
-            "provider": "db",
-            "refresh": true,
-            "username": admin_username,
-        }))
+        .get(format!("http://{}/api/v1/health", address))
         .send()?;
+    println!("{:?}", &response);
 
     if response.status().is_success() {
         Ok(())
     } else {
         Err(anyhow!(
-            "Login on pod [{}] failed. {:?}",
+            "Health-check on pod [{}] failed. {:?}",
             pod.name(),
             response
         ))
