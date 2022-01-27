@@ -1,5 +1,7 @@
 apiVersion: kuttl.dev/v1beta1
 kind: TestStep
 commands:
-  - script: ./webhdfs.sh create
-  - script: ./webhdfs.sh ls
+  - script: kubectl cp ./webhdfs.sh webhdfs:/tmp
+  - script: kubectl cp ./testdata.txt webhdfs:/tmp
+  - script: kubectl exec webhdfs -- /tmp/webhdfs.sh create
+  - script: kubectl exec webhdfs -- /tmp/webhdfs.sh ls
