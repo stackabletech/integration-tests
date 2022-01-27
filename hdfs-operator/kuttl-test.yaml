@@ -4,4 +4,5 @@ testDirs:
 - ./tests/kuttl
 startKIND: false
 parallel: 1
-
+namespace: default
+suppress: ["events"]
