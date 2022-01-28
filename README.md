@@ -31,13 +31,18 @@ To be more precise: Helm needs to find a valid `repositories.yaml` file in its c
 
 The `create_test_cluster.py` utility script will set up a test kind cluster (if requested with the `--kind` parameter) and install dependencies required for running the integration tests.
 
-    . create_test_cluster.py --debug --kind --ooperator <operator>
+    . create_test_cluster.py --debug --kind --operator <operator>
 
 Example
 
     ./create_test_cluster.py --debug --kind --operator trino
 
 This will set up a three node kind cluster called `integration-tests` and install the `trino-operator` along with a MiniIO cluster and the `hive-operator`. When this is done, you can run the integration tests for the `trino-operator` by following the instructions below.
+It is possible to specify multiple operators to install at the same time. Operator versions can be specified in the format 'operator[=version]'.
+
+Example
+
+    ./create_test_cluster.py --kind --operator trino superset=0.3.0
 
 IMPORTANT: The script might ask you to set environment variables that are needed for the integration tests!
 
