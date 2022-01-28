@@ -15,14 +15,14 @@ def get_token(username, password, namespace):
     url = 'https://test-nifi-node-default-1.test-nifi-node-default.' + namespace + '.svc.cluster.local:8443/nifi-api/access/token'
     response = requests.post(url , headers=headers, data=data, verify='tests/kuttl/smoke/cacert.pem')
 
-    if cluster.ok:
-        cluster_data = json.loads(cluster.content.decode('utf-8'))
+    if response.ok:
+        token = response.content.decode('utf-8')
+        return "Bearer " + token
     else:
-        print("Failed to get token: ", cluster.status_code, " - ", cluster.content)
+        print("Failed to get token: ", response.status_code, " - ", response.content)
         exit(-1)
 
-    token = response.content.decode('utf-8')
-    return "Bearer " + token
+
 
 
 # Construct an argument parser
@@ -47,6 +47,7 @@ if cluster.ok:
     cluster_data = json.loads(cluster.content.decode('utf-8'))
 else:
     print("Failed to get cluster data: ", cluster.status_code, " - ", cluster.content)
+    exit(-1)
 
 nodes = cluster_data['cluster']['nodes']
 

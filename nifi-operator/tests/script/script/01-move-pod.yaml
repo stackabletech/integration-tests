@@ -2,4 +2,4 @@
 apiVersion: kuttl.dev/v1beta1
 kind: TestStep
 commands:
-  - command: ./05-move-pod.sh
+  - command: ./01-move-pod.sh

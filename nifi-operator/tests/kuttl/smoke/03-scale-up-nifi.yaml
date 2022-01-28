@@ -13,7 +13,8 @@ spec:
       SingleUser:
         adminCredentialsSecret:
           name: nifi-admin-credentials-simple
-    allowAnonymousAccess: true
+  sensitivePropertiesConfig:
+    keySecret: nifi-sensitive-property-key
   nodes:
     roleGroups:
       default:
@@ -21,7 +22,6 @@ spec:
           matchLabels:
             kubernetes.io/os: linux
         config:
-          sensitivePropertyKeySecret: nifi-sensitive-property-key
           log:
             rootLogLevel: INFO
         replicas: 3

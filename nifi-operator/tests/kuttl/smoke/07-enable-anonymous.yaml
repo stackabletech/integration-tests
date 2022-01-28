@@ -13,8 +13,7 @@ spec:
       SingleUser:
         adminCredentialsSecret:
           name: nifi-admin-credentials-simple
-  sensitivePropertiesConfig:
-    keySecret: nifi-sensitive-property-key
+    allowAnonymousAccess: true
   nodes:
     roleGroups:
       default:
@@ -22,14 +21,12 @@ spec:
           matchLabels:
             kubernetes.io/os: linux
         config:
+          sensitivePropertyKeySecret: nifi-sensitive-property-key
           log:
             rootLogLevel: INFO
         replicas: 2
 ---
-apiVersion: v1
-kind: Secret
-metadata:
-  name: nifi-admin-credentials-simple
-stringData:
-  username: admin
-  password: supersecretpassword
+apiVersion: kuttl.dev/v1beta1
+kind: TestStep
+commands:
+  - command: kubectl rollout restart statefulset test-nifi-node-default --namespace $namespace

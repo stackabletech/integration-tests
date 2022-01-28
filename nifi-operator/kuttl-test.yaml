@@ -1,5 +1,6 @@
 apiVersion: kuttl.dev/v1beta1
-kind: NiFi Operator Integration Tests
+kind: TestSuite 
 testDirs:
-- ./tests/kuttl/
+- ./tests/kuttl
 startKIND: false
+timeout: 6000
