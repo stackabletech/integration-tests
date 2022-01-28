@@ -381,7 +381,7 @@ def main() -> int:
       install_stackable_operator(operator_with_version[0], None)
     else:
       logging.warning(f"Encountered illegal operator/version string: [{operator}]")
-      sys.exit(1)
+      return 1
   logging.info(f"Successfully installed operator for {args.operator}")
   if args.provision:
     helper_execute(['kubectl', 'apply', '-f', args.provision])
