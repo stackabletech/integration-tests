@@ -1,8 +1,13 @@
-apiVersion: v1
-kind: Pod
+apiVersion: kuttl.dev/v1beta1
+kind: TestAssert
+metadata:
+  name: webhdfs
+timeout: 300
+---
+apiVersion: apps/v1
+kind: StatefulSet
 metadata:
   name: webhdfs
 status:
-  containerStatuses:
-    - name: webhdfs
-      ready: true
+  readyReplicas: 1
+  replicas: 1
