@@ -12,8 +12,7 @@ spec:
     method:
       multiUser:
         userCredentialsSecret:
-          namespace: default
-          name: simple-trino-users-secret
+          name: test-trino-users-secret
   s3:
     endPoint: changeme
     accessKey: changeme
@@ -40,7 +39,7 @@ spec:
 apiVersion: v1
 kind: Secret
 metadata:
-  name: simple-trino-users-secret
+  name: test-trino-users-secret
 type: kubernetes.io/opaque
 stringData:
   # admin:admin
