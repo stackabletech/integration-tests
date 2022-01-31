@@ -115,7 +115,6 @@ where
               clusterRef:
                 name: {cluster_reference}
               credentialsSecret: {secret_name}
-              loadExamples: false
         ",
         kind = kind,
         name = name,

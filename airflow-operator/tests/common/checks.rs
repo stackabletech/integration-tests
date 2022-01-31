@@ -29,7 +29,7 @@ pub fn health_check(service: &TemporaryService, pod: &Pod) -> Result<()> {
     let response = client
         .get(format!("http://{}/api/v1/health", address))
         .send()?;
-    println!("{:?}", &response);
+    println!("Returned {}, {:?}", &response.status(), &response);
 
     if response.status().is_success() {
         Ok(())
