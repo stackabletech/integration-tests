@@ -17,6 +17,10 @@ DEFAULT_KIND_CLUSTER_NAME = "integration-tests"
 
 HELM_DEV_REPO_NAME = "stackable-dev"
 HELM_DEV_REPO_URL = "https://repo.stackable.tech/repository/helm-dev"
+HELM_TEST_REPO_NAME = "stackable-test"
+HELM_TEST_REPO_URL = "https://repo.stackable.tech/repository/helm-test"
+HELM_STABLE_REPO_NAME = "stackable"
+HELM_STABLE_REPO_URL = "https://repo.stackable.tech/repository/helm-stable"
 
 
 KIND_CLUSTER_DEFINITION = """
@@ -67,8 +71,8 @@ def check_args() -> Namespace:
     description="This tool can be used to install the Stackable Kubernetes Operators into a Kubernetes cluster using Helm. "
                 "It can optionally also create a kind cluster."
   )
-  parser.add_argument('--operator', '-o', help='The Stackable operator to install', required=True, choices=VALID_OPERATORS)
-  parser.add_argument('--version', '-v', required=False, help='The version of the operator to install, if left empty it will install the latest development version')
+  parser.add_argument('--operator', '-o', help='A list of Stackable operators to install. Operators can be specified in the form \"name[=version]\"', required=False, nargs='+')
+  parser.add_argument('--provision', '-p', required=False, help='A folder with resources or a single file to be deployed after the cluster has been created.')
   parser.add_argument('--kind', '-k', required=False, nargs='?', default=False, const=DEFAULT_KIND_CLUSTER_NAME, metavar="CLUSTER NAME",
                       help="When provided we'll automatically create a 4 node kind cluster. "
                            f"If this was provided with no argument the kind cluster will have the name '{DEFAULT_KIND_CLUSTER_NAME}' "
@@ -120,14 +124,23 @@ def install_stackable_operator(name: str, version: str = None):
 
   It makes sure that the proper repository is installed and install either a specific version or the latest development version
   """
+
+  logging.info(f"Installing [{name}] in version [{version}]")
   operator_name = f"{name}-operator"
 
   if version:
-    args = [f"--version={version}"]
+    if "-nightly" in version:
+      args = [f"--version={version}", "--devel"]
+      helper_install_helm_release(operator_name, operator_name, HELM_DEV_REPO_NAME, HELM_DEV_REPO_URL, args)
+    elif "-pr" in version:
+      args = [f"--version={version}", "--devel"]
+      helper_install_helm_release(operator_name, operator_name, HELM_TEST_REPO_NAME, HELM_TEST_REPO_URL, args)
+    else:
+      helper_install_helm_release(operator_name, operator_name, HELM_STABLE_REPO_NAME, HELM_STABLE_REPO_URL, [])
   else:
     args = ["--devel"]
+    helper_install_helm_release(operator_name, operator_name, HELM_DEV_REPO_NAME, HELM_DEV_REPO_URL, args)
 
-  helper_install_helm_release(operator_name, operator_name, HELM_DEV_REPO_NAME, HELM_DEV_REPO_URL, args)
   install_dependencies(name)
 
 
@@ -187,7 +200,6 @@ def install_dependencies(name: str):
 def install_dependencies_druid():
   logging.info("Installing dependencies for Druid")
   install_stackable_operator("zookeeper")
-
 
 def install_dependencies_hbase():
   logging.info("Installing dependencies for HBase")
@@ -359,10 +371,23 @@ def main() -> int:
   if args.kind:
     create_kind_cluster(args.kind)
   check_kubernetes_available()
-  install_stackable_operator(args.operator, args.version)
-  logging.info(f"Successfully installed operator for {args.operator}")
-  return 0
 
+  # Iterate over all provided operators, parse version from provided string (if there is one)
+  for operator in args.operator:
+    operator_with_version = operator.split("=")
+    if len(operator_with_version) == 2:
+      install_stackable_operator(operator_with_version[0], operator_with_version[1])
+    elif len(operator_with_version) == 1:
+      install_stackable_operator(operator_with_version[0], None)
+    else:
+      logging.warning(f"Encountered illegal operator/version string: [{operator}]")
+      return 1
+  logging.info(f"Successfully installed operator for {args.operator}")
+  if args.provision:
+    helper_execute(['kubectl', 'apply', '-f', args.provision])
+    logging.info(f"Successfully applied resources from [{args.provision}]")
+
+  return 0
 
 if __name__ == '__main__':
   sys.exit(main())
