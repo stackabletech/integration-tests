@@ -32,6 +32,7 @@ allow = [
 ]
 
 exceptions = [
+    { name = "airflow-operator-integration-tests", allow = ["OSL-3.0"] },
     { name = "druid-operator-integration-tests", allow = ["OSL-3.0"] },
     { name = "hive-operator-integration-tests", allow = ["OSL-3.0"] },
     { name = "kafka-operator-integration-tests", allow = ["OSL-3.0"] },
