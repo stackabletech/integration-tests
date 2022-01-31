@@ -11,11 +11,7 @@ anyhow = "1.0"
 indoc = "1.0"
 integration-test-commons = { path = "../commons" }
 reqwest = { version = "0.11", features = ["blocking", "json"] }
-#serde = "1.0"
-#serde_json = "1.0"
 serde_yaml = "0.8"
 stackable-airflow-crd = { git = "https://github.com/stackabletech/airflow-operator.git", branch = "main"}
-#strum = "0.23"
-#strum_macros = "0.23"
 
 
