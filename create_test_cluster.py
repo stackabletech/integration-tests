@@ -191,7 +191,8 @@ def install_dependencies(name: str):
     "nifi": install_dependencies_nifi,
     "opa": install_dependencies_opa,
     "superset": install_dependencies_superset,
-    "trino": install_dependencies_trino
+    "trino": install_dependencies_trino,
+    "airflow": install_dependencies_airflow
   }
   if name in options:
     options[name]()
@@ -247,6 +248,19 @@ def install_dependencies_superset():
   ]
   helper_install_helm_release("superset-postgresql", "postgresql", "bitnami", "https://charts.bitnami.com/bitnami", args)
 
+def install_dependencies_airflow():
+  logging.info("Installing dependencies for Airflow")
+  args = [
+    '--set', 'postgresqlUsername=airflow',
+    '--set', 'postgresqlPassword=airflow',
+    '--set', 'postgresqlDatabase=airflow'
+  ]
+  helper_install_helm_release("airflow-postgresql", "postgresql", "bitnami", "https://charts.bitnami.com/bitnami", args)
+
+  args = [
+    '--set', 'auth.password=redis'
+  ]
+  helper_install_helm_release("airflow-redis", "redis", "bitnami", "https://charts.bitnami.com/bitnami", args)
 
 def install_dependencies_trino():
   install_stackable_operator("hive")
