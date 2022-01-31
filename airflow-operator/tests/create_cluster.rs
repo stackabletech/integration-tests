@@ -27,8 +27,7 @@ fn test_create_cluster_223() -> Result<()> {
         .client
         .apply::<Secret>(&serde_yaml::to_string(&airflow_secret)?);
 
-    let airflow_cr =
-        build_airflow_cluster(cluster.name(), version, expected_pod_count, secret_name)?;
+    let airflow_cr = build_airflow_cluster(cluster.name(), version, secret_name)?;
     cluster.create_or_update(&airflow_cr, &BTreeMap::new(), expected_pod_count)?;
 
     let created_pods = cluster.list::<Pod>(None);

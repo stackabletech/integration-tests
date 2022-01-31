@@ -5,7 +5,7 @@ use integration_test_commons::stackable_operator::kube::ResourceExt;
 use integration_test_commons::test::prelude::Pod;
 use reqwest::blocking::Client;
 
-/// Collect and gather all checks that may be performed on airflow node services.
+/// Execute and consolidate check results to be performed on the airflow node services.
 pub fn custom_checks(service_pods: &[Pod], service: &TemporaryService) -> Result<()> {
     for service_pod in service_pods {
         let named_pod = service_pod
@@ -21,6 +21,7 @@ pub fn custom_checks(service_pods: &[Pod], service: &TemporaryService) -> Result
     Ok(())
 }
 
+/// Invoke the webserver health endpoint.
 pub fn health_check(service: &TemporaryService, pod: &Pod) -> Result<()> {
     let client = Client::new();
 
