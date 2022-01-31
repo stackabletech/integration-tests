@@ -53,11 +53,10 @@ pub fn build_airflow_credentials(
     Ok(serde_yaml::from_str(spec)?)
 }
 
-/// This returns a airflow custom resource.
+/// This returns an airflow custom resource.
 pub fn build_airflow_cluster(
     name: &str,
     version: &str,
-    _replicas: usize,
     secret_name: &str,
 ) -> Result<AirflowCluster> {
     let spec = &formatdoc!(
@@ -86,16 +85,17 @@ pub fn build_airflow_cluster(
                   default:
                     config:
                       credentialsSecret: {secret_name}
-        ", // {replicas}?
+        ",
         name = name,
         version = version.to_string(),
         secret_name = secret_name,
-        //replicas = replicas
     );
 
     Ok(serde_yaml::from_str(spec)?)
 }
 
+/// This returns a command used to initialize backend components (e.g. database, queue)
+/// required by the airflow cluster.
 pub fn build_command<T>(
     name: &str,
     kind: &str,
