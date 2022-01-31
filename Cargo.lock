@@ -1637,7 +1637,7 @@ dependencies = [
 [[package]]
 name = "stackable-airflow-crd"
 version = "0.1.0-nightly"
-source = "git+https://github.com/stackabletech/airflow-operator.git?branch=airflow_protoype#5ba0d2364649b2c7ce32d1e4ff36825bfaf82f7e"
+source = "git+https://github.com/stackabletech/airflow-operator.git?branch=main#a40239cb7f8d9732f30f0e3e97f119d82166bbd4"
 dependencies = [
  "serde",
  "serde_json",
