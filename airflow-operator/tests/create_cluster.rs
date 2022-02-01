@@ -33,10 +33,17 @@ fn test_create_cluster_223() -> Result<()> {
     let created_pods = cluster.list::<Pod>(None);
     assert_eq!(created_pods.len(), expected_pod_count);
 
+    let cluster_uid = cluster
+        .cluster
+        .as_ref()
+        .and_then(|cluster| cluster.metadata.uid.as_ref())
+        .unwrap();
+
     let init: Init = build_command(
         "airflow-cluster-command-init",
         "Init",
         cluster.name(),
+        cluster_uid,
         secret_name,
     )?;
     cluster.apply_command(&init)?;

@@ -43,11 +43,8 @@ pub fn build_airflow_credentials(
               connections.secretKey: thisISaSECRET_1234
               connections.sqlalchemyDatabaseUri: postgresql+psycopg2://airflow:airflow@airflow-postgresql.default.svc.cluster.local/airflow
               connections.celeryResultBackend: db+postgresql://airflow:airflow@airflow-postgresql.default.svc.cluster.local/airflow
-              connections.celeryBrokerUrl: redis://:redis@redis-master:6379/0
-        ",
-        secret_name = secret_name,
-        admin_username = admin_username,
-        admin_password = admin_password,
+              connections.celeryBrokerUrl: redis://:redis@airflow-redis-master:6379/0
+        "
     );
 
     Ok(serde_yaml::from_str(spec)?)
@@ -68,8 +65,8 @@ pub fn build_airflow_cluster(
             spec:
               version: {version}
               executor: CeleryExecutor
-              loadExamples: true
-              exposeConfig: true
+              loadExamples: false
+              exposeConfig: false
               webservers:
                 roleGroups:
                   default:
@@ -85,10 +82,7 @@ pub fn build_airflow_cluster(
                   default:
                     config:
                       credentialsSecret: {secret_name}
-        ",
-        name = name,
-        version = version.to_string(),
-        secret_name = secret_name,
+        "
     );
 
     Ok(serde_yaml::from_str(spec)?)
@@ -100,26 +94,28 @@ pub fn build_command<T>(
     name: &str,
     kind: &str,
     cluster_reference: &str,
+    cluster_uid: &str,
     secret_name: &str,
 ) -> Result<T>
 where
     T: Clone + Debug + DeserializeOwned + Serialize,
 {
-    let spec = format!(
+    let spec = &formatdoc!(
         "
             apiVersion: command.airflow.stackable.tech/v1alpha1
             kind: {kind}
             metadata:
               name: {name}
+              ownerReferences:
+                - apiVersion: airflow.stackable.tech/v1alpha1
+                  kind: AirflowCluster
+                  name: {cluster_reference}
+                  uid: {cluster_uid}
             spec:
               clusterRef:
                 name: {cluster_reference}
               credentialsSecret: {secret_name}
-        ",
-        kind = kind,
-        name = name,
-        cluster_reference = cluster_reference,
-        secret_name = secret_name,
+        "
     );
 
     Ok(serde_yaml::from_str(&spec)?)

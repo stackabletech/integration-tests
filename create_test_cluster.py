@@ -11,7 +11,7 @@ import subprocess
 import time
 from argparse import Namespace
 
-VALID_OPERATORS = ["druid", "hbase", "hive", "kafka", "nifi", "opa", "spark", "superset", "trino", "zookeeper", "airflow"]
+VALID_OPERATORS = ["airflow", "druid", "hbase", "hive", "kafka", "nifi", "opa", "spark", "superset", "trino", "zookeeper"]
 
 DEFAULT_KIND_CLUSTER_NAME = "integration-tests"
 
@@ -184,6 +184,7 @@ def helper_add_helm_repo(name: str, url: str) -> str:
 def install_dependencies(name: str):
   # In Python 3.10 this could have been a match-case statement
   options = {
+    "airflow": install_dependencies_airflow,
     "druid": install_dependencies_druid,
     "hbase": install_dependencies_hbase,
     "hive": install_dependencies_hive,
@@ -191,8 +192,7 @@ def install_dependencies(name: str):
     "nifi": install_dependencies_nifi,
     "opa": install_dependencies_opa,
     "superset": install_dependencies_superset,
-    "trino": install_dependencies_trino,
-    "airflow": install_dependencies_airflow
+    "trino": install_dependencies_trino
   }
   if name in options:
     options[name]()
