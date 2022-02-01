@@ -1,0 +1,5 @@
+---
+apiVersion: kuttl.dev/v1beta1
+kind: TestAssert
+commands:
+  - script: kubectl exec -n $NAMESPACE check-worker-0 -- python /tmp/check-worker.py -u admin -p admin -n $NAMESPACE -w 2
