@@ -11,7 +11,7 @@ import subprocess
 import time
 from argparse import Namespace
 
-VALID_OPERATORS = ["airflow", "druid", "hbase", "hive", "kafka", "nifi", "opa", "spark", "superset", "trino", "zookeeper"]
+VALID_OPERATORS = ["airflow", "druid", "hbase", "hdfs", "hive", "kafka", "nifi", "opa", "spark", "superset", "trino", "zookeeper"]
 
 DEFAULT_KIND_CLUSTER_NAME = "integration-tests"
 
@@ -192,11 +192,16 @@ def install_dependencies(name: str):
     "nifi": install_dependencies_nifi,
     "opa": install_dependencies_opa,
     "superset": install_dependencies_superset,
-    "trino": install_dependencies_trino
+    "trino": install_dependencies_trino,
+    "hdfs": install_dependencies_hdfs,
   }
   if name in options:
     options[name]()
 
+
+def install_dependencies_hdfs():
+  logging.info("Installing dependencies for Apache HDFS")
+  install_stackable_operator("zookeeper")
 
 def install_dependencies_druid():
   logging.info("Installing dependencies for Druid")
