@@ -1,22 +1,13 @@
----
 apiVersion: kuttl.dev/v1beta1
 kind: TestAssert
 metadata:
-  name: install-trino
-timeout: 600
+  name: check-worker
+timeout: 300
 ---
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
-  name: test-trino-coordinator-default
-status:
-  readyReplicas: 1
-  replicas: 1
----
-apiVersion: apps/v1
-kind: StatefulSet
-metadata:
-  name: test-trino-worker-default
+  name: check-worker
 status:
   readyReplicas: 1
   replicas: 1

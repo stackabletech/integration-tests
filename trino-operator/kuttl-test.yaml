@@ -3,5 +3,8 @@ kind: TestSuite
 testDirs:
   - ./tests/kuttl
 startKIND: false
+kindContainers:
+  - docker.stackable.tech/stackable/trino:362-stackable0
+  - docker.stackable.tech/stackable/hive:2.3.9-stackable0
 parallel: 1
-suppress: ["events"]
+timeout: 300
