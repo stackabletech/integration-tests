@@ -8,13 +8,6 @@ use reqwest::blocking::Client;
 /// Execute and consolidate check results to be performed on the airflow node services.
 pub fn custom_checks(service_pods: &[Pod], service: &TemporaryService) -> Result<()> {
     for service_pod in service_pods {
-        let named_pod = service_pod
-            .metadata
-            .generate_name
-            .as_ref()
-            .unwrap()
-            .as_str();
-        println!("{:?}/{}", named_pod, &service.address(service_pod));
         checks::scan_port(&service.address(service_pod))?;
         health_check(service, service_pod)?;
     }
