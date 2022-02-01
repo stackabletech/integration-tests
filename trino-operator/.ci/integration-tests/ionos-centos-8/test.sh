@@ -54,7 +54,7 @@ export S3_ACCESS_KEY=$(kubectl get secret minio1-secret --output=jsonpath="{.dat
 export S3_SECRET_KEY=$(kubectl get secret minio1-secret --output=jsonpath="{.data.secretkey}" | base64 --decode)
 
 # install stuff on testdriver
-ssh testdriver-1 sudo yum install vim procps curl gcc make pkgconfig openssl-devel systemd-devel python3-pip container-selinux selinux-policy-base git -y
+ssh testdriver-1 sudo yum install vim procps curl gcc make pkgconfig openssl-devel systemd-devel python3-pip container-selinux selinux-policy-base git -y --nobest
 
 # install Rust with a script on testdriver
 echo "curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y" > install-rust.sh
