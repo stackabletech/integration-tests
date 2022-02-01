@@ -1,7 +1,7 @@
 # Write script to set up Postgres and execute it on testdriver-1
 echo "helm repo add bitnami https://charts.bitnami.com/bitnami
 helm repo update bitnami
-helm install airflow-postresql bitnami/postgresql \
+helm install airflow-postgresql bitnami/postgresql \
     --set postgresqlUsername=airflow \
     --set postgresqlPassword=airflow \
     --set postgresqlDatabase=airflow
