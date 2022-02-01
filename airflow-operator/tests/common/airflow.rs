@@ -118,5 +118,5 @@ where
         "
     );
 
-    Ok(serde_yaml::from_str(&spec)?)
+    Ok(serde_yaml::from_str(spec)?)
 }
