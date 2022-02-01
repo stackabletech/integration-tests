@@ -12,7 +12,7 @@ ssh testdriver-1 ./set-up-postgres.sh
 
 # Wait for Postgres to be up and running
 echo Starting Postgresql database ...
-while [ "$(kubectl get pod airflow-postgresql-0 --output=jsonpath='{.status.containerStatuses[0].ready}')" != "true" ]; do
+while [ "$(kubectl get pod airflow-postgresql-postgresql-0 --output=jsonpath='{.status.containerStatuses[0].ready}')" != "true" ]; do
 	sleep 2
 done
 echo Postgresql database started.
