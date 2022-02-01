@@ -1817,19 +1817,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "stackable-superset-crd"
-version = "0.3.0-nightly"
-source = "git+https://github.com/stackabletech/superset-operator.git?branch=main#a2169f830379779651d7a5d300659d76782453b7"
-dependencies = [
- "serde",
- "serde_json",
- "snafu",
- "stackable-operator 0.9.0",
- "strum",
- "strum_macros",
-]
-
-[[package]]
 name = "stackable-zookeeper-crd"
 version = "0.9.0-nightly"
 source = "git+https://github.com/stackabletech/zookeeper-operator.git?branch=main#5d90be82608ada871421add2d4adc66e3db33635"
@@ -1867,18 +1854,6 @@ dependencies = [
  "quote",
  "rustversion",
  "syn",
-]
-
-[[package]]
-name = "superset-operator-integration-tests"
-version = "0.1.0"
-dependencies = [
- "anyhow",
- "indoc",
- "integration-test-commons",
- "reqwest",
- "serde_yaml",
- "stackable-superset-crd",
 ]
 
 [[package]]
