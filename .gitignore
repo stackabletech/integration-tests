@@ -11,4 +11,4 @@
 **/*.rs.bk
 
 .idea/
-
+**/kubeconfig
