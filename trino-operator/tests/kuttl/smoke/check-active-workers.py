@@ -1,6 +1,11 @@
 #!/usr/bin/env python
 import trino
 import argparse
+import sys
+
+if not sys.warnoptions:
+    import warnings
+warnings.simplefilter("ignore")
 
 
 def get_connection(username, password, namespace):

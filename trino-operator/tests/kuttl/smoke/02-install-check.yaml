@@ -2,21 +2,21 @@
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
-  name: check-worker
+  name: trino-test-helper
   labels:
-    app: check-worker
+    app: trino-test-helper
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: check-worker
+      app: trino-test-helper
   template:
     metadata:
       labels:
-        app: check-worker
+        app: trino-test-helper
     spec:
       containers:
-        - name: check-worker
+        - name: trino-test-helper
           image: python:3.10-bullseye
           stdin: true
           tty: true
