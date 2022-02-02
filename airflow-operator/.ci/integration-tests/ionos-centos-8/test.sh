@@ -31,8 +31,9 @@ ssh testdriver-1 ./set-up-redis.sh
 
 # Wait for Redis to be up and running
 echo Starting Redis ...
-while [ "$(kubectl get pod airflow-redis-replicas-2 --output=jsonpath='{.status.containerStatuses[0].ready}')" != "true" ]; do
-	sleep 2
+while [ "$(kubectl get statefulset airflow-redis-master --output=jsonpath='{.status.readyReplicas}')" != "1" ] || 
+      [ "$(kubectl get statefulset airflow-redis-replicas --output=jsonpath='{.status.readyReplicas}')" != "3" ]; do
+    sleep 2
 done
 echo Redis started.
 echo
