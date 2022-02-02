@@ -270,6 +270,7 @@ def install_dependencies_airflow():
 def install_dependencies_trino():
   install_stackable_operator("hive")
   install_stackable_operator("opa")
+  install_stackable_operator("regorule")
 
   helper_add_helm_repo("minio", "https://operator.min.io")
   release = helper_find_helm_release("minio-operator", "minio-operator")
