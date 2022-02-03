@@ -6,5 +6,6 @@
 
 The integration tests are based on [KUTTL](https://kuttl.dev).
 
-    ../create_test_cluster.py --kind kind --operator hive --debug
+    ./create_test_cluster.py --kind kind --operator hive --debug
+    cd hive-operator
     kubectl kuttl test
