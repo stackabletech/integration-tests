@@ -1,4 +1,6 @@
 apiVersion: kuttl.dev/v1beta1
 kind: TestStep
 commands:
-  - script: helm install regorule-operator --namespace $NAMESPACE stackable/regorule-operator
+  - script: helm repo add $NAMESPACE-stackable https://repo.stackable.tech/repository/helm-stable
+  - script: helm upgrade regorule-operator --namespace $NAMESPACE $NAMESPACE-stackable/regorule-operator --install
+  - script: helm repo remove $NAMESPACE-stackable
