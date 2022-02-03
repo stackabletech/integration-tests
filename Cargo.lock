@@ -1097,19 +1097,6 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "da32515d9f6e6e489d7bc9d84c71b060db7247dc035bbe44eac88cf87486d8d5"
 
 [[package]]
-name = "opa-operator-integration-tests"
-version = "0.1.0"
-dependencies = [
- "anyhow",
- "integration-test-commons",
- "reqwest",
- "serde",
- "serde_json",
- "serde_yaml",
- "stackable-opa-crd",
-]
-
-[[package]]
 name = "openssl"
 version = "0.10.38"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1717,20 +1704,6 @@ dependencies = [
  "stackable-operator 0.9.0",
  "strum",
  "strum_macros",
-]
-
-[[package]]
-name = "stackable-opa-crd"
-version = "0.8.0-nightly"
-source = "git+https://github.com/stackabletech/opa-operator.git?branch=main#5279b0210b04af5fa5730baac3f32472a1cfb0d4"
-dependencies = [
- "semver",
- "serde",
- "serde_json",
- "stackable-operator 0.8.0",
- "strum",
- "strum_macros",
- "tracing",
 ]
 
 [[package]]

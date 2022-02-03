@@ -1,0 +1,7 @@
+apiVersion: kuttl.dev/v1beta1
+kind: TestStep
+commands:
+  # since we currently deploy the regorule operator ourselves we need to clean up the roles and rolebindings
+  # for multiple runs (cannot be overwritten by a new helm install because of different namespaces)
+  - script: kubectl delete clusterroles regorule-operator-clusterrole
+  - script: kubectl delete clusterrolebindings regorule-operator-clusterrolebinding
