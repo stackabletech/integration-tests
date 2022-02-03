@@ -186,7 +186,6 @@ def install_dependencies(name: str):
     "airflow": install_dependencies_airflow,
     "druid": install_dependencies_druid,
     "hbase": install_dependencies_hbase,
-    "hive": install_dependencies_hive,
     "kafka": install_dependencies_kafka,
     "nifi": install_dependencies_nifi,
     "opa": install_dependencies_opa,
@@ -210,21 +209,6 @@ def install_dependencies_hbase():
   logging.info("Installing dependencies for HBase")
   install_stackable_operator("zookeeper")
   install_stackable_operator("hdfs")
-
-
-def install_dependencies_hive():
-  logging.info("Checking prerequisites and installing dependencies for Hive")
-  helper_command_exists('python')
-  helper_command_exists('pip')
-
-  logging.debug("Checking whether the Python Hive requirements have been installed")
-  metastore_client_spec = importlib.util.find_spec('hive_metastore_client')
-  if metastore_client_spec is None:
-    logging.info("Python requirements for Hive are missing - installing now")
-    helper_execute([sys.executable, '-m', 'pip', 'install', '--user', '--requirement', 'hive-operator/python/requirements.txt'])
-  else:
-    logging.debug("Python requirements for Hive seem to be installed already")
-
 
 def install_dependencies_kafka():
   logging.info("Installing dependencies for Kafka")
