@@ -124,6 +124,7 @@ def install_stackable_operator(name: str, version: str = None):
 
   It makes sure that the proper repository is installed and install either a specific version or the latest development version
   """
+  install_dependencies(name)
 
   logging.info(f"Installing [{name}] in version [{version}]")
   operator_name = f"{name}-operator"
@@ -140,8 +141,6 @@ def install_stackable_operator(name: str, version: str = None):
   else:
     args = ["--devel"]
     helper_install_helm_release(operator_name, operator_name, HELM_DEV_REPO_NAME, HELM_DEV_REPO_URL, args)
-
-  install_dependencies(name)
 
 
 def helper_check_docker_running():
@@ -268,9 +267,9 @@ def install_dependencies_airflow():
   helper_install_helm_release("airflow-redis", "redis", "bitnami", "https://charts.bitnami.com/bitnami", args)
 
 def install_dependencies_trino():
-  install_stackable_operator("hive")
-  install_stackable_operator("opa")
   install_stackable_operator("regorule")
+  install_stackable_operator("opa")
+  install_stackable_operator("hive")
 
   helper_add_helm_repo("minio", "https://operator.min.io")
   release = helper_find_helm_release("minio-operator", "minio-operator")
