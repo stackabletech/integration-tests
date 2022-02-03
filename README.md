@@ -54,7 +54,7 @@ It is recommended to run the tests in the same shell the was used to create the 
 
 ## Run KUTTL tests
 
-Currently, the some integration tests are adapted to utilize [KUTTL](https://kuttl.dev) instead if Rust. Install KUTTL first as described [here](https://kuttl.dev/docs/cli.html#setup-the-kuttl-kubectl-plugin).
+Currently, some integration tests are adapted to utilize [KUTTL](https://kuttl.dev) instead if Rust. Install KUTTL first as described [here](https://kuttl.dev/docs/cli.html#setup-the-kuttl-kubectl-plugin).
 You can run KUTTL tests (if there is a folder named `tests/kuttl`) via:
 
     cd <operator>
