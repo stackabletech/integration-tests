@@ -1,0 +1,30 @@
+---
+apiVersion: spark.stackable.tech/v1alpha1
+kind: SparkCluster
+metadata:
+  name: spark
+spec:
+  version: "3.0.1"
+  config:
+    enableMonitoring: true
+  masters:
+    roleGroups:
+      default:
+        selector:
+          matchLabels:
+            kubernetes.io/os: linux
+        replicas: 1
+  workers:
+    roleGroups:
+      default:
+        selector:
+          matchLabels:
+            kubernetes.io/os: linux
+        replicas: 3
+  historyServers:
+    roleGroups:
+      default:
+        selector:
+          matchLabels:
+            kubernetes.io/os: linux
+        replicas: 1
