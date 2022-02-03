@@ -557,18 +557,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "hive-operator-integration-tests"
-version = "0.1.0"
-dependencies = [
- "anyhow",
- "integration-test-commons",
- "serde",
- "serde_json",
- "serde_yaml",
- "stackable-hive-crd",
-]
-
-[[package]]
 name = "http"
 version = "0.2.6"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -714,7 +702,7 @@ dependencies = [
  "serde_json",
  "serde_yaml",
  "spectral",
- "stackable-operator 0.8.0",
+ "stackable-operator",
  "strum",
  "strum_macros",
  "tokio",
@@ -1677,20 +1665,7 @@ source = "git+https://github.com/stackabletech/airflow-operator.git?branch=main#
 dependencies = [
  "serde",
  "serde_json",
- "stackable-operator 0.8.0",
- "strum",
- "strum_macros",
-]
-
-[[package]]
-name = "stackable-hive-crd"
-version = "0.5.0-nightly"
-source = "git+https://github.com/stackabletech/hive-operator.git?branch=main#14e0964be3729452f53bf6af23d6b4f47992b550"
-dependencies = [
- "serde",
- "serde_json",
- "snafu",
- "stackable-operator 0.9.0",
+ "stackable-operator",
  "strum",
  "strum_macros",
 ]
@@ -1730,40 +1705,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "stackable-operator"
-version = "0.9.0"
-source = "git+https://github.com/stackabletech/operator-rs.git?tag=0.9.0#e7c3e2a10c7dd6469c1fdf2fc570e962ea776762"
-dependencies = [
- "async-trait",
- "backoff",
- "chrono",
- "clap",
- "const_format",
- "derivative",
- "either",
- "futures",
- "json-patch",
- "k8s-openapi",
- "kube",
- "lazy_static",
- "product-config",
- "rand 0.8.4",
- "regex",
- "schemars",
- "serde",
- "serde_json",
- "serde_yaml",
- "strum",
- "strum_macros",
- "thiserror",
- "tokio",
- "tracing",
- "tracing-futures",
- "tracing-subscriber",
- "uuid",
-]
-
-[[package]]
 name = "stackable-zookeeper-crd"
 version = "0.9.0-nightly"
 source = "git+https://github.com/stackabletech/zookeeper-operator.git?branch=main#5d90be82608ada871421add2d4adc66e3db33635"
@@ -1771,7 +1712,7 @@ dependencies = [
  "serde",
  "serde_json",
  "snafu",
- "stackable-operator 0.8.0",
+ "stackable-operator",
  "strum",
 ]
 
