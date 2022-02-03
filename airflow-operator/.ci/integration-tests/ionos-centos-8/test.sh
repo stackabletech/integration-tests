@@ -2,9 +2,10 @@
 echo "helm repo add bitnami https://charts.bitnami.com/bitnami
 helm repo update bitnami
 helm install airflow-postgresql bitnami/postgresql \
-    --set postgresqlUsername=airflow \
-    --set postgresqlPassword=airflow \
-    --set postgresqlDatabase=airflow
+    --version 11.0.0 \
+    --set auth.username=airflow \
+    --set auth.password=airflow \
+    --set auth.database=airflow
 " > set-up-postgres.sh
 scp set-up-postgres.sh testdriver-1:set-up-postgres.sh
 ssh testdriver-1 chmod a+x set-up-postgres.sh
