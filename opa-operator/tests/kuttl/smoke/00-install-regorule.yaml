@@ -1,6 +1,9 @@
 apiVersion: kuttl.dev/v1beta1
 kind: TestStep
 commands:
+  # in case a regorule-operator already exists -> this will leave the cluster e.g. created by create_test_cluster.py
+  # in a different state
+  - script: helm uninstall regorule-operator || true
   - script: helm repo add $NAMESPACE-stackable https://repo.stackable.tech/repository/helm-stable
   - script: helm upgrade regorule-operator --namespace $NAMESPACE $NAMESPACE-stackable/regorule-operator --install
   - script: helm repo remove $NAMESPACE-stackable
