@@ -1,7 +1,7 @@
 apiVersion: kuttl.dev/v1beta1
 kind: TestAssert
 metadata:
-  name: webhdfs
+  name: upscale-worker
 timeout: 300
 ---
 apiVersion: apps/v1
