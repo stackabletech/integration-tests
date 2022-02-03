@@ -8,8 +8,6 @@ members = [
     #"kafka-operator",
     # "monitoring-operator",
     # "nifi-operator",
-    "opa-operator",
     #"superset-operator",
-    # "trino-operator",
     "zookeeper-operator"
 ]

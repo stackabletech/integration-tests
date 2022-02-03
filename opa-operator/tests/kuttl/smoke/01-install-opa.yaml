@@ -1,0 +1,44 @@
+---
+apiVersion: opa.stackable.tech/v1alpha1
+kind: RegoRule
+metadata:
+  name: test-rego
+spec:
+  rego: |
+    package test
+    
+    hello {
+      true
+    }
+
+    world {
+      false
+    }
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: test-opa-svc
+spec:
+  type: ClusterIP
+  selector:
+    app.kubernetes.io/instance: test-opa
+    app.kubernetes.io/name: opa
+  ports:
+    - port: 8081
+      targetPort: 8081
+---
+apiVersion: opa.stackable.tech/v1alpha1
+kind: OpenPolicyAgent
+metadata:
+  name: test-opa
+spec:
+  version: "0.27.1"
+  servers:
+    roleGroups:
+      default:
+        selector:
+          matchLabels:
+            kubernetes.io/os: linux
+        config:
+          regoRuleReference: "http://regorule-operator:3030/opa/v1"
