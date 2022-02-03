@@ -1,4 +1,3 @@
-
 git clone -b $GIT_BRANCH https://github.com/stackabletech/integration-tests.git
 (cd integration-tests/trino-operator && kubectl kuttl test)
 exit_code=$?

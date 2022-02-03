@@ -1,4 +1,3 @@
-
 ---
 apiVersion: t2.stackable.tech/v1
 kind: Infra
