@@ -1,5 +1,8 @@
 ---
-apiVersion: kuttl.dev/v1beta1
-kind: TestAssert
-commands:
-  - script: kubectl --namespace $NAMESPACE run assert01 -i -t --rm=true --restart=Never --image=docker.stackable.tech/soenkeliebau/nifi-tests:2 --command -- /tests/02-assert.py -u admin -p supersecretpassword -n kuttl-test-evolved-stud
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: test-nifi-node-default
+status:
+  readyReplicas: 3
+  replicas: 3

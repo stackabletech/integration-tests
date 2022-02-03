@@ -1,5 +1,0 @@
----
-apiVersion: kuttl.dev/v1beta1
-kind: TestAssert
-commands:
-  - script: telepresence connect -- tests/kuttl/smoke/04-assert.py -u admin -p supersecretpassword -n $NAMESPACE
