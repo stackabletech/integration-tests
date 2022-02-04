@@ -8,5 +8,4 @@ members = [
     # "monitoring-operator",
     # "nifi-operator",
     "superset-operator",
-    "zookeeper-operator"
 ]

@@ -4,4 +4,4 @@ kind: TestAssert
 metadata:
   name: test-regorule
 commands:
-  - script: kubectl exec -n $NAMESPACE test-metastore-0 -- python /tmp/test_metastore.py -n $NAMESPACE
+  - script: kubectl exec -n $NAMESPACE test-metastore-0 -- python /tmp/test_zookeeper.py -n $NAMESPACE
