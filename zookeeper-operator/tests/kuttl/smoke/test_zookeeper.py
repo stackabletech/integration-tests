@@ -8,7 +8,7 @@ sys.tracebacklimit = 0
 
 def print_request_error_and_sleep(message, err,  retry_count):
     print("[" + str(retry_count) + "] " + message, err)
-    time.sleep(3)
+    time.sleep(5)
 
 
 def try_get(url):

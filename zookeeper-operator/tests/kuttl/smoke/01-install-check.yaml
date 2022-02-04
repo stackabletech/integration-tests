@@ -17,6 +17,6 @@ spec:
     spec:
       containers:
         - name: zk-test-helper
-          image: python:3.10-bullseye
+          image: python:3.10-slim
           stdin: true
           tty: true
