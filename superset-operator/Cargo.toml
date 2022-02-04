@@ -1,10 +1,10 @@
 [package]
-authors = ["Siegfried Weber <mail@siegfriedweber.net>"]
+authors = ["Stackable GmbH <info@stackable.de>"]
 description = "Integration tests for the Stackable Operator for Apache Superset"
 edition = "2021"
 license = "OSL-3.0"
 name = "superset-operator-integration-tests"
-repository = "https://github.com/stackabletech/superset-operator-integration-tests"
+repository = "https://github.com/stackabletech/integration-tests"
 version = "0.1.0"
 
 [dependencies]

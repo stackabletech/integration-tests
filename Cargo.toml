@@ -1,15 +1,11 @@
 [workspace]
 
 members = [
+    "airflow-operator",
     "commons",
-    "druid-operator",
-    "hive-operator",
-    "kafka-operator",
+    #"druid-operator",
+    #"kafka-operator",
     # "monitoring-operator",
     # "nifi-operator",
-    "opa-operator",
-    "spark-operator",
     "superset-operator",
-    # "trino-operator",
-    "zookeeper-operator"
 ]

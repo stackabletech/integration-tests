@@ -11,7 +11,7 @@ import subprocess
 import time
 from argparse import Namespace
 
-VALID_OPERATORS = ["druid", "hbase", "hive", "kafka", "nifi", "opa", "spark", "superset", "trino", "zookeeper"]
+VALID_OPERATORS = ["airflow", "druid", "hbase", "hdfs", "hive", "kafka", "nifi", "opa", "spark", "superset", "trino", "zookeeper"]
 
 DEFAULT_KIND_CLUSTER_NAME = "integration-tests"
 
@@ -124,6 +124,7 @@ def install_stackable_operator(name: str, version: str = None):
 
   It makes sure that the proper repository is installed and install either a specific version or the latest development version
   """
+  install_dependencies(name)
 
   logging.info(f"Installing [{name}] in version [{version}]")
   operator_name = f"{name}-operator"
@@ -140,8 +141,6 @@ def install_stackable_operator(name: str, version: str = None):
   else:
     args = ["--devel"]
     helper_install_helm_release(operator_name, operator_name, HELM_DEV_REPO_NAME, HELM_DEV_REPO_URL, args)
-
-  install_dependencies(name)
 
 
 def helper_check_docker_running():
@@ -184,18 +183,23 @@ def helper_add_helm_repo(name: str, url: str) -> str:
 def install_dependencies(name: str):
   # In Python 3.10 this could have been a match-case statement
   options = {
+    "airflow": install_dependencies_airflow,
     "druid": install_dependencies_druid,
     "hbase": install_dependencies_hbase,
-    "hive": install_dependencies_hive,
     "kafka": install_dependencies_kafka,
     "nifi": install_dependencies_nifi,
     "opa": install_dependencies_opa,
     "superset": install_dependencies_superset,
-    "trino": install_dependencies_trino
+    "trino": install_dependencies_trino,
+    "hdfs": install_dependencies_hdfs,
   }
   if name in options:
     options[name]()
 
+
+def install_dependencies_hdfs():
+  logging.info("Installing dependencies for Apache HDFS")
+  install_stackable_operator("zookeeper")
 
 def install_dependencies_druid():
   logging.info("Installing dependencies for Druid")
@@ -205,21 +209,6 @@ def install_dependencies_hbase():
   logging.info("Installing dependencies for HBase")
   install_stackable_operator("zookeeper")
   install_stackable_operator("hdfs")
-
-
-def install_dependencies_hive():
-  logging.info("Checking prerequisites and installing dependencies for Hive")
-  helper_command_exists('python')
-  helper_command_exists('pip')
-
-  logging.debug("Checking whether the Python Hive requirements have been installed")
-  metastore_client_spec = importlib.util.find_spec('hive_metastore_client')
-  if metastore_client_spec is None:
-    logging.info("Python requirements for Hive are missing - installing now")
-    helper_execute([sys.executable, '-m', 'pip', 'install', '--user', '--requirement', 'hive-operator/python/requirements.txt'])
-  else:
-    logging.debug("Python requirements for Hive seem to be installed already")
-
 
 def install_dependencies_kafka():
   logging.info("Installing dependencies for Kafka")
@@ -241,14 +230,31 @@ def install_dependencies_opa():
 def install_dependencies_superset():
   logging.info("Installing dependencies for Superset")
   args = [
-    '--set', 'postgresqlUsername=superset',
-    '--set', 'postgresqlPassword=superset',
-    '--set', 'postgresqlDatabase=superset'
+    '--version', '11.0.0',
+    '--set', 'auth.username=superset',
+    '--set', 'auth.password=superset',
+    '--set', 'auth.database=superset'
   ]
   helper_install_helm_release("superset-postgresql", "postgresql", "bitnami", "https://charts.bitnami.com/bitnami", args)
 
+def install_dependencies_airflow():
+  logging.info("Installing dependencies for Airflow")
+  args = [
+    '--version', '11.0.0',
+    '--set', 'auth.username=airflow',
+    '--set', 'auth.password=airflow',
+    '--set', 'auth.database=airflow'
+  ]
+  helper_install_helm_release("airflow-postgresql", "postgresql", "bitnami", "https://charts.bitnami.com/bitnami", args)
+
+  args = [
+    '--set', 'auth.password=redis'
+  ]
+  helper_install_helm_release("airflow-redis", "redis", "bitnami", "https://charts.bitnami.com/bitnami", args)
 
 def install_dependencies_trino():
+  install_stackable_operator("regorule")
+  install_stackable_operator("opa")
   install_stackable_operator("hive")
 
   helper_add_helm_repo("minio", "https://operator.min.io")
