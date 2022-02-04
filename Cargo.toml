@@ -7,6 +7,6 @@ members = [
     #"kafka-operator",
     # "monitoring-operator",
     # "nifi-operator",
-    #"superset-operator",
+    "superset-operator",
     "zookeeper-operator"
 ]

@@ -2,9 +2,10 @@
 echo "helm repo add bitnami https://charts.bitnami.com/bitnami
 helm repo update bitnami
 helm install superset bitnami/postgresql \
-    --set postgresqlUsername=superset \
-    --set postgresqlPassword=superset \
-    --set postgresqlDatabase=superset
+    --version 11.0.0 \
+    --set auth.username=superset \
+    --set auth.password=superset \
+    --set auth.database=superset
 " > set-up-postgres.sh
 scp set-up-postgres.sh testdriver-1:set-up-postgres.sh
 ssh testdriver-1 chmod a+x set-up-postgres.sh
