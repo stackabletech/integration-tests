@@ -2,9 +2,10 @@
 echo "helm repo add bitnami https://charts.bitnami.com/bitnami
 helm repo update bitnami
 helm install airflow-postgresql bitnami/postgresql \
-    --set postgresqlUsername=airflow \
-    --set postgresqlPassword=airflow \
-    --set postgresqlDatabase=airflow
+    --version 11.0.0 \
+    --set auth.username=airflow \
+    --set auth.password=airflow \
+    --set auth.database=airflow
 " > set-up-postgres.sh
 scp set-up-postgres.sh testdriver-1:set-up-postgres.sh
 ssh testdriver-1 chmod a+x set-up-postgres.sh
@@ -12,7 +13,7 @@ ssh testdriver-1 ./set-up-postgres.sh
 
 # Wait for Postgres to be up and running
 echo Starting Postgresql database ...
-while [ "$(kubectl get pod airflow-postgresql-postgresql-0 --output=jsonpath='{.status.containerStatuses[0].ready}')" != "true" ]; do
+while [ "$(kubectl get pod airflow-postgresql-0 --output=jsonpath='{.status.containerStatuses[0].ready}')" != "true" ]; do
 	sleep 2
 done
 echo Postgresql database started.
