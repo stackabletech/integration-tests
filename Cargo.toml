@@ -6,6 +6,5 @@ members = [
     #"druid-operator",
     #"kafka-operator",
     # "monitoring-operator",
-    # "nifi-operator",
     "superset-operator",
 ]

@@ -29,4 +29,4 @@ spec:
 apiVersion: kuttl.dev/v1beta1
 kind: TestStep
 commands:
-  - command: kubectl rollout restart statefulset test-nifi-node-default --namespace $namespace
+  - command: kubectl rollout restart statefulset test-nifi-node-default --namespace $NAMESPACE

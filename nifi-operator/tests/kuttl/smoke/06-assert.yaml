@@ -1,5 +1,39 @@
 ---
-apiVersion: kuttl.dev/v1beta1
-kind: TestAssert
-commands:
-  - script: telepresence connect -- tests/kuttl/smoke/06-assert.py -u admin -p supersecretpassword -n $NAMESPACE
+apiVersion: v1
+kind: Event
+reason: Started
+source:
+  component: kubelet
+involvedObject:
+  apiVersion: v1
+  kind: Pod
+  name: test-nifi-node-default-0
+---
+apiVersion: v1
+kind: Event
+reason: Started
+source:
+  component: kubelet
+involvedObject:
+  apiVersion: v1
+  kind: Pod
+  name: test-nifi-node-default-1
+---
+apiVersion: v1
+kind: Event
+reason: Started
+source:
+  component: kubelet
+involvedObject:
+  apiVersion: v1
+  kind: Pod
+  name: test-nifi-node-default-2
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: test-nifi-node-default
+status:
+  readyReplicas: 3
+  replicas: 3
+
