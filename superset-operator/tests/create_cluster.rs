@@ -3,13 +3,11 @@ pub mod common;
 use anyhow::Result;
 use common::{
     checks::custom_checks,
-    superset::{
-        build_command, build_superset_cluster, build_superset_credentials, build_test_cluster,
-    },
+    superset::{build_superset_cluster, build_superset_credentials, build_test_cluster},
 };
 use integration_test_commons::operator::service::create_node_port_service;
 use integration_test_commons::test::prelude::{Pod, Secret};
-use stackable_superset_crd::commands::Init;
+use stackable_superset_crd::supersetdb::{SupersetDB, SupersetDBStatusCondition};
 use std::collections::BTreeMap;
 
 #[test]
@@ -31,20 +29,14 @@ fn test_create_cluster_1_3_2() -> Result<()> {
     cluster.create_or_update(&superset_cr, &BTreeMap::new(), replicas)?;
     let created_pods = cluster.list::<Pod>(None);
 
-    let init: Init = build_command(
-        "superset-cluster-command-init",
-        "Init",
-        cluster.name(),
-        secret_name,
-    )?;
-    cluster.apply_command(&init)?;
+    let superset_db = cluster
+        .client
+        .find_namespaced::<SupersetDB>(cluster.name())
+        .expect("Resource SupersetDB expected");
 
-    cluster.client.verify_status(&init, |command| {
-        command
-            .status
-            .as_ref()
-            .and_then(|status| status.finished_at.as_ref())
-            .is_some()
+    cluster.client.verify_status(&superset_db, |superset_db| {
+        superset_db.status.as_ref().map(|status| status.condition)
+            == Some(SupersetDBStatusCondition::Ready)
     });
 
     let admin_service =

@@ -230,18 +230,20 @@ def install_dependencies_opa():
 def install_dependencies_superset():
   logging.info("Installing dependencies for Superset")
   args = [
-    '--set', 'postgresqlUsername=superset',
-    '--set', 'postgresqlPassword=superset',
-    '--set', 'postgresqlDatabase=superset'
+    '--version', '11.0.0',
+    '--set', 'auth.username=superset',
+    '--set', 'auth.password=superset',
+    '--set', 'auth.database=superset'
   ]
   helper_install_helm_release("superset-postgresql", "postgresql", "bitnami", "https://charts.bitnami.com/bitnami", args)
 
 def install_dependencies_airflow():
   logging.info("Installing dependencies for Airflow")
   args = [
-    '--set', 'postgresqlUsername=airflow',
-    '--set', 'postgresqlPassword=airflow',
-    '--set', 'postgresqlDatabase=airflow'
+    '--version', '11.0.0',
+    '--set', 'auth.username=airflow',
+    '--set', 'auth.password=airflow',
+    '--set', 'auth.database=airflow'
   ]
   helper_install_helm_release("airflow-postgresql", "postgresql", "bitnami", "https://charts.bitnami.com/bitnami", args)
 
