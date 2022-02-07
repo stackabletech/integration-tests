@@ -4,9 +4,7 @@ members = [
     "airflow-operator",
     "commons",
     #"druid-operator",
-    #"kafka-operator",
     # "monitoring-operator",
     # "nifi-operator",
     "superset-operator",
-    "zookeeper-operator"
 ]
