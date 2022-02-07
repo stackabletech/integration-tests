@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: healthcheck
+  labels:
+    app: healthcheck
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: healthcheck
+  template:
+    metadata:
+      labels:
+        app: healthcheck
+    spec:
+      containers:
+      - name: healthcheck
+        image: python:3.10-slim
+        stdin: true
+        tty: true
