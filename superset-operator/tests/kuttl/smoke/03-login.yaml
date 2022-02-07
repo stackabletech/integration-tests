@@ -1,7 +1,7 @@
 apiVersion: kuttl.dev/v1beta1
 kind: TestStep
 metadata:
-  name: metrics
+  name: login
 commands:
   - script: kubectl cp -n $NAMESPACE ./requirements.txt python-0:/tmp
   - script: kubectl cp -n $NAMESPACE ./login.py python-0:/tmp

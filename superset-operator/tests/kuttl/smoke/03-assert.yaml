@@ -1,6 +1,6 @@
 apiVersion: kuttl.dev/v1beta1
 kind: TestAssert
 metadata:
-  name: metrics
+  name: login
 commands:
   - script: kubectl exec -n $NAMESPACE python-0 -- python /tmp/login.py
