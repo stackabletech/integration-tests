@@ -1,18 +1,24 @@
+apiVersion: kuttl.dev/v1beta1
+kind: TestStep
+metadata:
+  name: install-test-container
+timeout: 300
+---
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
-  name: webhdfs
+  name: python
   labels:
-    app: webhdfs
+    app: python
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: webhdfs
+      app: python
   template:
     metadata:
       labels:
-        app: webhdfs
+        app: python
     spec:
       containers:
       - name: webhdfs

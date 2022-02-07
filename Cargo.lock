@@ -1752,18 +1752,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "stackable-zookeeper-crd"
-version = "0.9.0-nightly"
-source = "git+https://github.com/stackabletech/zookeeper-operator.git?branch=main#86e874f19f95c1f43ef25ab0a8f012d921aa4166"
-dependencies = [
- "serde",
- "serde_json",
- "snafu",
- "stackable-operator 0.8.0",
- "strum",
-]
-
-[[package]]
 name = "strsim"
 version = "0.10.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -2323,18 +2311,3 @@ name = "zeroize"
 version = "1.5.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "7c88870063c39ee00ec285a2f8d6a966e5b6fb2becc4e8dac77ed0d370ed6006"
-
-[[package]]
-name = "zookeeper-operator-integration-tests"
-version = "0.1.0"
-dependencies = [
- "anyhow",
- "indoc",
- "integration-test-commons",
- "reqwest",
- "semver",
- "serde",
- "serde_json",
- "serde_yaml",
- "stackable-zookeeper-crd",
-]
