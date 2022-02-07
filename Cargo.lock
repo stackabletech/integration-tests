@@ -271,12 +271,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "doc-comment"
-version = "0.3.3"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "fea41bba32d969b513997752735605054bc0dfa92b4c56bf1189f2e174be7a10"
-
-[[package]]
 name = "dyn-clone"
 version = "1.0.4"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -702,7 +696,7 @@ dependencies = [
  "serde_json",
  "serde_yaml",
  "spectral",
- "stackable-operator 0.8.0",
+ "stackable-operator",
  "strum",
  "strum_macros",
  "tokio",
@@ -1618,28 +1612,6 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "f2dd574626839106c320a323308629dcb1acfc96e32a8cba364ddc61ac23ee83"
 
 [[package]]
-name = "snafu"
-version = "0.7.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "2eba135d2c579aa65364522eb78590cdf703176ef71ad4c32b00f58f7afb2df5"
-dependencies = [
- "doc-comment",
- "snafu-derive",
-]
-
-[[package]]
-name = "snafu-derive"
-version = "0.7.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "7a7fe9b0669ef117c5cabc5549638528f36771f058ff977d7689deb517833a75"
-dependencies = [
- "heck 0.3.3",
- "proc-macro2",
- "quote",
- "syn",
-]
-
-[[package]]
 name = "socket2"
 version = "0.4.4"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1661,11 +1633,11 @@ dependencies = [
 [[package]]
 name = "stackable-airflow-crd"
 version = "0.2.0-nightly"
-source = "git+https://github.com/stackabletech/airflow-operator.git?branch=main#b972ccc1e8a752c0a2a0914ff6ffd84f22189a62"
+source = "git+https://github.com/stackabletech/airflow-operator.git?branch=main#dca51515b97118c28580a0e7ca7e93815be66db2"
 dependencies = [
  "serde",
  "serde_json",
- "stackable-operator 0.8.0",
+ "stackable-operator",
  "strum",
  "strum_macros",
 ]
@@ -1705,53 +1677,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "stackable-operator"
-version = "0.9.0"
-source = "git+https://github.com/stackabletech/operator-rs.git?tag=0.9.0#e7c3e2a10c7dd6469c1fdf2fc570e962ea776762"
-dependencies = [
- "async-trait",
- "backoff",
- "chrono",
- "clap",
- "const_format",
- "derivative",
- "either",
- "futures",
- "json-patch",
- "k8s-openapi",
- "kube",
- "lazy_static",
- "product-config",
- "rand 0.8.4",
- "regex",
- "schemars",
- "serde",
- "serde_json",
- "serde_yaml",
- "strum",
- "strum_macros",
- "thiserror",
- "tokio",
- "tracing",
- "tracing-futures",
- "tracing-subscriber",
- "uuid",
-]
-
-[[package]]
-name = "stackable-superset-crd"
-version = "0.3.0-nightly"
-source = "git+https://github.com/stackabletech/superset-operator.git?branch=main#02a4d1ac456b44f95580eb9f7c18cfca6f4ca2f1"
-dependencies = [
- "serde",
- "serde_json",
- "snafu",
- "stackable-operator 0.9.0",
- "strum",
- "strum_macros",
-]
-
-[[package]]
 name = "strsim"
 version = "0.10.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1777,18 +1702,6 @@ dependencies = [
  "quote",
  "rustversion",
  "syn",
-]
-
-[[package]]
-name = "superset-operator-integration-tests"
-version = "0.1.0"
-dependencies = [
- "anyhow",
- "indoc",
- "integration-test-commons",
- "reqwest",
- "serde_yaml",
- "stackable-superset-crd",
 ]
 
 [[package]]
