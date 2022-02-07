@@ -10,7 +10,7 @@ metadata:
   name: derby-druid
 spec:
   version: 0.22.0
-  zookeeperCluster: druid-zk
+  zookeeperConfigMapName: druid-zk
   metadataStorageDatabase:
     dbType: derby
     connString: jdbc:derby://localhost:1527/var/druid/metadata.db;create=true
