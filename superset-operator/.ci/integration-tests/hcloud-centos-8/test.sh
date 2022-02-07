@@ -16,7 +16,6 @@ while [ "$(kubectl get pod superset-postgresql-0 --output=jsonpath='{.status.con
 done
 echo Postgresql database started.
 echo
-sleep 30
 
 # Execute tests
 git clone -b $GIT_BRANCH https://github.com/stackabletech/integration-tests.git
