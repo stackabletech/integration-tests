@@ -4,14 +4,10 @@
 
 This repository bundles integration tests for the [Stackable Operator](https://github.com/stackabletech/kafka-operator) for Apache Kafka. 
 
-## Requirements
+## Run tests
 
-- The tests require at least 3 nodes to be available
+The integration tests are based on [KUTTL](https://kuttl.dev).
 
-## Content
-
-Currently, the integration tests cover the following cases:
-
-- **Create** a Kafka cluster and check if it is running correctly.
-- **Scale** a Kafka cluster up (e.g., from 1 to 3 nodes) and down (e.g., from 3 to 1 nodes) and check if it is running correctly.
-- **Monitor** a Kafka cluster via a prometheus endpoint. Check if JMX Explorer port is opened correctly and if required container_ports are set.
+    ./create_test_cluster.py --kind kind --operator kafka --debug
+    cd kafka-operator
+    kubectl kuttl test
