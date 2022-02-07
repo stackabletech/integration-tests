@@ -16,4 +16,3 @@ metadata:
 spec:
   clusterRef:
     name: test-zk
-    namespace: my-test
