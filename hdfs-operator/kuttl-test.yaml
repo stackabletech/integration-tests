@@ -5,5 +5,5 @@ testDirs:
 startKIND: false
 #parallel: 1
 #skipDelete: true
-#namespace: default
-suppress: ["events"]
+namespace: default
+#suppress: ["events"]
