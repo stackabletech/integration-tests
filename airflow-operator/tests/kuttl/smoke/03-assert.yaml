@@ -1,14 +1,13 @@
----
 apiVersion: kuttl.dev/v1beta1
 kind: TestAssert
 metadata:
-  name: test-airflow-python
+  name: test-airflow-cluster
 timeout: 120
 ---
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
-  name: test-airflow-python
+  name: airflow-scheduler-default
 status:
   readyReplicas: 1
   replicas: 1

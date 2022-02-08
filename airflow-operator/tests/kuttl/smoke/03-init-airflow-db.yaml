@@ -1,0 +1,14 @@
+apiVersion: kuttl.dev/v1beta1
+kind: TestStep
+metadata:
+  name: install-airflow-db
+timeout: 300
+---
+apiVersion: command.airflow.stackable.tech/v1alpha1
+kind: Init
+metadata:
+  name: airflow-cluster-command-init
+spec:
+  clusterRef:
+    name: airflow
+  credentialsSecret: test-airflow-credentials

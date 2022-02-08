@@ -9,7 +9,6 @@ if __name__ == "__main__":
     logging.basicConfig(level=log_level, format='%(asctime)s %(levelname)s: %(message)s', stream=sys.stdout)
 
     http_code = requests.get("http://airflow-webserver-default:8080/api/v1/health").status_code
-    print(f"Test returned code: [{http_code}]")
 
     if http_code != 200:
         result = 1

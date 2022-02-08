@@ -19,11 +19,3 @@ metadata:
 status:
   readyReplicas: 2
   replicas: 2
----
-apiVersion: apps/v1
-kind: StatefulSet
-metadata:
-  name: airflow-scheduler-default
-status:
-  readyReplicas: 1
-  replicas: 1
