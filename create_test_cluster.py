@@ -71,7 +71,7 @@ def check_args() -> Namespace:
     description="This tool can be used to install the Stackable Kubernetes Operators into a Kubernetes cluster using Helm. "
                 "It can optionally also create a kind cluster."
   )
-  parser.add_argument('--operator', '-o', help='A list of Stackable operators to install. Operators can be specified in the form \"name[=version]\"', required=False, nargs='+')
+  parser.add_argument('--operator', '-o', help='A list of Stackable operators to install. Operators can be specified in the form \"name[=version]\"', required=True, nargs='+')
   parser.add_argument('--provision', '-p', required=False, help='A folder with resources or a single file to be deployed after the cluster has been created.')
   parser.add_argument('--kind', '-k', required=False, nargs='?', default=False, const=DEFAULT_KIND_CLUSTER_NAME, metavar="CLUSTER NAME",
                       help="When provided we'll automatically create a 4 node kind cluster. "
