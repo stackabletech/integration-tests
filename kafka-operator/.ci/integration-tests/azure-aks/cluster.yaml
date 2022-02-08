@@ -10,4 +10,5 @@ publicKeys: []
 spec:
   versions:
     kafka-operator: "$KAFKA_OPERATOR_VERSION"
+    zookeeper-operator: "0.9.0-pr406"
   node_count: 3
