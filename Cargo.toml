@@ -3,7 +3,5 @@
 members = [
     "airflow-operator",
     "commons",
-    #"druid-operator",
     # "monitoring-operator",
-    "superset-operator",
 ]
