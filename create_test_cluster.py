@@ -11,7 +11,7 @@ import subprocess
 import time
 from argparse import Namespace
 
-VALID_OPERATORS = ["airflow", "druid", "hbase", "hdfs", "hive", "kafka", "nifi", "opa", "spark", "superset", "trino", "zookeeper"]
+VALID_OPERATORS = ["airflow", "druid", "hbase", "hdfs", "hive", "kafka", "nifi", "opa", "secret", "spark", "superset", "trino", "zookeeper"]
 
 DEFAULT_KIND_CLUSTER_NAME = "integration-tests"
 
@@ -220,6 +220,7 @@ def install_dependencies_kafka():
 def install_dependencies_nifi():
   logging.info("Installing dependencies for NiFi")
   install_stackable_operator("zookeeper")
+  install_stackable_operator("secret")
 
 
 def install_dependencies_opa():
@@ -256,6 +257,7 @@ def install_dependencies_trino():
   install_stackable_operator("regorule")
   install_stackable_operator("opa")
   install_stackable_operator("hive")
+  install_stackable_operator("secret")
 
   helper_add_helm_repo("minio", "https://operator.min.io")
   release = helper_find_helm_release("minio-operator", "minio-operator")

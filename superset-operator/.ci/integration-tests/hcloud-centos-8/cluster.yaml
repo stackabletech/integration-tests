@@ -3,8 +3,8 @@ apiVersion: t2.stackable.tech/v1
 kind: Infra
 template: hcloud-centos-8
 metadata: 
-  name: druid-operator-integration-tests
-  description: "Cluster for Druid Operator Integration Tests (Hetzner Cloud / CentOS 8)"
+  name: superset-operator-integration-tests
+  description: "Cluster for Superset Operator Integration Tests (Hetzner Cloud / CentOS 8)"
 domain: stackable.test
 publicKeys: []
 spec:
@@ -12,7 +12,7 @@ spec:
   k8sVersion: "$K8S_VERSION"
   wireguard: false
   versions:
-    druid-operator: "$DRUID_OPERATOR_VERSION"
+    superset-operator: "$SUPERSET_OPERATOR_VERSION"
   nodes:
     main:
       numberOfNodes: 3
