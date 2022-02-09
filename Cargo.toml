@@ -1,6 +1,0 @@
-[workspace]
-
-members = [
-    "commons",
-    # "monitoring-operator",
-]

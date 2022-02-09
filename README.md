@@ -46,12 +46,6 @@ Example
 
 IMPORTANT: The script might ask you to set environment variables that are needed for the integration tests!
 
-## Run tests
-
-It is recommended to run the tests in the same shell the was used to create the Kind cluster. This is to ensure that any required environment variables are available to the test process.
-
-    cargo test --package trino-operator-integration-tests -- --nocapture --test-threads=1
-
 ## Run KUTTL tests
 
 Currently, some integration tests are adapted to utilize [KUTTL](https://kuttl.dev) instead if Rust. Install KUTTL first as described [here](https://kuttl.dev/docs/cli.html#setup-the-kuttl-kubectl-plugin).
@@ -59,10 +53,6 @@ You can run KUTTL tests (if there is a folder named `tests/kuttl`) via:
 
     cd <operator>
     kubectl kuttl test
-
-## Build commons
-
-    cargo build --package integration-test-commons
 
 ## Tips and tricks
 
