@@ -1,0 +1,18 @@
+apiVersion: zookeeper.stackable.tech/v1alpha1
+kind: ZookeeperCluster
+metadata:
+  name: test-zk
+spec:
+  servers:
+    roleGroups:
+      default:
+        replicas: 1
+  version: 3.5.8
+---
+apiVersion: zookeeper.stackable.tech/v1alpha1
+kind: ZookeeperZnode
+metadata:
+  name: test-znode
+spec:
+  clusterRef:
+    name: test-zk
