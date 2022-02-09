@@ -1,7 +1,0 @@
-[workspace]
-
-members = [
-    "airflow-operator",
-    "commons",
-    # "monitoring-operator",
-]

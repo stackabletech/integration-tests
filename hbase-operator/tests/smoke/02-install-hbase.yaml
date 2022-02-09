@@ -1,0 +1,24 @@
+apiVersion: hbase.stackable.tech/v1alpha1
+kind: HbaseCluster
+metadata:
+  name: test-hbase
+spec:
+  version: 2.4.6
+  config:
+    hdfsConfigMapName: test-hdfs-namenode-default
+    zookeeperConfigMapName: test-znode
+    hbaseManagesZk: false
+    hbaseClusterDistributed: true
+    hbaseRootdir: hdfs://test-hdfs/hbase
+  masters:
+    roleGroups:
+      default:
+        replicas: 1
+  regionServers:
+    roleGroups:
+      default:
+        replicas: 1
+  restServers:
+    roleGroups:
+      default:
+        replicas: 1
