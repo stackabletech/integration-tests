@@ -6,11 +6,17 @@ This repository bundles integration tests for the [Stackable Operator](https://g
 
 ## Requirements
 
-The simplest way to set-up a cluster and the necessary dependencies is to use the 
-`create_test_cluster.py` script in the root directory:
+A running cluster is required - e.g. a kind cluster can be set up like this:
 
-    ./create_test_cluster.py --debug --kind --operator airflow
+    kind create cluster
 
 ## Running
 
-Once the requirements are met, a simple `cargo test` can be issued to run the tests.
+The integration tests are based on [KUTTL](https://kuttl.dev) and be run with this command:
+
+    ./create_test_cluster.py --kind --operator airflow --debug
+    cd airflow-operator
+    kubectl kuttl test
+
+N.B. this will install any dependencies defined in the `./create_test_cluster.py` script for the airflow operator, but is necessary to ensure the operator is rolled out.
+The tests will run in their own namespace so that any dependencies installed in the scope of the tests will not interfere with existing dependencies.
