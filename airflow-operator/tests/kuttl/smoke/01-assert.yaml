@@ -2,7 +2,7 @@ apiVersion: kuttl.dev/v1beta1
 kind: TestAssert
 metadata:
   name: test-airflow-redis
-timeout: 240
+timeout: 480
 ---
 apiVersion: apps/v1
 kind: StatefulSet

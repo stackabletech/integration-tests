@@ -3,7 +3,7 @@ apiVersion: kuttl.dev/v1beta1
 kind: TestAssert
 metadata:
   name: test-airflow-python
-timeout: 120
+timeout: 240
 ---
 apiVersion: apps/v1
 kind: StatefulSet
