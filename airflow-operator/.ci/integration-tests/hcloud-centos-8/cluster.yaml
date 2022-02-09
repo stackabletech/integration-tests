@@ -1,0 +1,18 @@
+---
+apiVersion: t2.stackable.tech/v1
+kind: Infra
+template: hcloud-centos-8
+metadata: 
+  name: airflow-ionos-centos-8
+  description: "Cluster for Airflow Operator Integration Tests (Hetzner Cloud / CentOS 8)"
+domain: stackable.demo
+publicKeys: []
+spec:
+  location: "hel1"
+  k8sVersion: "$K8S_VERSION"
+  wireguard: false
+  versions:
+    airflow-operator: "$AIRFLOW_OPERATOR_VERSION"
+  nodes:
+    main:
+      numberOfNodes: 3
