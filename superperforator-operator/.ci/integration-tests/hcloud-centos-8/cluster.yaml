@@ -3,8 +3,8 @@ apiVersion: t2.stackable.tech/v1
 kind: Infra
 template: hcloud-centos-8
 metadata: 
-  name: zookeper-operator-integration-tests
-  description: "Cluster for Zookeeper Operator Integration Tests (Hetzner Cloud / CentOS 8)"
+  name: superperforator-operator-integration-tests
+  description: "Cluster for Superperforator Operator Integration Tests (Hetzner Cloud / CentOS 8)"
 domain: stackable.test
 publicKeys: []
 spec:
@@ -12,7 +12,7 @@ spec:
   k8sVersion: "$K8S_VERSION"
   wireguard: false
   versions:
-    zookeeper-operator: "$OPERATOR_UNDER_TEST_VERSION"
+    superperforator-operator: "$OPERATOR_UNDER_TEST_VERSION"
   nodes:
     main:
       numberOfNodes: 3
