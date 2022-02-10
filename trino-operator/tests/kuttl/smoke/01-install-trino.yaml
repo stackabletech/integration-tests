@@ -19,7 +19,7 @@ metadata:
 spec:
   version: "0.0.362"
   nodeEnvironment: production
-  hive: test-hive-derby
+  hiveConfigMapName: test-hive-derby
   authentication:
     method:
       multiUser:
