@@ -17,6 +17,6 @@ spec:
     spec:
       containers:
         - name: trino-test-helper
-          image: python:3.10-bullseye
+          image: python:3.10-slim
           stdin: true
           tty: true
