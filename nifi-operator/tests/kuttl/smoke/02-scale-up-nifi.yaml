@@ -5,9 +5,7 @@ metadata:
   name: test-nifi
 spec:
   version: "1.15.0"
-  zookeeperReference:
-    name: test-zk
-    chroot: /nifiytest
+  zookeeperConfigMapName: test-nifi-znode
   authenticationConfig:
     method:
       SingleUser:
