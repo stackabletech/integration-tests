@@ -1,3 +1,4 @@
+---
 apiVersion: zookeeper.stackable.tech/v1alpha1
 kind: ZookeeperCluster
 metadata:
@@ -11,3 +12,11 @@ spec:
           myidOffset: 10
   version: 3.5.8
   stopped: false
+---
+apiVersion: zookeeper.stackable.tech/v1alpha1
+kind: ZookeeperZnode
+metadata:
+  name: test-nifi-znode
+spec:
+  clusterRef:
+    name: test-zk
