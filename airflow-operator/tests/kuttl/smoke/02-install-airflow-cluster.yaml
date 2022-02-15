@@ -26,8 +26,9 @@ metadata:
   name: airflow
 spec:
   version: 2.2.3-python3.8
+  statsdExporterVersion: v0.22.4
   executor: CeleryExecutor
-  loadExamples: false
+  loadExamples: true
   exposeConfig: false
   webservers:
     roleGroups:
