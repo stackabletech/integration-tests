@@ -21,6 +21,9 @@ HELM_TEST_REPO_NAME = "stackable-test"
 HELM_TEST_REPO_URL = "https://repo.stackable.tech/repository/helm-test"
 HELM_STABLE_REPO_NAME = "stackable"
 HELM_STABLE_REPO_URL = "https://repo.stackable.tech/repository/helm-stable"
+HELM_PROMETHEUS_REPO_NAME = "prometheus-community"
+HELM_PROMETHEUS_REPO_URL = "https://prometheus-community.github.io/helm-charts"
+HELM_PROMETHEUS_CHART_NAME = "kube-prometheus-stack"
 
 
 KIND_CLUSTER_DEFINITION = """
@@ -65,6 +68,22 @@ spec:
       targetPort: 9000
 """
 
+PROMETHEUS_SCRAPE_SERVICE = """
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: scrape-label
+  labels:
+    release: prometheus-operator
+spec:
+  endpoints:
+  - port: metrics
+  jobLabel: app.kubernetes.io/instance
+  selector:
+    matchLabels:
+      prometheus.io/scrape: "true"
+"""
+
 
 def check_args() -> Namespace:
   parser = argparse.ArgumentParser(
@@ -79,6 +98,7 @@ def check_args() -> Namespace:
                            "Otherwise the provided name will be used",
                       )
   parser.add_argument('--debug', '-d', action='store_true', required=False, help="Will print additional debug statements (e.g. output from all run commands)")
+  parser.add_argument('--prometheus', '-m', action='store_true', required=False, help="Will install the Prometheus operator for scraping metrics.")
   args = parser.parse_args()
 
   log_level = 'DEBUG' if args.debug else 'INFO'
@@ -141,6 +161,22 @@ def install_stackable_operator(name: str, version: str = None):
   else:
     args = ["--devel"]
     helper_install_helm_release(operator_name, operator_name, HELM_DEV_REPO_NAME, HELM_DEV_REPO_URL, args)
+
+
+def install_prometheus():
+  """This installs the Prometheus Operator in Helm
+
+  It makes sure that the proper repository is installed and deploys a generic ServiceMonitor service
+  """
+  helper_add_helm_repo(HELM_PROMETHEUS_REPO_NAME, HELM_PROMETHEUS_REPO_URL)
+  release = helper_find_helm_release(HELM_PROMETHEUS_REPO_NAME, HELM_PROMETHEUS_CHART_NAME)
+
+  if release:
+    logging.info(f"Prometheus Operator already running release with name [{release['name']}] and chart [{release['chart']}] - skipping installation")
+    return
+
+  helper_install_helm_release("prometheus-operator", HELM_PROMETHEUS_CHART_NAME, HELM_PROMETHEUS_REPO_NAME, HELM_PROMETHEUS_REPO_URL)
+  helper_execute(['kubectl', 'apply', '-f', '-'], PROMETHEUS_SCRAPE_SERVICE)
 
 
 def helper_check_docker_running():
@@ -319,7 +355,8 @@ def helper_install_helm_release(name: str, chart_name: str, repo_name: str = Non
   logging.debug(f"No Helm release with the name {name} found")
   logging.info(f"Installing Helm release [{name}] from chart [{chart_name}] now")
   args = ['helm', 'install', name, f"{repo_name}/{chart_name}"]
-  args = args + install_args
+  if install_args:
+    args = args + install_args
   helper_execute(args)
   logging.info("Helm release was installed successfully")
 
@@ -394,7 +431,9 @@ def main() -> int:
   if args.provision:
     helper_execute(['kubectl', 'apply', '-f', args.provision])
     logging.info(f"Successfully applied resources from [{args.provision}]")
-
+  # install prometheus
+  if args.prometheus:
+    install_prometheus()
   return 0
 
 if __name__ == '__main__':
