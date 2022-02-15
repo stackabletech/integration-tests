@@ -27,6 +27,7 @@ If this happens please add a (any) repository to Helm manually (this can be dele
 To be more precise: Helm needs to find a valid `repositories.yaml` file in its config directory. 
 
     ./create_test_cluster.py --debug --kind --operator <operator>
+
 ## Set up a test kind-cluster
 
 The `create_test_cluster.py` utility script will set up a test kind cluster (if requested with the `--kind` parameter) and install dependencies required for running the integration tests.
@@ -45,6 +46,14 @@ Example
     ./create_test_cluster.py --kind --operator trino superset=0.3.0
 
 IMPORTANT: The script might ask you to set environment variables that are needed for the integration tests!
+
+## Set up a test kind-cluster with monitoring
+
+This will install the [Prometheus Operator](https://prometheus-operator.dev) and a general ServiceMonitor to scrape metrics as described [here](https://docs.stackable.tech/home/monitoring.html). 
+
+Example
+
+    ./create_test_cluster.py --debug --kind --prometheus --operator trino
 
 ## Run KUTTL tests
 
