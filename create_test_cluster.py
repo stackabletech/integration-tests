@@ -98,7 +98,7 @@ def check_args() -> Namespace:
                            "Otherwise the provided name will be used",
                       )
   parser.add_argument('--debug', '-d', action='store_true', required=False, help="Will print additional debug statements (e.g. output from all run commands)")
-  parser.add_argument('--prometheus', '-prom', action='store_true', required=False, help="Will install the Prometheus operator for scraping metrics.")
+  parser.add_argument('--prometheus', '-m', action='store_true', required=False, help="Will install the Prometheus operator for scraping metrics.")
   args = parser.parse_args()
 
   log_level = 'DEBUG' if args.debug else 'INFO'
