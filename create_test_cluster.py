@@ -82,6 +82,8 @@ spec:
   selector:
     matchLabels:
       prometheus.io/scrape: "true"
+  namespaceSelector:
+    any: true      
 """
 
 
