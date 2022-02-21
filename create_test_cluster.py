@@ -5,6 +5,7 @@ import importlib.util
 import json
 import logging
 import re
+import requests
 import shutil
 import sys
 import subprocess
@@ -25,6 +26,23 @@ HELM_PROMETHEUS_REPO_NAME = "prometheus-community"
 HELM_PROMETHEUS_REPO_URL = "https://prometheus-community.github.io/helm-charts"
 HELM_PROMETHEUS_CHART_NAME = "kube-prometheus-stack"
 
+# replacement for switch/match case
+OPERATOR_TO_EXAMPLE_REPO = {
+  "airflow": "https://raw.githubusercontent.com/stackabletech/airflow-operator/blob/main/examples/simple-airflow-cluster.yaml",
+  "druid": "https://raw.githubusercontent.com/stackabletech/druid-operator/blob/main/examples/simple-druid-cluster.yaml",
+  "hbase": "https://raw.githubusercontent.com/stackabletech/hbase-operator/blob/main/examples/simple-hbase-cluster.yaml",
+  "hdfs": "https://raw.githubusercontent.com/stackabletech/hdfs-operator/blob/main/examples/simple-hdfs-cluster.yaml",
+  "hive": "https://raw.githubusercontent.com/stackabletech/hive-operator/blob/main/examples/simple-hive-cluster.yaml",
+  "kafka": "https://raw.githubusercontent.com/stackabletech/kafka-operator/main/examples/simple-kafka-cluster.yaml",
+  "nifi": "https://raw.githubusercontent.com/stackabletech/nifi-operator/blob/main/examples/simple-nifi-cluster.yaml",
+  "opa": "https://raw.githubusercontent.com/stackabletech/opa-operator/main/examples/simple-opa-cluster.yaml",
+  # we do not need to provide the secret examples
+  "secret": None,
+  "spark": "https://raw.githubusercontent.com/stackabletech/spark-operator/blob/main/examples/simple-spark-cluster.yaml",
+  "superset": "https://raw.githubusercontent.com/stackabletech/superset-operator/blob/main/examples/simple-superset-cluster.yaml",
+  "trino": "https://raw.githubusercontent.com/stackabletech/trino-operator/blob/main/examples/simple-trino-cluster.yaml",
+  "zookeeper": "https://raw.githubusercontent.com/stackabletech/zookeeper-operator/blob/main/examples/simple-zookeeper-cluster.yaml",
+}
 
 KIND_CLUSTER_DEFINITION = """
 kind: Cluster
@@ -101,6 +119,7 @@ def check_args() -> Namespace:
                       )
   parser.add_argument('--debug', '-d', action='store_true', required=False, help="Will print additional debug statements (e.g. output from all run commands)")
   parser.add_argument('--prometheus', '-m', action='store_true', required=False, help="Will install the Prometheus operator for scraping metrics.")
+  parser.add_argument('--example', '-e', help="A list of Stackable operators that should be installed with the respective 'simple' examples provided in the operator 'examples' directory.", required=False, nargs='+')
   args = parser.parse_args()
 
   log_level = 'DEBUG' if args.debug else 'INFO'
@@ -179,6 +198,20 @@ def install_prometheus():
 
   helper_install_helm_release("prometheus-operator", HELM_PROMETHEUS_CHART_NAME, HELM_PROMETHEUS_REPO_NAME, HELM_PROMETHEUS_REPO_URL)
   helper_execute(['kubectl', 'apply', '-f', '-'], PROMETHEUS_SCRAPE_SERVICE)
+
+
+def install_example(examples: set):
+  for operator in examples:
+    example_url = OPERATOR_TO_EXAMPLE_REPO[operator]
+    if example_url:
+      example_file_name = "/tmp/simple-" + operator + "-cluster.yaml"
+      r = requests.get(example_url, allow_redirects=True)
+      if r.status_code == 404:
+        logging.info(f"Not Found 404 - failed  to download example for [{operator}]. Skipping: {example_url}")
+      else:
+        open(example_file_name, "wb").write(r.content)
+        helper_execute(['kubectl', 'apply', '-f', example_file_name])
+        helper_execute(['rm', example_file_name])
 
 
 def helper_check_docker_running():
@@ -433,7 +466,11 @@ def main() -> int:
   if args.provision:
     helper_execute(['kubectl', 'apply', '-f', args.provision])
     logging.info(f"Successfully applied resources from [{args.provision}]")
-  # install prometheus
+  if args.example:
+    uninstallable_examples = set(args.example) - set(args.operator)
+    logging.info(f"Unable to apply an example for an operator that was not specified via '--operator'. Skipping examples: " + str(uninstallable_examples))
+    installable_examples = set(args.operator) & set(args.example)
+    install_example(installable_examples)
   if args.prometheus:
     install_prometheus()
   return 0
