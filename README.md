@@ -55,6 +55,18 @@ Example
 
     ./create_test_cluster.py --debug --kind --prometheus --operator trino
 
+## Set up a test kind-cluster with cluster examples deployed
+
+This will install the `simple-<operator>-cluster.yaml` files in the `example` folder of the specified operators.
+
+Example to create trino, hive and opa operator and deploy **all** the `simple` examples in each operator's example folder.
+
+    ./create_test_cluster.py --debug --kind --operator trino hive opa --examples
+
+Example to create trino, hive and opa operator and deploy **only** the `simple` example in the opa operator.
+
+    ./create_test_cluster.py --debug --kind --operator trino hive opa --examples opa
+
 ## Run KUTTL tests
 
 Currently, some integration tests are adapted to utilize [KUTTL](https://kuttl.dev) instead if Rust. Install KUTTL first as described [here](https://kuttl.dev/docs/cli.html#setup-the-kuttl-kubectl-plugin).
