@@ -9,7 +9,7 @@ kind: KafkaCluster
 metadata:
   name: simple-kafka
 spec:
-  version: 3.1.0
+  version: {{ .Variables.kafkaVersion }}
   zookeeperConfigMapName: kafka-zk
   brokers:
     roleGroups:

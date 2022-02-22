@@ -4,3 +4,6 @@ testDirs:
 - ./tests/kuttl
 startKIND: false
 suppress: ["events"]
+variableSets:
+  - kafkaVersion: 3.1.0
+  - kafkaVersion: 2.8.1
