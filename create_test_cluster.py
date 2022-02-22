@@ -203,18 +203,19 @@ def install_prometheus():
   helper_execute(['kubectl', 'apply', '-f', '-'], PROMETHEUS_SCRAPE_SERVICE)
 
 
-def install_example(examples: set):
+def install_examples(examples: set):
   for operator in examples:
     example_url = OPERATOR_TO_EXAMPLE_REPO[operator]
     if example_url:
       example_file_name = "/tmp/simple-" + operator + "-cluster.yaml"
       r = requests.get(example_url, allow_redirects=True)
       if r.status_code == 404:
-        logging.info(f"Not Found 404 - failed  to download example for [{operator}]. Skipping: {example_url}")
+        logging.info(f"Not Found 404 - failed to download example for [{operator}]. Skipping: {example_url}")
       else:
         open(example_file_name, "wb").write(r.content)
         helper_execute(['kubectl', 'apply', '-f', example_file_name])
         helper_execute(['rm', example_file_name])
+        logging.info(f"Successfully applied example from [{example_url}]")
 
 
 def helper_check_docker_running():
@@ -480,7 +481,7 @@ def main() -> int:
     if len(args.example) > 0:
       installable_examples &= set(args.example)
 
-    install_example(installable_examples)
+    install_examples(installable_examples)
   if args.prometheus:
     install_prometheus()
   return 0
