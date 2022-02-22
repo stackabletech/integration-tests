@@ -61,11 +61,11 @@ This will install the `simple-<operator>-cluster.yaml` files in the `example` fo
 
 Example to create trino, hive and opa operator and deploy **all** the `simple` examples in each operator's example folder.
 
-    ./create_test_cluster.py --debug --kind --operator trino hive opa --examples
+    ./create_test_cluster.py --debug --kind --operator trino hive opa --example
 
 Example to create trino, hive and opa operator and deploy **only** the `simple` example in the opa operator.
 
-    ./create_test_cluster.py --debug --kind --operator trino hive opa --examples opa
+    ./create_test_cluster.py --debug --kind --operator trino hive opa --example opa
 
 ## Run KUTTL tests
 
