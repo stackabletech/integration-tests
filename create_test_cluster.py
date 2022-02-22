@@ -28,20 +28,20 @@ HELM_PROMETHEUS_CHART_NAME = "kube-prometheus-stack"
 
 # replacement for switch/match case
 OPERATOR_TO_EXAMPLE_REPO = {
-  "airflow": "https://raw.githubusercontent.com/stackabletech/airflow-operator/blob/main/examples/simple-airflow-cluster.yaml",
-  "druid": "https://raw.githubusercontent.com/stackabletech/druid-operator/blob/main/examples/simple-druid-cluster.yaml",
-  "hbase": "https://raw.githubusercontent.com/stackabletech/hbase-operator/blob/main/examples/simple-hbase-cluster.yaml",
-  "hdfs": "https://raw.githubusercontent.com/stackabletech/hdfs-operator/blob/main/examples/simple-hdfs-cluster.yaml",
-  "hive": "https://raw.githubusercontent.com/stackabletech/hive-operator/blob/main/examples/simple-hive-cluster.yaml",
+  "airflow": "https://raw.githubusercontent.com/stackabletech/airflow-operator/main/examples/simple-airflow-cluster.yaml",
+  "druid": "https://raw.githubusercontent.com/stackabletech/druid-operator/main/examples/simple-druid-cluster.yaml",
+  "hbase": "https://raw.githubusercontent.com/stackabletech/hbase-operator/main/examples/simple-hbase-cluster.yaml",
+  "hdfs": "https://raw.githubusercontent.com/stackabletech/hdfs-operator/main/examples/simple-hdfs-cluster.yaml",
+  "hive": "https://raw.githubusercontent.com/stackabletech/hive-operator/main/examples/simple-hive-cluster.yaml",
   "kafka": "https://raw.githubusercontent.com/stackabletech/kafka-operator/main/examples/simple-kafka-cluster.yaml",
-  "nifi": "https://raw.githubusercontent.com/stackabletech/nifi-operator/blob/main/examples/simple-nifi-cluster.yaml",
+  "nifi": "https://raw.githubusercontent.com/stackabletech/nifi-operator/main/examples/simple-nifi-cluster.yaml",
   "opa": "https://raw.githubusercontent.com/stackabletech/opa-operator/main/examples/simple-opa-cluster.yaml",
   # we do not need to provide the secret examples
   "secret": None,
-  "spark": "https://raw.githubusercontent.com/stackabletech/spark-operator/blob/main/examples/simple-spark-cluster.yaml",
-  "superset": "https://raw.githubusercontent.com/stackabletech/superset-operator/blob/main/examples/simple-superset-cluster.yaml",
-  "trino": "https://raw.githubusercontent.com/stackabletech/trino-operator/blob/main/examples/simple-trino-cluster.yaml",
-  "zookeeper": "https://raw.githubusercontent.com/stackabletech/zookeeper-operator/blob/main/examples/simple-zookeeper-cluster.yaml",
+  "spark": "https://raw.githubusercontent.com/stackabletech/spark-operator/main/examples/simple-spark-cluster.yaml",
+  "superset": "https://raw.githubusercontent.com/stackabletech/superset-operator/main/examples/simple-superset-cluster.yaml",
+  "trino": "https://raw.githubusercontent.com/stackabletech/trino-operator/main/examples/simple-trino-cluster.yaml",
+  "zookeeper": "https://raw.githubusercontent.com/stackabletech/zookeeper-operator/main/examples/simple-zookeeper-cluster.yaml",
 }
 
 KIND_CLUSTER_DEFINITION = """
@@ -110,7 +110,8 @@ def check_args() -> Namespace:
     description="This tool can be used to install the Stackable Kubernetes Operators into a Kubernetes cluster using Helm. "
                 "It can optionally also create a kind cluster."
   )
-  parser.add_argument('--operator', '-o', help='A list of Stackable operators to install. Operators can be specified in the form \"name[=version]\"', required=True, nargs='+')
+  parser.add_argument('--operator', '-o', required=True, nargs='+', choices=VALID_OPERATORS,
+                      help='A list of Stackable operators to install. Operators can be specified in the form \"name[=version]\"', )
   parser.add_argument('--provision', '-p', required=False, help='A folder with resources or a single file to be deployed after the cluster has been created.')
   parser.add_argument('--kind', '-k', required=False, nargs='?', default=False, const=DEFAULT_KIND_CLUSTER_NAME, metavar="CLUSTER NAME",
                       help="When provided we'll automatically create a 4 node kind cluster. "
@@ -119,7 +120,9 @@ def check_args() -> Namespace:
                       )
   parser.add_argument('--debug', '-d', action='store_true', required=False, help="Will print additional debug statements (e.g. output from all run commands)")
   parser.add_argument('--prometheus', '-m', action='store_true', required=False, help="Will install the Prometheus operator for scraping metrics.")
-  parser.add_argument('--example', '-e', help="A list of Stackable operators that should be installed with the respective 'simple' examples provided in the operator 'examples' directory.", required=False, nargs='+')
+  parser.add_argument('--example', '-e', required=False, nargs='*', choices=VALID_OPERATORS,
+                      help="A list of Stackable operators that should be installed with the respective 'simple' examples provided in the operator 'examples' directory."
+                           "If no examples are specified, all provided operators will be installed with examples.")
   args = parser.parse_args()
 
   log_level = 'DEBUG' if args.debug else 'INFO'
@@ -466,14 +469,22 @@ def main() -> int:
   if args.provision:
     helper_execute(['kubectl', 'apply', '-f', args.provision])
     logging.info(f"Successfully applied resources from [{args.provision}]")
-  if args.example:
+  # if only "--examples" provided this is an empty list -> we want to process
+  # if "--examples" is omitted "args.example" is None -> we do not want to process
+  if args.example != None:
     uninstallable_examples = set(args.example) - set(args.operator)
-    logging.info(f"Unable to apply an example for an operator that was not specified via '--operator'. Skipping examples: " + str(uninstallable_examples))
-    installable_examples = set(args.operator) & set(args.example)
+    if uninstallable_examples:
+      logging.info(f"Unable to apply an example for an operator that was not specified via '--operator'. Skipping examples: {uninstallable_examples}")
+
+    installable_examples = set(args.operator)
+    if len(args.example) > 0:
+      installable_examples &= set(args.example)
+
     install_example(installable_examples)
   if args.prometheus:
     install_prometheus()
   return 0
+
 
 if __name__ == '__main__':
   sys.exit(main())
