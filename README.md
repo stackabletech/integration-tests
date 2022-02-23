@@ -63,7 +63,7 @@ This will start the Trino, Hive and OPA operators and deploy **all** the `simple
 
     ./create_test_cluster.py --debug --kind --operator trino hive opa --example
 
-Example to create trino, hive and opa operator and deploy **only** the `simple` example in the opa operator.
+This will start the Trino, Hive and OPA operators but **only** deploy the `simple` example from the OPA operator.
 
     ./create_test_cluster.py --debug --kind --operator trino hive opa --example opa
 
