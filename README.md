@@ -59,7 +59,7 @@ Example
 
 This will install the `simple-<operator>-cluster.yaml` files in the `examples` folder of the specified operators.
 
-Example to create trino, hive and opa operator and deploy **all** the `simple` examples in each operator's example folder.
+This will start the Trino, Hive and OPA operators and deploy **all** the `simple` examples in each operator's `examples` folder:
 
     ./create_test_cluster.py --debug --kind --operator trino hive opa --example
 
