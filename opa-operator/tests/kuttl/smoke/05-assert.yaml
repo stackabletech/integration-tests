@@ -1,0 +1,6 @@
+apiVersion: kuttl.dev/v1beta1
+kind: TestAssert
+metadata:
+  name: install-opa-with-bundle-builder
+commands:
+  - script: kubectl -n $NAMESPACE rollout status daemonset opa-with-bundle-builder-server-default --timeout 300s
