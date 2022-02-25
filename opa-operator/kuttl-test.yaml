@@ -5,5 +5,3 @@ testDirs:
 startKIND: false
 parallel: 1
 timeout: 120
-namespace: "default"
-
