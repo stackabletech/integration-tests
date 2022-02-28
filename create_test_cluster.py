@@ -120,9 +120,7 @@ def check_args() -> Namespace:
                       )
   parser.add_argument('--debug', '-d', action='store_true', required=False, help="Will print additional debug statements (e.g. output from all run commands)")
   parser.add_argument('--prometheus', '-m', action='store_true', required=False, help="Will install the Prometheus operator for scraping metrics.")
-  parser.add_argument('--example', '-e', required=False, nargs='*', choices=VALID_OPERATORS,
-                      help="A list of Stackable operators that should be installed with the respective 'simple' examples provided in the operator 'examples' directory."
-                           "If no examples are specified, all provided operators will be installed with examples.")
+  parser.add_argument('--example', '-e', action='store_true', required=False, help="Will install the 'simple' examples for the operators specified via '--operator' or '-o'")
   args = parser.parse_args()
 
   log_level = 'DEBUG' if args.debug else 'INFO'
@@ -203,19 +201,19 @@ def install_prometheus():
   helper_execute(['kubectl', 'apply', '-f', '-'], PROMETHEUS_SCRAPE_SERVICE)
 
 
-def install_examples(examples: set):
+def install_examples(examples: list):
   for operator in examples:
     example_url = OPERATOR_TO_EXAMPLE_REPO[operator]
     if example_url:
       example_file_name = "/tmp/simple-" + operator + "-cluster.yaml"
       r = requests.get(example_url, allow_redirects=True)
-      if r.status_code == 404:
-        logging.info(f"Not Found 404 - failed to download example for [{operator}]. Skipping: {example_url}")
-      else:
+      if r.status_code == 200:
         open(example_file_name, "wb").write(r.content)
         helper_execute(['kubectl', 'apply', '-f', example_file_name])
         helper_execute(['rm', example_file_name])
         logging.info(f"Successfully applied example from [{example_url}]")
+      else:
+        logging.info(f"Error {r.status_code}: {r.reason}")
 
 
 def helper_check_docker_running():
@@ -467,18 +465,8 @@ def main() -> int:
   if args.provision:
     helper_execute(['kubectl', 'apply', '-f', args.provision])
     logging.info(f"Successfully applied resources from [{args.provision}]")
-  # if only "--examples" provided this is an empty list -> we want to process
-  # if "--examples" is omitted "args.example" is None -> we do not want to process
-  if args.example != None:
-    uninstallable_examples = set(args.example) - set(args.operator)
-    if uninstallable_examples:
-      logging.info(f"Unable to apply an example for an operator that was not specified via '--operator'. Skipping examples: {uninstallable_examples}")
-
-    installable_examples = set(args.operator)
-    if len(args.example) > 0:
-      installable_examples &= set(args.example)
-
-    install_examples(installable_examples)
+  if args.example:
+    install_examples(args.operator)
   if args.prometheus:
     install_prometheus()
   return 0
