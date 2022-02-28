@@ -201,19 +201,20 @@ def install_prometheus():
   helper_execute(['kubectl', 'apply', '-f', '-'], PROMETHEUS_SCRAPE_SERVICE)
 
 
-def install_examples(examples: list):
-  for operator in examples:
-    example_url = OPERATOR_TO_EXAMPLE_REPO[operator]
-    if example_url:
-      example_file_name = "/tmp/simple-" + operator + "-cluster.yaml"
-      r = requests.get(example_url, allow_redirects=True)
-      if r.status_code == 200:
-        open(example_file_name, "wb").write(r.content)
-        helper_execute(['kubectl', 'apply', '-f', example_file_name])
-        helper_execute(['rm', example_file_name])
-        logging.info(f"Successfully applied example from [{example_url}]")
-      else:
-        logging.info(f"Error {r.status_code}: {r.reason}")
+def install_examples(operator: str):
+  example_url = OPERATOR_TO_EXAMPLE_REPO[operator]
+  if example_url:
+    example_file_name = "/tmp/simple-" + operator + "-cluster.yaml"
+    r = requests.get(example_url, allow_redirects=True)
+    if r.status_code == 200:
+      open(example_file_name, "wb").write(r.content)
+      helper_execute(['kubectl', 'apply', '-f', example_file_name])
+      helper_execute(['rm', example_file_name])
+      logging.info(f"Successfully applied example from [{example_url}]")
+    else:
+      logging.info(f"Error {r.status_code}: {r.reason}")
+  else:
+    logging.info(f"No examples found for [{operator}] - skipping.")
 
 
 def helper_check_docker_running():
@@ -461,8 +462,12 @@ def main() -> int:
     operator_with_version = operator.split("=")
     if len(operator_with_version) == 2:
       install_stackable_operator(operator_with_version[0], operator_with_version[1])
+      if args.example:
+        install_examples(operator_with_version[0])
     elif len(operator_with_version) == 1:
       install_stackable_operator(operator_with_version[0], None)
+      if args.example:
+        install_examples(operator_with_version[0])
     else:
       logging.warning(f"Encountered illegal operator/version string: [{operator}]")
       return 1
@@ -470,8 +475,6 @@ def main() -> int:
   if args.provision:
     helper_execute(['kubectl', 'apply', '-f', args.provision])
     logging.info(f"Successfully applied resources from [{args.provision}]")
-  if args.example:
-    install_examples(args.operator)
   if args.prometheus:
     install_prometheus()
   return 0
