@@ -5,7 +5,7 @@ import argparse
 
 if __name__ == "__main__":
     all_args = argparse.ArgumentParser()
-    all_args.add_argument("-n", "--namespace", required=True, help="Namespace the test is running in")
+    all_args.add_argument("-u", "--url", required=True, help="OPA service url")
     args = vars(all_args.parse_args())
 
     # rego rule to check (compare: 01-install-opa.yaml)
@@ -26,8 +26,8 @@ if __name__ == "__main__":
     # or http://<host>:8081/v1/data/test/hello
     # --> {'hello': True}
 
-    url = 'http://test-opa-svc:8081/v1/data/test'
-    response = requests.post(url).json()
+    #url = 'http://test-opa-svc:8081/v1/data/test'
+    response = requests.post(args['url']).json()
 
     if "result" in response and "hello" in response["result"] and response["result"]["hello"]:
         print("Test successful!")
