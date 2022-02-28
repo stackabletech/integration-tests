@@ -288,7 +288,6 @@ def install_dependencies_hbase():
 def install_dependencies_kafka():
   logging.info("Installing dependencies for Kafka")
   install_stackable_operator("zookeeper")
-  install_stackable_operator("regorule")
   install_stackable_operator("opa")
 
 
@@ -300,7 +299,6 @@ def install_dependencies_nifi():
 
 def install_dependencies_opa():
   logging.info("Installing dependencies for OPA")
-  install_stackable_operator("regorule")
 
 
 def install_dependencies_superset():
@@ -329,7 +327,6 @@ def install_dependencies_airflow():
   helper_install_helm_release("airflow-redis", "redis", "bitnami", "https://charts.bitnami.com/bitnami", args)
 
 def install_dependencies_trino():
-  install_stackable_operator("regorule")
   install_stackable_operator("opa")
   install_stackable_operator("hive")
   install_stackable_operator("secret")
