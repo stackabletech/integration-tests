@@ -462,12 +462,10 @@ def main() -> int:
     operator_with_version = operator.split("=")
     if len(operator_with_version) == 2:
       install_stackable_operator(operator_with_version[0], operator_with_version[1])
-      if args.example:
-        install_examples(operator_with_version[0])
     elif len(operator_with_version) == 1:
       install_stackable_operator(operator_with_version[0], None)
-      if args.example:
-        install_examples(operator_with_version[0])
+    if args.example:
+      install_examples(operator_with_version[0])
     else:
       logging.warning(f"Encountered illegal operator/version string: [{operator}]")
       return 1
