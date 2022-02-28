@@ -274,14 +274,17 @@ def install_dependencies_hdfs():
   logging.info("Installing dependencies for Apache HDFS")
   install_stackable_operator("zookeeper")
 
+
 def install_dependencies_druid():
   logging.info("Installing dependencies for Druid")
   install_stackable_operator("zookeeper")
+
 
 def install_dependencies_hbase():
   logging.info("Installing dependencies for HBase")
   install_stackable_operator("zookeeper")
   install_stackable_operator("hdfs")
+
 
 def install_dependencies_kafka():
   logging.info("Installing dependencies for Kafka")
@@ -309,6 +312,7 @@ def install_dependencies_superset():
   ]
   helper_install_helm_release("superset-postgresql", "postgresql", "bitnami", "https://charts.bitnami.com/bitnami", args)
 
+
 def install_dependencies_airflow():
   logging.info("Installing dependencies for Airflow")
   args = [
@@ -323,6 +327,7 @@ def install_dependencies_airflow():
     '--set', 'auth.password=redis'
   ]
   helper_install_helm_release("airflow-redis", "redis", "bitnami", "https://charts.bitnami.com/bitnami", args)
+
 
 def install_dependencies_trino():
   install_stackable_operator("opa")
