@@ -57,15 +57,9 @@ Example
 
 ## Set up a test kind-cluster with cluster examples deployed
 
-This will install the `simple-<operator>-cluster.yaml` files in the `examples` folder of the specified operators.
+This will start the Trino operator and deploy the `simple-<operator>-cluster.yaml` example in the operator's `examples` folder:
 
-This will start the Trino, Hive and OPA operators and deploy **all** the `simple` examples in each operator's `examples` folder:
-
-    ./create_test_cluster.py --debug --kind --operator trino hive opa --example
-
-This will start the Trino, Hive and OPA operators but **only** deploy the `simple` example from the OPA operator.
-
-    ./create_test_cluster.py --debug --kind --operator trino hive opa --example opa
+    ./create_test_cluster.py --debug --kind --operator trino --example
 
 ## Run KUTTL tests
 
