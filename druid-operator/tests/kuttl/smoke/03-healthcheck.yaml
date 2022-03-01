@@ -1,6 +1,0 @@
-apiVersion: kuttl.dev/v1beta1
-kind: TestStep
-commands:
-  - script: kubectl cp -n $NAMESPACE ./healthcheck.py  healthcheck-0:/tmp
-  - script: kubectl cp -n $NAMESPACE ./requirements.txt healthcheck-0:/tmp
-  - script: kubectl exec -n $NAMESPACE healthcheck-0 -- pip install --user -r /tmp/requirements.txt
