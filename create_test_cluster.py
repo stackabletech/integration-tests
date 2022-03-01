@@ -110,7 +110,7 @@ def check_args() -> Namespace:
     description="This tool can be used to install the Stackable Kubernetes Operators into a Kubernetes cluster using Helm. "
                 "It can optionally also create a kind cluster."
   )
-  parser.add_argument('--operator', '-o', required=True, nargs='+',
+  parser.add_argument('--operator', '-o', required=True, nargs='+', type=operator_from_input,
                       help='A list of Stackable operators to install. Operators can be specified in the form \"name[=version]\"', )
   parser.add_argument('--provision', '-p', required=False, help='A folder with resources or a single file to be deployed after the cluster has been created.')
   parser.add_argument('--kind', '-k', required=False, nargs='?', default=False, const=DEFAULT_KIND_CLUSTER_NAME, metavar="CLUSTER NAME",
@@ -450,6 +450,34 @@ def helper_execute(args, stdin: str = None) -> str:
   sys.exit(1)
 
 
+class OperatorVersion:
+  def __init__(self, name: str, version: str) -> None:
+      self.name=name
+      self.version=version
+
+  def __format__(self, __format_spec: str) -> str:
+      if self.version:
+        return f"{self.name}={self.version}"
+      else:
+        return self.name
+
+  def __repr__(self) -> str:
+      if self.version:
+        return f"OperatorVersion({self.name}, {self.version})"
+      else:
+        return f"OperatorVersion({self.name}, None)"
+
+
+def operator_from_input(input: str) -> OperatorVersion:
+    parts = input.split("=")
+    if len(parts) == 1 and parts[0] in VALID_OPERATORS:
+      result = OperatorVersion(parts[0], None)
+      return result
+    elif len(parts) == 2 and parts[0] in VALID_OPERATORS:
+      result = OperatorVersion(parts[0], parts[1])
+      return result
+    raise argparse.ArgumentTypeError(f"Operator name {input} is invalid")
+
 def main() -> int:
   args = check_args()
   check_prerequisites()
@@ -458,17 +486,10 @@ def main() -> int:
   check_kubernetes_available()
 
   # Iterate over all provided operators, parse version from provided string (if there is one)
-  for operator in args.operator:
-    operator_with_version = operator.split("=")
-    if len(operator_with_version) == 2:
-      install_stackable_operator(operator_with_version[0], operator_with_version[1])
-    elif len(operator_with_version) == 1:
-      install_stackable_operator(operator_with_version[0], None)
+  for ov in args.operator:
+    install_stackable_operator(ov.name, ov.version)
     if args.example:
-      install_examples(operator_with_version[0])
-    else:
-      logging.warning(f"Encountered illegal operator/version string: [{operator}]")
-      return 1
+      install_examples(ov.name)
   logging.info(f"Successfully installed operator for {args.operator}")
   if args.provision:
     helper_execute(['kubectl', 'apply', '-f', args.provision])
