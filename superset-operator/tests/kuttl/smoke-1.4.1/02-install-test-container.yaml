@@ -1,22 +1,27 @@
+apiVersion: kuttl.dev/v1beta1
+kind: TestStep
+metadata:
+  name: install-test-container
+timeout: 300
 ---
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
-  name: test-regorule
+  name: python
   labels:
-    app: test-regorule
+    app: python
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: test-regorule
+      app: python
   template:
     metadata:
       labels:
-        app: test-regorule
+        app: python
     spec:
       containers:
-      - name: test-regorule
+      - name: python
         image: python:3.10-slim
         stdin: true
         tty: true
