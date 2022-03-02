@@ -334,7 +334,11 @@ def install_dependencies_trino():
   install_stackable_operator("opa")
   install_stackable_operator("hive")
   install_stackable_operator("secret")
+  helper_install_minio()
 
+
+def helper_install_minio():
+  """Spins up a MinIO instances providing an S3 API for testing purposes"""
   helper_add_helm_repo("minio", "https://operator.min.io")
   release = helper_find_helm_release("minio-operator", "minio-operator")
   if release:
@@ -357,11 +361,12 @@ def install_dependencies_trino():
   logging.info("Helm release was installed successfully, waiting for MinIO to start")
 
   logging.info("Waiting for MinIO pod to become available")
-  while helper_execute(['kubectl', 'get', 'pod', '--selector=v1.min.io/tenant=minio1',
-                        "--output=jsonpath={range .items[*]}{.status.conditions[?(@.type=='Ready')].status}{end}"]) != 'True':
-    logging.debug("Still waiting for MinIO Pod to become available...")
-    time.sleep(2)
-  logging.info("MinIO pod now available - continuing")
+  helper_execute(['kubectl', 'wait', '--for=condition=Available', 'deployment', '--selector=app.kubernetes.io/name=minio-operator', '--timeout=5m'])
+  # Sadly we can't wait for StatefulSet to become ready, see https://github.com/kubernetes/kubernetes/issues/79606 so we have to watch the Pods
+  logging.info("Waiting 15s for MinIO operator to spawn the actual MinIO pods")
+  time.sleep(15)
+  helper_execute(['kubectl', 'wait', '--for=condition=Ready', 'pod', '--selector=v1.min.io/tenant=minio1', '--timeout=10m'])
+  logging.info("MinIO pod(s) now available - continuing")
 
   logging.info("Creating MinIO service now and wait 30s until it is available")
   helper_execute(['kubectl', 'apply', '-f', '-'], MINIO_SERVICE)
