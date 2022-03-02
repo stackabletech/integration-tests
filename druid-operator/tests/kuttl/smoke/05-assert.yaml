@@ -3,4 +3,4 @@ kind: TestAssert
 metadata:
   name: ingestion-check
 commands:
-  - script: kubectl exec -n $NAMESPACE checks-0 -- python /tmp/ingestioncheck.py
+  - script: kubectl exec -n $NAMESPACE checks-0 -- python /tmp/ingestioncheck.py derby-druid
