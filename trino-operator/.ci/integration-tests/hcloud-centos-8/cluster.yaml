@@ -12,8 +12,8 @@ spec:
   k8sVersion: "$K8S_VERSION"
   wireguard: false
   versions:
+    _-operator: NIGHTLY
     trino-operator: "$TRINO_OPERATOR_VERSION"
-    regorule-operator: "RELEASE"
   nodes:
     main:
       numberOfNodes: 3
