@@ -14,18 +14,25 @@ from contextlib import closing
 from kubernetes import client, config
 from tabulate import tabulate
 
-# We could further restrict the forwarded ports by converting this to a Map<str (regex), [int] ports>.
-SERVICES_TO_EXPOSE = [
-    r".*minio-external$",
-    r".*minio.*-console$",
-    r".*-kafka$",
-    r".*-nifi$",
-    r".*-superset-external$",
-    r".*-trino-coordinator$",
-    r".*-spark-master$",
-    r".*-spark-history-server",
-    r".*airflow-webserver$",
-]
+# An empty list of port names to expose means expose all ports of that service
+SERVICES_TO_EXPOSE = {
+    r".*minio$": ["http-minio"],
+    r".*minio-hl$": ["http-minio"],
+    r".*minio-console$": ["http-console"],
+    r".*opa": ["http", "https"],
+    r".*druid-(broker|coordinator|historical|middlemanager|router)": ["http", "https"],
+    r".*hbase-(master|regionserver|restserver)": ["ui"],
+    r".*spark-master": ["http", "https"],
+    r".*spark-slave": ["http", "https"],
+    r".*spark-history-server": ["http", "https"],
+    r".*trino-(coordinator|worker)": ["http", "https"],
+    r".*nifi": ["http", "https"],
+    r".*airflow-webserver": ["airflow"],
+    r".*superset": ["superset"],
+    r".*simple-hdfs-namenode-.*$(?<!-[0-9])(?<!-[0-9][0-9])(?<!-[0-9][0-9][0-9])": ["http", "https"],
+    r".*simple-hdfs-datanode-.*$(?<!-[0-9])(?<!-[0-9][0-9])(?<!-[0-9][0-9][0-9])": ["http", "https"],
+    r".*simple-hdfs-journalnode-.*$(?<!-[0-9])(?<!-[0-9][0-9])(?<!-[0-9][0-9][0-9])": ["http", "https"],
+}
 
 processes = []
 forwarded_services = []
@@ -38,6 +45,8 @@ def check_args() -> Namespace:
                       help='The namespace of the services to forward. As a default the current kubectl context will be used')
   parser.add_argument('--all-namespaces', '-a', action='store_true',
                       help='Forward services from all namespaces')
+  parser.add_argument('--all-services', action='store_true',
+                      help='Forward all services regardles of the name or the exposed ports')
   parser.add_argument('--verbose', '-v', action='store_true',
                       help='Show stdout output of actual "kubectl port-forward" command')
   return parser.parse_args()
@@ -57,21 +66,23 @@ def main():
     for service in services.items:
         service_namespace = service.metadata.namespace
         service_name = service.metadata.name
-        service_ports = [portSpec.port for portSpec in service.spec.ports]
 
-        if shall_expose_service(service_name):
-            for service_port in service_ports:
-                forward_port(service_namespace, service_name, service_port, args.verbose)
+        for portSpec in service.spec.ports:
+            service_port = portSpec.port
+            service_port_name = portSpec.name
+            if shall_expose_service(service_name, service_port_name) or args.all_services:
+                forward_port(service_namespace, service_name, service_port, service_port_name, args.verbose)
 
-    print(tabulate(forwarded_services, headers=['Namespace', 'Service', 'Port', 'URL'], tablefmt='psql'))
+    print(tabulate(forwarded_services, headers=['Namespace', 'Service', 'Port', 'Name', 'URL'], tablefmt='psql'))
     print()
 
     for process in processes:
         process.wait()
 
-def shall_expose_service(name) -> bool:
-    for regex in SERVICES_TO_EXPOSE:
-        if re.match(regex, name):
+def shall_expose_service(service_name, service_port_name) -> bool:
+    for regex, port_names_to_expose in SERVICES_TO_EXPOSE.items():
+        if re.match(regex, service_name) \
+            and (service_port_name in port_names_to_expose or len(port_names_to_expose) == 0):
             return True
     return False
 
@@ -80,7 +91,7 @@ def find_free_port() -> int:
         s.bind(('localhost', 0))
         return s.getsockname()[1]
 
-def forward_port(service_namespace, service_name, service_port, verbose):
+def forward_port(service_namespace, service_name, service_port, service_port_name, verbose):
     local_port = find_free_port()
     command = ["kubectl", "-n", service_namespace, "port-forward", f"service/{service_name}", f"{local_port}:{service_port}"]
     if verbose:
@@ -92,6 +103,7 @@ def forward_port(service_namespace, service_name, service_port, verbose):
         service_namespace,
         service_name,
         service_port,
+        service_port_name,
         f"http://localhost:{local_port}"
     ])
 
