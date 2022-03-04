@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-# Requirements: pip install kubernetes tabulate
+# To install the requirements run "pip install -r forward_services_locally_requirements.txt"
 
 import argparse
 import os
