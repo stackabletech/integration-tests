@@ -16,9 +16,7 @@ from tabulate import tabulate
 
 # An empty list of port names to expose means expose all ports of that service
 SERVICES_TO_EXPOSE = {
-    r".*minio$": ["http-minio"],
-    r".*minio-hl$": ["http-minio"],
-    r".*minio-console$": ["http-console"],
+    r".*minio.*-console$": ["http-console"],
     r".*opa": ["http", "https"],
     r".*druid-(broker|coordinator|historical|middlemanager|router)": ["http", "https"],
     r".*hbase-(master|regionserver|restserver)": ["ui"],
@@ -32,6 +30,9 @@ SERVICES_TO_EXPOSE = {
     r".*simple-hdfs-namenode-.*$(?<!-[0-9])(?<!-[0-9][0-9])(?<!-[0-9][0-9][0-9])": ["http", "https"],
     r".*simple-hdfs-datanode-.*$(?<!-[0-9])(?<!-[0-9][0-9])(?<!-[0-9][0-9][0-9])": ["http", "https"],
     r".*simple-hdfs-journalnode-.*$(?<!-[0-9])(?<!-[0-9][0-9])(?<!-[0-9][0-9][0-9])": ["http", "https"],
+    r"alertmanager-operated": ["http-web"],
+    r"prometheus-operated": ["http-web"],
+    r"prometheus-operator-grafana": ["http-web"]
 }
 
 processes = []
