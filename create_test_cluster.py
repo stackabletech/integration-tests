@@ -5,6 +5,7 @@ import importlib.util
 import json
 import logging
 import re
+import requests
 import shutil
 import sys
 import subprocess
@@ -25,6 +26,23 @@ HELM_PROMETHEUS_REPO_NAME = "prometheus-community"
 HELM_PROMETHEUS_REPO_URL = "https://prometheus-community.github.io/helm-charts"
 HELM_PROMETHEUS_CHART_NAME = "kube-prometheus-stack"
 
+# replacement for switch/match case
+OPERATOR_TO_EXAMPLE_REPO = {
+  "airflow": "https://raw.githubusercontent.com/stackabletech/airflow-operator/main/examples/simple-airflow-cluster.yaml",
+  "druid": "https://raw.githubusercontent.com/stackabletech/druid-operator/main/examples/simple-druid-cluster.yaml",
+  "hbase": "https://raw.githubusercontent.com/stackabletech/hbase-operator/main/examples/simple-hbase-cluster.yaml",
+  "hdfs": "https://raw.githubusercontent.com/stackabletech/hdfs-operator/main/examples/simple-hdfs-cluster.yaml",
+  "hive": "https://raw.githubusercontent.com/stackabletech/hive-operator/main/examples/simple-hive-cluster.yaml",
+  "kafka": "https://raw.githubusercontent.com/stackabletech/kafka-operator/main/examples/simple-kafka-cluster.yaml",
+  "nifi": "https://raw.githubusercontent.com/stackabletech/nifi-operator/main/examples/simple-nifi-cluster.yaml",
+  "opa": "https://raw.githubusercontent.com/stackabletech/opa-operator/main/examples/simple-opa-cluster.yaml",
+  # we do not need to provide the secret examples
+  "secret": None,
+  "spark": "https://raw.githubusercontent.com/stackabletech/spark-operator/main/examples/simple-spark-cluster.yaml",
+  "superset": "https://raw.githubusercontent.com/stackabletech/superset-operator/main/examples/simple-superset-cluster.yaml",
+  "trino": "https://raw.githubusercontent.com/stackabletech/trino-operator/main/examples/simple-trino-cluster.yaml",
+  "zookeeper": "https://raw.githubusercontent.com/stackabletech/zookeeper-operator/main/examples/simple-zookeeper-cluster.yaml",
+}
 
 KIND_CLUSTER_DEFINITION = """
 kind: Cluster
@@ -92,7 +110,8 @@ def check_args() -> Namespace:
     description="This tool can be used to install the Stackable Kubernetes Operators into a Kubernetes cluster using Helm. "
                 "It can optionally also create a kind cluster."
   )
-  parser.add_argument('--operator', '-o', help='A list of Stackable operators to install. Operators can be specified in the form \"name[=version]\"', required=True, nargs='+')
+  parser.add_argument('--operator', '-o', required=True, nargs='+', type=operator_from_input,
+                      help='A list of Stackable operators to install. Operators can be specified in the form \"name[=version]\"', )
   parser.add_argument('--provision', '-p', required=False, help='A folder with resources or a single file to be deployed after the cluster has been created.')
   parser.add_argument('--kind', '-k', required=False, nargs='?', default=False, const=DEFAULT_KIND_CLUSTER_NAME, metavar="CLUSTER NAME",
                       help="When provided we'll automatically create a 4 node kind cluster. "
@@ -101,6 +120,7 @@ def check_args() -> Namespace:
                       )
   parser.add_argument('--debug', '-d', action='store_true', required=False, help="Will print additional debug statements (e.g. output from all run commands)")
   parser.add_argument('--prometheus', '-m', action='store_true', required=False, help="Will install the Prometheus operator for scraping metrics.")
+  parser.add_argument('--example', '-e', action='store_true', required=False, help="Will install the 'simple' examples for the operators specified via '--operator' or '-o'")
   args = parser.parse_args()
 
   log_level = 'DEBUG' if args.debug else 'INFO'
@@ -181,6 +201,22 @@ def install_prometheus():
   helper_execute(['kubectl', 'apply', '-f', '-'], PROMETHEUS_SCRAPE_SERVICE)
 
 
+def install_examples(operator: str):
+  example_url = OPERATOR_TO_EXAMPLE_REPO[operator]
+  if example_url:
+    example_file_name = "/tmp/simple-" + operator + "-cluster.yaml"
+    r = requests.get(example_url, allow_redirects=True)
+    if r.status_code == 200:
+      open(example_file_name, "wb").write(r.content)
+      helper_execute(['kubectl', 'apply', '-f', example_file_name])
+      helper_execute(['rm', example_file_name])
+      logging.info(f"Successfully applied example from [{example_url}]")
+    else:
+      logging.info(f"Error {r.status_code}: {r.reason}")
+  else:
+    logging.info(f"No examples found for [{operator}] - skipping.")
+
+
 def helper_check_docker_running():
   """Check if Docker is running, exit the program if not"""
 
@@ -239,14 +275,18 @@ def install_dependencies_hdfs():
   logging.info("Installing dependencies for Apache HDFS")
   install_stackable_operator("zookeeper")
 
+
 def install_dependencies_druid():
   logging.info("Installing dependencies for Druid")
   install_stackable_operator("zookeeper")
+  install_stackable_operator("hdfs")
+
 
 def install_dependencies_hbase():
   logging.info("Installing dependencies for HBase")
   install_stackable_operator("zookeeper")
   install_stackable_operator("hdfs")
+
 
 def install_dependencies_kafka():
   logging.info("Installing dependencies for Kafka")
@@ -274,6 +314,7 @@ def install_dependencies_superset():
   ]
   helper_install_helm_release("superset-postgresql", "postgresql", "bitnami", "https://charts.bitnami.com/bitnami", args)
 
+
 def install_dependencies_airflow():
   logging.info("Installing dependencies for Airflow")
   args = [
@@ -289,11 +330,16 @@ def install_dependencies_airflow():
   ]
   helper_install_helm_release("airflow-redis", "redis", "bitnami", "https://charts.bitnami.com/bitnami", args)
 
+
 def install_dependencies_trino():
   install_stackable_operator("opa")
   install_stackable_operator("hive")
   install_stackable_operator("secret")
+  helper_install_minio()
 
+
+def helper_install_minio():
+  """Spins up a MinIO instances providing an S3 API for testing purposes"""
   helper_add_helm_repo("minio", "https://operator.min.io")
   release = helper_find_helm_release("minio-operator", "minio-operator")
   if release:
@@ -316,11 +362,12 @@ def install_dependencies_trino():
   logging.info("Helm release was installed successfully, waiting for MinIO to start")
 
   logging.info("Waiting for MinIO pod to become available")
-  while helper_execute(['kubectl', 'get', 'pod', '--selector=v1.min.io/tenant=minio1',
-                        "--output=jsonpath={range .items[*]}{.status.conditions[?(@.type=='Ready')].status}{end}"]) != 'True':
-    logging.debug("Still waiting for MinIO Pod to become available...")
-    time.sleep(2)
-  logging.info("MinIO pod now available - continuing")
+  helper_execute(['kubectl', 'wait', '--for=condition=Available', 'deployment', '--selector=app.kubernetes.io/name=minio-operator', '--timeout=5m'])
+  # Sadly we can't wait for StatefulSet to become ready, see https://github.com/kubernetes/kubernetes/issues/79606 so we have to watch the Pods
+  logging.info("Waiting 15s for MinIO operator to spawn the actual MinIO pods")
+  time.sleep(15)
+  helper_execute(['kubectl', 'wait', '--for=condition=Ready', 'pod', '--selector=v1.min.io/tenant=minio1', '--timeout=10m'])
+  logging.info("MinIO pod(s) now available - continuing")
 
   logging.info("Creating MinIO service now and wait 30s until it is available")
   helper_execute(['kubectl', 'apply', '-f', '-'], MINIO_SERVICE)
@@ -409,6 +456,34 @@ def helper_execute(args, stdin: str = None) -> str:
   sys.exit(1)
 
 
+class OperatorVersion:
+  def __init__(self, name: str, version: str) -> None:
+      self.name=name
+      self.version=version
+
+  def __format__(self, __format_spec: str) -> str:
+      if self.version:
+        return f"{self.name}={self.version}"
+      else:
+        return self.name
+
+  def __repr__(self) -> str:
+      if self.version:
+        return f"OperatorVersion({self.name}, {self.version})"
+      else:
+        return f"OperatorVersion({self.name}, None)"
+
+
+def operator_from_input(input: str) -> OperatorVersion:
+    parts = input.split("=")
+    if len(parts) == 1 and parts[0] in VALID_OPERATORS:
+      result = OperatorVersion(parts[0], None)
+      return result
+    elif len(parts) == 2 and parts[0] in VALID_OPERATORS:
+      result = OperatorVersion(parts[0], parts[1])
+      return result
+    raise argparse.ArgumentTypeError(f"Operator name {input} is invalid")
+
 def main() -> int:
   args = check_args()
   check_prerequisites()
@@ -417,23 +492,18 @@ def main() -> int:
   check_kubernetes_available()
 
   # Iterate over all provided operators, parse version from provided string (if there is one)
-  for operator in args.operator:
-    operator_with_version = operator.split("=")
-    if len(operator_with_version) == 2:
-      install_stackable_operator(operator_with_version[0], operator_with_version[1])
-    elif len(operator_with_version) == 1:
-      install_stackable_operator(operator_with_version[0], None)
-    else:
-      logging.warning(f"Encountered illegal operator/version string: [{operator}]")
-      return 1
+  for ov in args.operator:
+    install_stackable_operator(ov.name, ov.version)
+    if args.example:
+      install_examples(ov.name)
   logging.info(f"Successfully installed operator for {args.operator}")
   if args.provision:
     helper_execute(['kubectl', 'apply', '-f', args.provision])
     logging.info(f"Successfully applied resources from [{args.provision}]")
-  # install prometheus
   if args.prometheus:
     install_prometheus()
   return 0
+
 
 if __name__ == '__main__':
   sys.exit(main())
