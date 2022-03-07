@@ -55,7 +55,7 @@ nodes:
       kind: JoinConfiguration
       nodeRegistration:
         kubeletExtraArgs:
-          node-labels: node=1,nodeType=druid-data
+          node-labels: node=1,
 - role: worker
   kubeadmConfigPatches:
     - |
