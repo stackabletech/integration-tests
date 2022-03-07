@@ -66,7 +66,7 @@ This will start the Trino operator and deploy the `simple-<operator>-cluster.yam
 There is a helper script that automatically forwards the deployed services to your local machine so that they are accessible.
 You can run it as follows, press Ctrl + C to exit it again:
 
-    ./forward_services_locally.py
+    ./access_services.py
 
 ## Run KUTTL tests
 
