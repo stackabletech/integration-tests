@@ -1,13 +1,13 @@
 apiVersion: kuttl.dev/v1beta1
 kind: TestAssert
 metadata:
-  name: checks
+  name: install-test-container
 timeout: 300
 ---
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
-  name: checks
+  name: python
 status:
   readyReplicas: 1
   replicas: 1

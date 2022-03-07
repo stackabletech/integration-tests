@@ -1,13 +1,13 @@
 apiVersion: kuttl.dev/v1beta1
 kind: TestAssert
 metadata:
-  name: checks
+  name: install-superset
 timeout: 300
 ---
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
-  name: checks
+  name: simple-superset-node-default
 status:
   readyReplicas: 1
   replicas: 1

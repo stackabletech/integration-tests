@@ -10,15 +10,19 @@ metadata:
   name: derby-druid
 spec:
   version: 0.22.1
-  zookeeperConfigMapName: druid-zk
+  zookeeperConfigMapName: druid-znode
   metadataStorageDatabase:
     dbType: derby
     connString: jdbc:derby://localhost:1527/var/druid/metadata.db;create=true
     host: localhost
     port: 1527
+  s3:
+    endpoint: s3-de-central.profitbricks.com
+    credentialsSecret:
+      s3-credentials
   deepStorage:
-    storageType: local
-    storageDirectory: /data
+    storageType: hdfs
+    storageDirectory: hdfs://druid-hdfs-namenode-default-0:8020/data
   brokers:
     roleGroups:
       default:
@@ -59,3 +63,11 @@ spec:
             kubernetes.io/os: linux
         config: {}
         replicas: 1
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: s3-credentials
+stringData:
+  accessKeyId: YOURACCESSKEYIDHERE
+  secretAccessKey: YOURSECRETACCESSKEYHERE
