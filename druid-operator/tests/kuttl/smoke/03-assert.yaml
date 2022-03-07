@@ -1,6 +1,13 @@
 apiVersion: kuttl.dev/v1beta1
 kind: TestAssert
 metadata:
-  name: install-healthcheck-files
-commands:
-  - script: kubectl exec -n $NAMESPACE healthcheck-0 -- python /tmp/healthcheck.py
+  name: checks
+timeout: 300
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: checks
+status:
+  readyReplicas: 1
+  replicas: 1
