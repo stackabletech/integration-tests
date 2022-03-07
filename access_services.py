@@ -35,6 +35,9 @@ SERVICES_TO_EXPOSE = {
     r"prometheus-operator-grafana": ["http-web"]
 }
 
+k8s = None
+k8s_node_ips = {}
+
 processes = []
 forwarded_services = []
 
@@ -48,31 +51,51 @@ def check_args() -> Namespace:
                       help='Forward services from all namespaces')
   parser.add_argument('--all-services', action='store_true',
                       help='Forward all services regardles of the name or the exposed ports')
+  parser.add_argument('--dont-use-port-forward', '-d', action='store_true',
+                      help='Dont use "kubectl port-forward", instead return the NodeIP and NodePort. This may cause problems as many services dont have the nodePorts attribute or services having multiple endpoints')
   parser.add_argument('--verbose', '-v', action='store_true',
-                      help='Show stdout output of actual "kubectl port-forward" command')
+                      help='In case of using port-forward show stdout output of "kubectl port-forward" command')
   return parser.parse_args()
 
 def main():
+    global k8s, k8s_nodes
+
     args = check_args()
 
     config.load_kube_config()
     namespace = args.namespace or config.list_kube_config_contexts()[1]['context'].get("namespace", "default")
     k8s = client.CoreV1Api()
 
+    for node in k8s.list_node().items:
+        node_name = node.metadata.name
+        node_ip = None
+        for address in node.status.addresses:
+            if address.type in ('InternalIP', 'ExternalIP'):
+                node_ip = address.address
+                break
+        if node_ip is None:
+            raise Exception(f"Could not find a valid InternalIP or ExternalIP for node {node_name}")
+
+        k8s_node_ips[node_name] = node_ip
+
     if args.all_namespaces:
         services = k8s.list_service_for_all_namespaces()
     else:
         services = k8s.list_namespaced_service(namespace=namespace)
 
-    for service in services.items:
-        service_namespace = service.metadata.namespace
-        service_name = service.metadata.name
+    for service_spec in services.items:
+        service_namespace = service_spec.metadata.namespace
+        service_name = service_spec.metadata.name
 
-        for portSpec in service.spec.ports:
-            service_port = portSpec.port
-            service_port_name = portSpec.name
+        for port_spec in service_spec.spec.ports:
+            service_port = port_spec.port
+            service_port_name = port_spec.name
+            service_node_port = port_spec.node_port or '<no nodePort attribute on service>'
             if shall_expose_service(service_name, service_port_name) or args.all_services:
-                forward_port(service_namespace, service_name, service_port, service_port_name, args.verbose)
+                if args.dont_use_port_forward:
+                    calculate_node_address(service_namespace, service_name, service_port, service_port_name, service_node_port)
+                else:
+                    forward_port(service_namespace, service_name, service_port, service_port_name, args.verbose)
 
     print(tabulate(forwarded_services, headers=['Namespace', 'Service', 'Port', 'Name', 'URL'], tablefmt='psql'))
     print()
@@ -106,6 +129,19 @@ def forward_port(service_namespace, service_name, service_port, service_port_nam
         service_port,
         service_port_name,
         f"http://localhost:{local_port}"
+    ])
+
+def calculate_node_address(service_namespace, service_name, service_port, service_port_name, service_node_port):
+    endpoint = k8s.read_namespaced_endpoints(namespace=service_namespace, name=service_name)
+    node_name = endpoint.subsets[0].addresses[0].node_name
+    node_ip = k8s_node_ips[node_name]
+
+    forwarded_services.append([
+        service_namespace,
+        service_name,
+        service_port,
+        service_port_name,
+        f"http://{node_ip}:{service_node_port}"
     ])
 
 def cleanup():
