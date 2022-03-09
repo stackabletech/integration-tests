@@ -2,6 +2,7 @@ apiVersion: kuttl.dev/v1beta1
 kind: TestSuite
 testDirs:
 - ./tests/kuttl
+- ./tests/ingestion
 startKIND: false
 parallel: 1
 timeout: 120
