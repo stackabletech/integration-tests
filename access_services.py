@@ -40,7 +40,7 @@ SERVICES_TO_EXPOSE = {
 EXTRA_INFO = {
     r"prometheus-operator-grafana$": 'kubectl get secret prometheus-operator-grafana --template=\'user: {{index .data "admin-user" | base64decode}}, password: {{index .data "admin-password" | base64decode}}\'',
     r"minio.*-console$": 'kubectl get secret $(echo "$SERVICE_NAME" | sed "s/-console$/-secret/") --template=\'accesskey: {{index .data "accesskey" | base64decode}}, secretkey: {{index .data "secretkey" | base64decode}}\'',
-    r".*-superset-external$": 'kubectl get secret $(echo "$SERVICE_NAME" | sed "s/-external$/-credentials/") --template=\'user: {{index .data "adminUser.username" | base64decode}}, password: {{index .data "adminUser.password" | base64decode}}\'',
+    r".*superset.*-external$": 'kubectl get secret $(kubectl get supersetclusters.superset.stackable.tech $(echo "$SERVICE_NAME" | sed "s/-external$//") --template=\'{{.spec.credentialsSecret}}\') --template=\'user: {{index .data "adminUser.username" | base64decode}}, password: {{index .data "adminUser.password" | base64decode}}\'',
 }
 
 k8s = None
