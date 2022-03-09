@@ -163,7 +163,7 @@ def get_extra_info(service_name):
         return ""
     else:
         complete_command = f"SERVICE_NAME={service_name} && {command}"
-        return subprocess.check_output(complete_command, shell=True).decode('utf-8')
+        return subprocess.run(complete_command, shell=True, capture_output=True).stdout.decode('utf-8')
 
 def cleanup():
     if len(processes) > 0:
