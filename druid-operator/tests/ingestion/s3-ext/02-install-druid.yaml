@@ -16,6 +16,10 @@ spec:
     connString: jdbc:derby://localhost:1527/var/druid/metadata.db;create=true
     host: localhost
     port: 1527
+  s3:
+    endpoint: s3-de-central.profitbricks.com
+    credentialsSecret:
+      s3-credentials
   deepStorage:
     storageType: hdfs
     storageDirectory: hdfs://druid-hdfs-namenode-default-0:8020/data
@@ -59,3 +63,11 @@ spec:
             kubernetes.io/os: linux
         config: {}
         replicas: 1
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: s3-credentials
+stringData:
+  accessKeyId: YOURACCESSKEYIDHERE
+  secretAccessKey: YOURSECRETACCESSKEYHERE
