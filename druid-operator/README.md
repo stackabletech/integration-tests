@@ -9,8 +9,5 @@ The integration tests are based on [KUTTL](https://kuttl.dev).
     ./create_test_cluster.py --kind kind --operator druid --debug
     cd druid-operator
 
-    # smoke tests
+    # all tests
     kubectl kuttl test
-
-    # ingestion tests
-    kubectl kuttl test tests/kuttl/ingestion
