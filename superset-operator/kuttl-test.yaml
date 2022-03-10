@@ -4,4 +4,3 @@ testDirs:
 - ./tests/kuttl
 startKIND: false
 suppress: ["events"]
-e
