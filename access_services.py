@@ -72,7 +72,7 @@ def check_args() -> Namespace:
 
 def main():
     """Main function executed. Blocking (waits for all processes to finish)."""
-    global K8S, K8S_NODE_IPS
+    global K8S
 
     args = check_args()
 
@@ -144,7 +144,8 @@ def forward_port(service_namespace, service_name, service_port, service_port_nam
     if verbose:
         process = subprocess.Popen(command)
     else:
-        process = subprocess.Popen(command, stdout=open(os.devnull, 'wb'))
+        with open(os.devnull, 'wb') as stdout:
+            process = subprocess.Popen(command, stdout=stdout)
     PROCESSES.append(process)
     SERVICES.append([
         service_namespace,
