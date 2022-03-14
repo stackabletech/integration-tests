@@ -170,7 +170,7 @@ def calculate_node_address(service_namespace, service_name, service_port, servic
         service_port,
         service_port_name,
         f"http://{node_ip}:{service_node_port}",
-        get_extra_info(service_name),
+        get_extra_info(service_namespace, service_name),
     ])
 
 
@@ -182,8 +182,10 @@ def get_extra_info(service_namespace, service_name) -> str:
             command = command_from_loop
     if command is None:
         return ""
-    complete_command = f"SERVICE_NAME={service_name} && NAMESPACE={service_namespace} && {command}"
-    return subprocess.run(complete_command, shell=True, capture_output=True, check=False).stdout.decode('utf-8')
+    env = os.environ.copy()
+    env["SERVICE_NAME"] = service_name
+    env["NAMESPACE"] = service_namespace
+    return subprocess.run(command, shell=True, capture_output=True, check=False, env=env).stdout.decode('utf-8')
 
 
 def cleanup():
