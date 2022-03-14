@@ -39,10 +39,11 @@ SERVICES_TO_EXPOSE = {
 
 # Shell command to print additional infos like credentials
 # The env variable SERVICE_NAME will be set to the service name
+# The env variable NAMESPACE will be set to the namespace of the service
 EXTRA_INFO = {
-    r"prometheus-operator-grafana$": 'kubectl get secret prometheus-operator-grafana --template=\'user: {{index .data "admin-user" | base64decode}}, password: {{index .data "admin-password" | base64decode}}\'',
-    r"minio.*-console$": 'kubectl get secret $(echo "$SERVICE_NAME" | sed "s/-console$/-secret/") --template=\'accesskey: {{index .data "accesskey" | base64decode}}, secretkey: {{index .data "secretkey" | base64decode}}\'',
-    r".*superset.*-external$": 'kubectl get secret $(kubectl get supersetclusters.superset.stackable.tech $(echo "$SERVICE_NAME" | sed "s/-external$//") --template=\'{{.spec.credentialsSecret}}\') --template=\'user: {{index .data "adminUser.username" | base64decode}}, password: {{index .data "adminUser.password" | base64decode}}\'',
+    r"prometheus-operator-grafana$": 'kubectl -n $NAMESPACE get secret prometheus-operator-grafana --template=\'user: {{index .data "admin-user" | base64decode}}, password: {{index .data "admin-password" | base64decode}}\'',
+    r"minio.*-console$": 'kubectl -n $NAMESPACE get secret $(echo "$SERVICE_NAME" | sed "s/-console$/-secret/") --template=\'accesskey: {{index .data "accesskey" | base64decode}}, secretkey: {{index .data "secretkey" | base64decode}}\'',
+    r".*superset.*-external$": 'kubectl -n $NAMESPACE get secret $(kubectl -n $NAMESPACE get supersetclusters.superset.stackable.tech $(echo "$SERVICE_NAME" | sed "s/-external$//") --template=\'{{.spec.credentialsSecret}}\') --template=\'user: {{index .data "adminUser.username" | base64decode}}, password: {{index .data "adminUser.password" | base64decode}}\'',
 }
 
 K8S = None
@@ -153,7 +154,7 @@ def forward_port(service_namespace, service_name, service_port, service_port_nam
         service_port,
         service_port_name,
         f"http://localhost:{local_port}",
-        get_extra_info(service_name),
+        get_extra_info(service_namespace, service_name),
     ])
 
 
@@ -173,7 +174,7 @@ def calculate_node_address(service_namespace, service_name, service_port, servic
     ])
 
 
-def get_extra_info(service_name) -> str:
+def get_extra_info(service_namespace, service_name) -> str:
     """Run the configured shell command to get some addition infos (like credentials) that we can show the user"""
     command = None
     for regex, command_from_loop in EXTRA_INFO.items():
@@ -181,7 +182,7 @@ def get_extra_info(service_name) -> str:
             command = command_from_loop
     if command is None:
         return ""
-    complete_command = f"SERVICE_NAME={service_name} && {command}"
+    complete_command = f"SERVICE_NAME={service_name} && NAMESPACE={service_namespace} && {command}"
     return subprocess.run(complete_command, shell=True, capture_output=True, check=False).stdout.decode('utf-8')
 
 
