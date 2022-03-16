@@ -1,7 +1,5 @@
 apiVersion: kuttl.dev/v1beta1
 kind: TestStep
-metadata:
-  name: install-kafka
 timeout: 300
 ---
 apiVersion: kafka.stackable.tech/v1alpha1

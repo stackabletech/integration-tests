@@ -1,7 +1,5 @@
 apiVersion: kuttl.dev/v1beta1
 kind: TestAssert
-metadata:
-  name: install-kafka-zk
 timeout: 300
 ---
 apiVersion: apps/v1
