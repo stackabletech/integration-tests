@@ -1,3 +1,16 @@
+---
+apiVersion: secrets.stackable.tech/v1alpha1
+kind: SecretClass
+metadata:
+  name: openldap-tls
+spec:
+  backend:
+    autoTls:
+      ca:
+        secret:
+          name: openldap-tls-ca
+          namespace: default
+---
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
@@ -24,9 +37,29 @@ spec:
               value: admin
             - name: LDAP_ADMIN_PASSWORD
               value: admin
+            - name: LDAP_ENABLE_TLS
+              value: "yes"
+            - name: LDAP_TLS_CERT_FILE
+              value: /tls/tls.crt
+            - name: LDAP_TLS_KEY_FILE
+              value: /tls/tls.key
+            - name: LDAP_TLS_CA_FILE
+              value: /tls/ca.crt
           ports:
             - name: tcp-ldap
               containerPort: 1389
+            - name: tls-ldap
+              containerPort: 1636
+          volumeMounts:
+            - name: tls
+              mountPath: /tls
+      volumes:
+      - name: tls
+        csi:
+          driver: secrets.stackable.tech
+          volumeAttributes:
+            secrets.stackable.tech/class: openldap-tls
+            secrets.stackable.tech/scope: pod
 ---
 apiVersion: v1
 kind: Service
@@ -40,5 +73,8 @@ spec:
     - name: tcp-ldap
       port: 1389
       targetPort: tcp-ldap
+    - name: tls-ldap
+      port: 1636
+      targetPort: tls-ldap
   selector:
     app.kubernetes.io/name: openldap
