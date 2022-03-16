@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 """
 Enables access to services deployed on the Stackable platform
-To install the requirements run "pip install -r forward_services_locally_requirements.txt"
 """
 
 import argparse
