@@ -18,7 +18,7 @@ spec:
             - |
               echo "message written after upgrade" > message
               kcat -b $KAFKA -t upgrade-test-data -P message
-  
+
               echo "message written before upgrade" > expected-messages
               echo >> expected-messages
               cat message >> expected-messages
