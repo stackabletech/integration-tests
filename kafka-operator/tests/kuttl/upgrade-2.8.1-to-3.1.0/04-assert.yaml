@@ -1,0 +1,12 @@
+apiVersion: kuttl.dev/v1beta1
+kind: TestAssert
+metadata:
+  name: read-data
+timeout: 300
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: read-data
+status:
+  succeeded: 1
