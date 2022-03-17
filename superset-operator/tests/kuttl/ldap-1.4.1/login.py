@@ -11,7 +11,8 @@ if __name__ == "__main__":
     superset_insstances = [
         "superset-with-ldap-no-tls-node-default",
         "superset-with-ldap-insecure-tls-node-default",
-        "superset-with-ldap-server-verified-tls-node-default",
+        "superset-with-ldap-server-veri-tls-node-default",
+        "superset-with-ldap-mutual-veri-tls-node-default",
     ]
 
     for superset_insstance in superset_insstances:

@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: Secret
 metadata:
-  name: superset-with-ldap-server-verified-tls-credentials
+  name: superset-with-ldap-server-veri-tls-credentials
 type: Opaque
 stringData:
   adminUser.username: admin
@@ -15,11 +15,11 @@ stringData:
 apiVersion: authentication.stackable.tech/v1alpha1
 kind: AuthenticationClass
 metadata:
-  name: superset-with-ldap-server-verified-tls-ldap
+  name: superset-with-ldap-server-veri-tls-ldap
 spec:
   protocol:
     ldap:
-      hostname: openldap # Runs in same namespace
+      hostname: openldap.default.svc.cluster.local # We have to use fqdn for TLS
       port: 1636
       searchBase: ou=users,dc=example,dc=org
       uid_field: uid
@@ -27,7 +27,7 @@ spec:
       lastnameField: sn
       emailField: mail
       bindCredentials:
-        secretClass: superset-with-ldap-server-verified-tls-ldap-bind-secret-class
+        secretClass: superset-with-ldap-server-veri-tls-ldap-bind
       tls:
         serverVerification:
           serverCaCert:
@@ -36,7 +36,7 @@ spec:
 apiVersion: secrets.stackable.tech/v1alpha1
 kind: SecretClass
 metadata:
-  name: superset-with-ldap-server-verified-tls-ldap-bind-secret-class
+  name: superset-with-ldap-server-veri-tls-ldap-bind
 spec:
   backend:
     k8sSearch:
@@ -46,9 +46,9 @@ spec:
 apiVersion: v1
 kind: Secret
 metadata:
-  name: superset-with-ldap-server-verified-tls-ldap-bind
+  name: superset-with-ldap-server-veri-tls-ldap-bind
   labels:
-    secrets.stackable.tech/class: superset-with-ldap-server-verified-tls-ldap-bind-secret-class
+    secrets.stackable.tech/class: superset-with-ldap-server-veri-tls-ldap-bind
 stringData:
   user: cn=admin,dc=example,dc=org
   password: admin
@@ -56,11 +56,11 @@ stringData:
 apiVersion: superset.stackable.tech/v1alpha1
 kind: SupersetCluster
 metadata:
-  name: superset-with-ldap-server-verified-tls
+  name: superset-with-ldap-server-veri-tls
 spec:
   version: 1.4.1
   statsdExporterVersion: v0.22.4
-  credentialsSecret: superset-with-ldap-server-verified-tls-credentials
+  credentialsSecret: superset-with-ldap-server-veri-tls-credentials
   loadExamplesOnInit: true
   nodes:
     roleGroups:
@@ -68,4 +68,4 @@ spec:
         config:
   authenticationConfig:
     methods:
-      - authenticationClass: superset-with-ldap-server-verified-tls-ldap
+      - authenticationClass: superset-with-ldap-server-veri-tls-ldap

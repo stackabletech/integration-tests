@@ -15,6 +15,7 @@ apiVersion: apps/v1
 kind: StatefulSet
 metadata:
   name: openldap
+  namespace: default # We have to place openlap in a known Namespace so that the fqdn is stable and well-known
   labels:
     app.kubernetes.io/name: openldap
 spec:
@@ -65,6 +66,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: openldap
+  namespace: default # We have to place openlap in a known Namespace so that the fqdn is stable and well-known
   labels:
     app.kubernetes.io/name: openldap
 spec:

@@ -19,16 +19,16 @@ metadata:
 spec:
   protocol:
     ldap:
-      hostname: openldap # Runs in same namespace
+      hostname: openldap.default.svc.cluster.local # We have to use fqdn for TLS
       port: 1389
       searchBase: ou=users,dc=example,dc=org
       bindCredentials:
-        secretClass: superset-with-ldap-no-tls-ldap-bind-secret-class
+        secretClass: superset-with-ldap-no-tls-ldap-bind
 ---
 apiVersion: secrets.stackable.tech/v1alpha1
 kind: SecretClass
 metadata:
-  name: superset-with-ldap-no-tls-ldap-bind-secret-class
+  name: superset-with-ldap-no-tls-ldap-bind
 spec:
   backend:
     k8sSearch:
@@ -40,7 +40,7 @@ kind: Secret
 metadata:
   name: superset-with-ldap-no-tls-ldap-bind
   labels:
-    secrets.stackable.tech/class: superset-with-ldap-no-tls-ldap-bind-secret-class
+    secrets.stackable.tech/class: superset-with-ldap-no-tls-ldap-bind
 stringData:
   user: cn=admin,dc=example,dc=org
   password: admin
