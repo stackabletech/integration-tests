@@ -8,22 +8,20 @@ if __name__ == "__main__":
     log_level = 'DEBUG' ### if args.debug else 'INFO'
     logging.basicConfig(level=log_level, format='%(asctime)s %(levelname)s: %(message)s', stream=sys.stdout)
 
-    http_code = requests.post("http://superset-with-ldap-no-tls-node-default:8088/api/v1/security/login", json={
-        "username": "integrationtest",
-        "password": "integrationtest",
-        "provider": "ldap",
-        "refresh": "true",
-        }).status_code
-    if http_code != 200:
-        result = 1
+    superset_insstances = [
+        "superset-with-ldap-no-tls-node-default",
+        "superset-with-ldap-insecure-tls-node-default",
+        "superset-with-ldap-server-verified-tls-node-default",
+    ]
 
-    http_code = requests.post("http://superset-with-ldap-insecure-tls-node-default:8088/api/v1/security/login", json={
-        "username": "integrationtest",
-        "password": "integrationtest",
-        "provider": "ldap",
-        "refresh": "true",
-        }).status_code
-    if http_code != 200:
-        result = 1
+    for superset_insstance in superset_insstances:
+        http_code = requests.post(f"http://{superset_insstance}:8088/api/v1/security/login", json={
+            "username": "integrationtest",
+            "password": "integrationtest",
+            "provider": "ldap",
+            "refresh": "true",
+            }).status_code
+        if http_code != 200:
+            result = 1
 
     sys.exit(result)
