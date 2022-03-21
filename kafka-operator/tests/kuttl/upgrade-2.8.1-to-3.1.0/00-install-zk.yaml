@@ -1,7 +1,6 @@
+---
 apiVersion: kuttl.dev/v1beta1
 kind: TestStep
-metadata:
-  name: install-kafka-zk
 timeout: 300
 ---
 apiVersion: zookeeper.stackable.tech/v1alpha1

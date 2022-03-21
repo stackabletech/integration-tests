@@ -32,7 +32,7 @@ To be more precise: Helm needs to find a valid `repositories.yaml` file in its c
 
 The `create_test_cluster.py` utility script will set up a test kind cluster (if requested with the `--kind` parameter) and install dependencies required for running the integration tests.
 
-    . create_test_cluster.py --debug --kind --operator <operator>
+    ./create_test_cluster.py --debug --kind --operator <operator>
 
 Example
 
@@ -60,6 +60,14 @@ Example
 This will start the Trino operator and deploy the `simple-<operator>-cluster.yaml` example in the operator's `examples` folder:
 
     ./create_test_cluster.py --debug --kind --operator trino --example
+
+## Access deployed services
+
+There is a helper script that automatically forwards the deployed services to your local machine so that they are accessible.
+You can run it as follows, press Ctrl + C to exit it again:
+
+    pip install -r access_services_requirements.txt
+    ./access_services.py
 
 ## Run KUTTL tests
 
