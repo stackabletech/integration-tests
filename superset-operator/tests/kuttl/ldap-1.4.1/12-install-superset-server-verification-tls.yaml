@@ -22,7 +22,7 @@ spec:
       hostname: openldap.default.svc.cluster.local # We have to use fqdn for TLS
       port: 1636
       searchBase: ou=users,dc=example,dc=org
-      uid_field: uid
+      uidField: uid
       firstnameField: givenName
       lastnameField: sn
       emailField: mail
