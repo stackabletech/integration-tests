@@ -1,6 +1,7 @@
 # Authorizer Test
 
 Required Operators:
+
 - Zookeeper
 - Druid
 - RegoRule
