@@ -11,3 +11,19 @@ spec:
           myidOffset: 10
   version: 3.5.8
   stopped: false
+---
+apiVersion: zookeeper.stackable.tech/v1alpha1
+kind: ZookeeperZnode
+metadata:
+  name: druid-znode
+spec:
+  clusterRef:
+    name: druid-zk
+---
+apiVersion: zookeeper.stackable.tech/v1alpha1
+kind: ZookeeperZnode
+metadata:
+  name: hdfs-znode
+spec:
+  clusterRef:
+    name: druid-zk

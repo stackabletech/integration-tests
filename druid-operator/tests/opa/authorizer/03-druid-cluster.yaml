@@ -10,18 +10,18 @@ metadata:
   name: derby-druid
 spec:
   version: 0.22.1
-  zookeeperConfigMapName: druid-zk
+  zookeeperConfigMapName: druid-znode
   opa:
-    opaConfigMapName: test-opa
-    opaDruidApiPath: v1/data/druid/allow
+    configMapName: test-opa
+    package: druid
   metadataStorageDatabase:
     dbType: derby
     connString: jdbc:derby://localhost:1527/var/druid/metadata.db;create=true
     host: localhost
     port: 1527
   deepStorage:
-    storageType: local
-    storageDirectory: /data
+    storageType: hdfs
+    storageDirectory: hdfs://druid-hdfs-namenode-default-0:8020/data
   brokers:
     configOverrides:
       runtime.properties:
