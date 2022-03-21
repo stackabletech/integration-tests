@@ -12,9 +12,8 @@ spec:
   k8sVersion: "$K8S_VERSION"
   wireguard: false
   versions:
-    zookeeper-operator: "0.9.0-nightly"
+    _-operator: NIGHTLY
     hbase-operator: "$HBASE_OPERATOR_VERSION"
-    hdfs-operator: "0.3.0-nightly"
   nodes:
     main:
       numberOfNodes: 3

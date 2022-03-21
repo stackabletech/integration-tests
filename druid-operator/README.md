@@ -8,4 +8,6 @@ The integration tests are based on [KUTTL](https://kuttl.dev).
 
     ./create_test_cluster.py --kind kind --operator druid --debug
     cd druid-operator
+
+    # all tests
     kubectl kuttl test

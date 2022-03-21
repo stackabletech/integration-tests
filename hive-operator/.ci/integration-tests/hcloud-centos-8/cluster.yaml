@@ -12,6 +12,7 @@ spec:
   location: "hel1"
   k8sVersion: "$K8S_VERSION"
   versions:
+    _-operator: NIGHTLY
     hive-operator: "$HIVE_OPERATOR_VERSION"
   nodes:
     main:

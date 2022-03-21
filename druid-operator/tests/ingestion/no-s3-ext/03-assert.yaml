@@ -1,14 +1,13 @@
----
 apiVersion: kuttl.dev/v1beta1
 kind: TestAssert
 metadata:
-  name: regorule-operator-deployment
+  name: checks
 timeout: 300
 ---
 apiVersion: apps/v1
-kind: Deployment
+kind: StatefulSet
 metadata:
-  name: regorule-operator-deployment
+  name: checks
 status:
   readyReplicas: 1
   replicas: 1

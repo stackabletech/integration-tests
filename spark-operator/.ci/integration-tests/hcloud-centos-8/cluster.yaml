@@ -12,6 +12,7 @@ spec:
   k8sVersion: "$K8S_VERSION"
   wireguard: false
   versions:
+    _-operator: NIGHTLY
     spark-operator: "$SPARK_OPERATOR_VERSION"
   nodes:
     main:
