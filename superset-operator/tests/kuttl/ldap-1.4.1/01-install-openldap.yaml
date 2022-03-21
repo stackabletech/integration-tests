@@ -7,6 +7,7 @@ spec:
   backend:
     autoTls:
       ca:
+        autoGenerate: true
         secret:
           name: openldap-tls-ca
           namespace: default
