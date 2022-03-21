@@ -16,7 +16,7 @@ apiVersion: apps/v1
 kind: StatefulSet
 metadata:
   name: openldap
-  namespace: default # We have to place openlap in a known Namespace so that the fqdn is stable and well-known
+  namespace: default # We have to place openldap in a known Namespace so that the fqdn is stable and well-known
   labels:
     app.kubernetes.io/name: openldap
 spec:
@@ -32,8 +32,7 @@ spec:
     spec:
       containers:
         - name: openldap
-          image: docker.io/bitnami/openldap:latest
-          imagePullPolicy: Always
+          image: docker.io/bitnami/openldap:2.5
           env:
             - name: LDAP_ADMIN_USERNAME
               value: admin
@@ -48,7 +47,7 @@ spec:
             - name: LDAP_TLS_CA_FILE
               value: /tls/ca.crt
           ports:
-            - name: tcp-ldap
+            - name: ldap
               containerPort: 1389
             - name: tls-ldap
               containerPort: 1636
@@ -73,9 +72,9 @@ metadata:
 spec:
   type: ClusterIP
   ports:
-    - name: tcp-ldap
+    - name: ldap
       port: 1389
-      targetPort: tcp-ldap
+      targetPort: ldap
     - name: tls-ldap
       port: 1636
       targetPort: tls-ldap
