@@ -356,6 +356,8 @@ def helper_install_minio():
   minio_values = re.sub('requestAutoCert:.*', 'requestAutoCert: false', minio_values)
   minio_values = re.sub('servers:.*', 'servers: 1', minio_values)
   minio_values = re.sub('size:.*', 'size: 10Mi', minio_values)
+  # Not all clusters name their default StorageClass "standard", including k3d
+  minio_values = re.sub('storageClassName:.*', 'storageClassName: null', minio_values)
 
   logging.info("Installing Helm release from chart [minio-operator] now")
   args = ['helm', 'install', '--version', minio_operator_chart_version, '--generate-name', '--values', '-', 'minio/minio-operator']
