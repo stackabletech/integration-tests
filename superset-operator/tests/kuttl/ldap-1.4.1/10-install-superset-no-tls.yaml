@@ -19,7 +19,7 @@ metadata:
 spec:
   protocol:
     ldap:
-      hostname: openldap.default.svc.cluster.local # We have to use fqdn for TLS
+      hostname: will.be.replaced.by.kubectl.patch # We need to use kubeclt patch so that we can dynamically put in the test namespace
       port: 1389
       searchBase: ou=users,dc=example,dc=org
       bindCredentials:

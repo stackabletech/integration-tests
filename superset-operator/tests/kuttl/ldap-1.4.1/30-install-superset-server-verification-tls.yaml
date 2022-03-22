@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: Secret
 metadata:
-  name: superset-with-ldap-mutual-veri-tls-credentials
+  name: superset-with-ldap-server-veri-tls-credentials
 type: Opaque
 stringData:
   adminUser.username: admin
@@ -15,11 +15,11 @@ stringData:
 apiVersion: authentication.stackable.tech/v1alpha1
 kind: AuthenticationClass
 metadata:
-  name: superset-with-ldap-mutual-veri-tls-ldap
+  name: superset-with-ldap-server-veri-tls-ldap
 spec:
   protocol:
     ldap:
-      hostname: openldap.default.svc.cluster.local # We have to use fqdn for TLS
+      hostname: will.be.replaced.by.kubectl.patch # We need to use kubeclt patch so that we can dynamically put in the test namespace
       port: 1636
       searchBase: ou=users,dc=example,dc=org
       uidField: uid
@@ -27,15 +27,16 @@ spec:
       lastnameField: sn
       emailField: mail
       bindCredentials:
-        secretClass: superset-with-ldap-mutual-veri-tls-ldap-bind
+        secretClass: superset-with-ldap-server-veri-tls-ldap-bind
       tls:
-        mutualVerification:
-          secretClass: openldap-tls
+        serverVerification:
+          serverCaCert:
+            secretClass: openldap-tls
 ---
 apiVersion: secrets.stackable.tech/v1alpha1
 kind: SecretClass
 metadata:
-  name: superset-with-ldap-mutual-veri-tls-ldap-bind
+  name: superset-with-ldap-server-veri-tls-ldap-bind
 spec:
   backend:
     k8sSearch:
@@ -45,9 +46,9 @@ spec:
 apiVersion: v1
 kind: Secret
 metadata:
-  name: superset-with-ldap-mutual-veri-tls-ldap-bind
+  name: superset-with-ldap-server-veri-tls-ldap-bind
   labels:
-    secrets.stackable.tech/class: superset-with-ldap-mutual-veri-tls-ldap-bind
+    secrets.stackable.tech/class: superset-with-ldap-server-veri-tls-ldap-bind
 stringData:
   user: cn=admin,dc=example,dc=org
   password: admin
@@ -55,15 +56,15 @@ stringData:
 apiVersion: superset.stackable.tech/v1alpha1
 kind: SupersetCluster
 metadata:
-  name: superset-with-ldap-mutual-veri-tls
+  name: superset-with-ldap-server-veri-tls
 spec:
   version: 1.4.1
   statsdExporterVersion: v0.22.4
-  credentialsSecret: superset-with-ldap-mutual-veri-tls-credentials
+  credentialsSecret: superset-with-ldap-server-veri-tls-credentials
   nodes:
     roleGroups:
       default:
         config:
   authenticationConfig:
     methods:
-      - authenticationClass: superset-with-ldap-mutual-veri-tls-ldap
+      - authenticationClass: superset-with-ldap-server-veri-tls-ldap
