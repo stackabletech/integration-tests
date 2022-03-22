@@ -280,6 +280,7 @@ def install_dependencies_druid():
   logging.info("Installing dependencies for Druid")
   install_stackable_operator("zookeeper")
   install_stackable_operator("hdfs")
+  install_stackable_operator("opa")
 
 
 def install_dependencies_hbase():
