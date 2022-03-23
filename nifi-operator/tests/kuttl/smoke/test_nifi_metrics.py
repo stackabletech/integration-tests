@@ -14,7 +14,7 @@ if __name__ == '__main__':
                           help="The namespace the test is running in")
     all_args.add_argument("-p", "--port", required=False, default="8081",
                           help="The port where metrics are exposed")
-    all_args.add_argument("-t", "--timeout", required=False, default="1",
+    all_args.add_argument("-t", "--timeout", required=False, default="60",
                           help="The timeout in seconds to wait for the metrics port to be opened")
 
     args = vars(all_args.parse_args())
@@ -26,7 +26,7 @@ if __name__ == '__main__':
     url = "http://test-nifi-node-default-0.test-nifi-node-default." + namespace + ".svc.cluster.local:" + port + "/metrics"
 
     # wait for 'timeout' seconds
-    t_end = time.time() + 60 * timeout
+    t_end = time.time() + timeout
     while time.time() < t_end:
         try:
             response = requests.post(url)
