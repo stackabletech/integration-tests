@@ -3,7 +3,7 @@ kind: TestStep
 commands:
   - script: >-
       kubectl exec -n $NAMESPACE minio-mc-0 -- 
-      sh -c 'mc alias set test-minio http://test-minio:9000/ $ACCESS_KEY $SECRET_KEY'
+      sh -c 'mc alias set test-minio http://test-minio:9000/'
   - script: kubectl cp -n $NAMESPACE spark-examples_2.12-3.2.1.jar  minio-mc-0:/tmp
   - script: >-
       kubectl exec -n $NAMESPACE minio-mc-0 -- 

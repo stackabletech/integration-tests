@@ -21,14 +21,3 @@ spec:
           command: ["/bin/sh"]
           stdin: true
           tty: true
-          env:
-            - name: ACCESS_KEY
-              valueFrom:
-                secretKeyRef:
-                  name: test-minio
-                  key: rootUser
-            - name: SECRET_KEY
-              valueFrom:
-                secretKeyRef:
-                  name: test-minio
-                  key: rootPassword
