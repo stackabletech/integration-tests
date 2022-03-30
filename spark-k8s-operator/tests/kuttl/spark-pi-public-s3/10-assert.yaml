@@ -9,8 +9,7 @@ timeout: 300
 apiVersion: batch/v1
 kind: Job
 metadata:
-  labels:
-    job-name: spark-s3-app
+  name: spark-s3-app
 status:
   succeeded: 1
 ---
