@@ -110,6 +110,7 @@ def main():
     for process in PROCESSES:
         process.wait()
 
+
 def calculate_k8s_node_ips(args):
     """Loops over the available k8s nodes and extracts the NodeIP information"""
     for node in K8S.list_node().items:
