@@ -5,5 +5,5 @@ metadata:
   name: spark-driver-edit-role
 rules:
   - apiGroups: [""]
-    resources: ["pods", "services", "configmaps"]
+    resources: ["pods", "services", "configmaps", "persistentvolumeclaims"]
     verbs: ["get", "list", "watch", "create", "delete"]
