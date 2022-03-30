@@ -64,7 +64,7 @@ def check_args() -> Namespace:
     parser.add_argument('--all-services', action='store_true',
                         help='Forward all services regardles of the name or the exposed ports')
     parser.add_argument('--dont-use-port-forward', '-d', action='store_true',
-                        help='Dont use "kubectl port-forward", instead return the NodeIP and NodePort. This may cause problems as many services dont have the nodePorts attribute or services having multiple endpoints')
+                        help='Dont use "kubectl port-forward", instead return the NodeIP and NodePort. This may cause problems as many services dont have the nodePorts attribute, services having multiple endpoints or kubernetes nodes having multiple InternalIPs or ExternalIPs (in this case we pick a random IP of that list)')
     parser.add_argument('--use-internal-node-ip', action='store_true',
                         help='Used in combination with --dont-use-port-forward. When set it prefers a nodes InternalIP over the ExternalIP')
     parser.add_argument('--verbose', '-v', action='store_true',
