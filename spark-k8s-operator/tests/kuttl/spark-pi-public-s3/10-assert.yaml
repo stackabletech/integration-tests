@@ -1,0 +1,50 @@
+---
+apiVersion: kuttl.dev/v1beta1
+kind: TestAssert
+metadata:
+  name: upscale-worker
+timeout: 300
+---
+# The Job starting the whole process
+apiVersion: batch/v1
+kind: Job
+metadata:
+  labels:
+    job-name: spark-s3-app
+status:
+  succeeded: 1
+---
+# The ServiceAccount created for the job
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: spark-s3-app
+---
+# The RoleBinding for the ServiceAccount
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: spark-s3-app
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: spark-driver-edit-role
+subjects:
+  - kind: ServiceAccount
+    name: spark-s3-app
+---
+# Our intermediate spark-submit pod
+apiVersion: v1
+kind: Pod
+metadata:
+  labels:
+    job-name: spark-s3-app
+---
+# the driver pod
+apiVersion: v1
+kind: Pod
+metadata:
+  labels:
+    spark-role: driver
+status:
+  phase: Succeeded
