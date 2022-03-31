@@ -17,21 +17,20 @@ kind: AuthenticationClass
 metadata:
   name: superset-with-ldap-server-veri-tls-ldap
 spec:
-  protocol:
+  provider:
     ldap:
       hostname: will.be.replaced.by.kubectl.patch # We need to use kubeclt patch so that we can dynamically put in the test namespace
       port: 1636
       searchBase: ou=users,dc=example,dc=org
-      uidField: uid
-      firstnameField: givenName
-      lastnameField: sn
-      emailField: mail
+      ldapFieldNames:
+        uid: uid
       bindCredentials:
         secretClass: superset-with-ldap-server-veri-tls-ldap-bind
       tls:
-        serverVerification:
-          serverCaCert:
-            secretClass: openldap-tls
+        verification:
+          server:
+            caCert:
+              secretClass: openldap-tls
 ---
 apiVersion: secrets.stackable.tech/v1alpha1
 kind: SecretClass

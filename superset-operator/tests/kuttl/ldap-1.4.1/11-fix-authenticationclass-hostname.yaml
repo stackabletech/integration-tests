@@ -4,6 +4,6 @@ metadata:
   name: fix-authenticationclass-hostname
 commands:
   - script: >
-      kubectl patch authenticationclass superset-with-ldap-no-tls-ldap --type=merge --patch '{"spec": {"protocol": {"ldap": {"hostname": "openldap.'"$NAMESPACE"'.svc.cluster.local"}}}}'
+      kubectl patch authenticationclass superset-with-ldap-no-tls-ldap --type=merge --patch '{"spec": {"provider": {"ldap": {"hostname": "openldap.'"$NAMESPACE"'.svc.cluster.local"}}}}'
   # Needed until superset-oeprator (or other) restarts the Pod when the ConfigMap changes
   - script: kubectl -n $NAMESPACE delete pod superset-with-ldap-no-tls-node-default-0

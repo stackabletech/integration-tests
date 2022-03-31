@@ -17,7 +17,7 @@ kind: AuthenticationClass
 metadata:
   name: superset-with-ldap-no-tls-ldap
 spec:
-  protocol:
+  provider:
     ldap:
       hostname: will.be.replaced.by.kubectl.patch # We need to use kubeclt patch so that we can dynamically put in the test namespace
       port: 1389
