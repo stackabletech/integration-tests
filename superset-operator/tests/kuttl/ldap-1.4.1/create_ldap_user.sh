@@ -1,3 +1,5 @@
+#!/bin/sh
+
 # To check the existing users
 # ldapsearch -H ldap://localhost:1389 -D cn=admin,dc=example,dc=org -w admin -b ou=users,dc=example,dc=org
 

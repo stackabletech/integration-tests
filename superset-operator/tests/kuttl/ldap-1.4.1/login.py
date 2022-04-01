@@ -5,7 +5,7 @@ import logging
 if __name__ == "__main__":
     result = 0
 
-    log_level = 'DEBUG' ### if args.debug else 'INFO'
+    log_level = 'DEBUG'  # if args.debug else 'INFO'
     logging.basicConfig(level=log_level, format='%(asctime)s %(levelname)s: %(message)s', stream=sys.stdout)
 
     superset_insstances = [
@@ -21,7 +21,7 @@ if __name__ == "__main__":
             "password": "integrationtest",
             "provider": "ldap",
             "refresh": "true",
-            }).status_code
+        }).status_code
         if http_code != 200:
             result = 1
 
