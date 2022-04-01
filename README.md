@@ -9,10 +9,14 @@ There is a helper script called `create_test_cluster.py` which can be used to in
 
 You need working versions of the following tools in your PATH:
 - [kubectl](https://kubernetes.io/docs/tasks/tools/#kubectl)
-- [kind](https://kind.sigs.k8s.io/), optional - only if the `--kind` option is used (tested with 0.11)
 - [helm](https://helm.sh/) (tested with 3.7.2)
 - [python](https://www.python.org/) (version 3.7 or above) 
 - [pip](https://pip.pypa.io/en/stable/) (version 3.x), optional for Hive tests
+
+If the option `--kind` is used:
+
+- [docker](https://docs.docker.com/get-docker/) (tested with 20.10.14)
+- [kind](https://kind.sigs.k8s.io/) (tested with 0.11)
 
 ### WARN: Helm bug
 
