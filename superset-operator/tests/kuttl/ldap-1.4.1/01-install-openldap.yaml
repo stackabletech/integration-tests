@@ -54,12 +54,12 @@ spec:
             - name: tls
               mountPath: /tls
       volumes:
-      - name: tls
-        csi:
-          driver: secrets.stackable.tech
-          volumeAttributes:
-            secrets.stackable.tech/class: openldap-tls
-            secrets.stackable.tech/scope: pod
+        - name: tls
+          csi:
+            driver: secrets.stackable.tech
+            volumeAttributes:
+              secrets.stackable.tech/class: openldap-tls
+              secrets.stackable.tech/scope: pod
 ---
 apiVersion: v1
 kind: Service
