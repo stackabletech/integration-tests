@@ -4,12 +4,10 @@ metadata:
   name: test-hbase
 spec:
   version: 2.4.11
+  hdfsConfigMapName: test-hdfs-namenode-default
+  zookeeperConfigMapName: test-znode
   config:
-    hdfsConfigMapName: test-hdfs-namenode-default
-    zookeeperConfigMapName: test-znode
-    hbaseManagesZk: false
-    hbaseClusterDistributed: true
-    hbaseRootdir: hdfs://test-hdfs/hbase
+    hbaseRootdir: /hbase
   masters:
     roleGroups:
       default:
