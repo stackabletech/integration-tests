@@ -11,4 +11,4 @@ The integration tests are based on [KUTTL](https://kuttl.dev).
     ./create_test_cluster.py --kind kind --operator commons --debug
     cd commons-operator
     kubectl kuttl test
-    
+
