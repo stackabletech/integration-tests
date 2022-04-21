@@ -6,5 +6,3 @@ metadata:
 commands:
   - script: >
       kubectl patch authenticationclass superset-with-ldap-server-veri-tls-ldap --type=merge --patch '{"spec": {"provider": {"ldap": {"hostname": "openldap.'"$NAMESPACE"'.svc.cluster.local"}}}}'
-  # Needed until superset-oeprator (or other) restarts the Pod when the ConfigMap changes
-  - script: kubectl -n $NAMESPACE delete pod superset-with-ldap-server-veri-tls-node-default-0
