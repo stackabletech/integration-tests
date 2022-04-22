@@ -12,7 +12,7 @@ import subprocess
 import time
 from argparse import Namespace
 
-VALID_OPERATORS = ["airflow", "druid", "hbase", "hdfs", "hive", "kafka", "nifi", "opa", "secret", "spark", "spark-k8s", "superset", "trino", "zookeeper"]
+VALID_OPERATORS = ["airflow", "commons", "druid", "hbase", "hdfs", "hive", "kafka", "nifi", "opa", "secret", "spark", "spark-k8s", "superset", "trino", "zookeeper"]
 
 DEFAULT_KIND_CLUSTER_NAME = "integration-tests"
 
@@ -29,6 +29,8 @@ HELM_PROMETHEUS_CHART_NAME = "kube-prometheus-stack"
 # replacement for switch/match case
 OPERATOR_TO_EXAMPLE_REPO = {
   "airflow": "https://raw.githubusercontent.com/stackabletech/airflow-operator/main/examples/simple-airflow-cluster.yaml",
+  # we do not need to provide the commons examples
+  "commons": None,
   "druid": "https://raw.githubusercontent.com/stackabletech/druid-operator/main/examples/simple-druid-cluster.yaml",
   "hbase": "https://raw.githubusercontent.com/stackabletech/hbase-operator/main/examples/simple-hbase-cluster.yaml",
   "hdfs": "https://raw.githubusercontent.com/stackabletech/hdfs-operator/main/examples/simple-hdfs-cluster.yaml",
@@ -309,6 +311,7 @@ def install_dependencies_opa():
 
 def install_dependencies_superset():
   logging.info("Installing dependencies for Superset")
+  install_stackable_operator("commons")
   args = [
     '--version', '11.0.0',
     '--set', 'auth.username=superset',
