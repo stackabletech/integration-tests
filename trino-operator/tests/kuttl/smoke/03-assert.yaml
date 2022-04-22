@@ -1,5 +1,14 @@
 ---
 apiVersion: kuttl.dev/v1beta1
 kind: TestAssert
-commands:
-  - script: kubectl exec -n $NAMESPACE trino-test-helper-0 -- python /tmp/check-active-workers.py -u admin -p admin -n $NAMESPACE -w 1
+metadata:
+  name: trino-test-helper
+timeout: 300
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: trino-test-helper
+status:
+  readyReplicas: 1
+  replicas: 1
