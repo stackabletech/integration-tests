@@ -19,6 +19,9 @@ metadata:
 spec:
   version: "0.0.377"
   hiveConfigMapName: test-hive-derby
+  opa:
+    configMapName: test-opa
+    package: trino
   authentication:
     method:
       multiUser:
