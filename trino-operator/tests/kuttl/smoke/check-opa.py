@@ -28,7 +28,7 @@ def test_user(user, password, ns, query):
     try:
         cursor.fetchone()
         return True
-    except Exception as ex:
+    except Exception:
         return False
 
 
