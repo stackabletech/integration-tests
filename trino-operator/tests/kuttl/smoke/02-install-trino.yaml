@@ -17,8 +17,11 @@ kind: TrinoCluster
 metadata:
   name: test-trino
 spec:
-  version: "0.0.362"
+  version: "0.0.377"
   hiveConfigMapName: test-hive-derby
+  opa:
+    configMapName: test-opa
+    package: trino
   authentication:
     method:
       multiUser:

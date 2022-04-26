@@ -49,4 +49,4 @@ if __name__ == '__main__':
         print("Missmatch: [expected/active] workers [" + str(expected_workers) + "/" + str(active_workers) + "]")
         exit(-1)
 
-    print("Test succeeded!")
+    print("Test check-active-workers.py succeeded!")
