@@ -11,3 +11,8 @@ The integration tests are based on [KUTTL](https://kuttl.dev).
     ./create_test_cluster.py --kind kind --operator superset --debug
     cd superset-operator
     kubectl kuttl test
+
+## Test Description
+
+- **smoke**: Tests whether a cluster can be installed and a login is possible
+- **druid-connection**: Tests whether a druid connection is set up correctly if the druid instance is started *after* the DruidConnection has been deployed.
