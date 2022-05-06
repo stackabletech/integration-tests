@@ -13,7 +13,6 @@ spec:
   wireguard: false
   versions:
     _-operator: NIGHTLY
-    commons-operator: NIGHTLY # TODO put in t2
     superset-operator: "$SUPERSET_OPERATOR_VERSION"
   nodes:
     main:
