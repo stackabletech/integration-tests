@@ -15,11 +15,8 @@ spec:
         userCredentialsSecret:
           name: test-trino-users-secret
   s3:
-    endPoint: changeme
-    accessKey: changeme
-    secretKey: changeme
-    sslEnabled: false
-    pathStyleAccess: true
+    inline:
+      host: changeme
   coordinators:
     roleGroups:
       default:
