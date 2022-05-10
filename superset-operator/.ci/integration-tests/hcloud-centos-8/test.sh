@@ -1,3 +1,5 @@
+#!/bin/bash
+
 # Bitnami Helm repo to install collaborators
 helm repo add bitnami https://charts.bitnami.com/bitnami
 helm repo update bitnami
@@ -18,7 +20,7 @@ echo Postgresql database started.
 echo
 
 # Execute tests
-git clone -b $GIT_BRANCH https://github.com/stackabletech/integration-tests.git
+git clone -b "$GIT_BRANCH" https://github.com/stackabletech/integration-tests.git
 (cd integration-tests/superset-operator && kubectl kuttl test --parallel 1)
 exit_code=$?
 
