@@ -18,9 +18,3 @@ spec:
             user: APP
             password: mine
             dbType: derby
-          s3Connection:
-            endPoint: changeme
-            accessKey: changeme
-            secretKey: changeme
-            sslEnabled: false
-            pathStyleAccess: true
