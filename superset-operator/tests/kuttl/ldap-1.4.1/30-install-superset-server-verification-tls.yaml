@@ -66,5 +66,4 @@ spec:
       default:
         config:
   authenticationConfig:
-    methods:
-      - authenticationClass: superset-with-ldap-server-veri-tls-ldap
+    authenticationClass: superset-with-ldap-server-veri-tls-ldap

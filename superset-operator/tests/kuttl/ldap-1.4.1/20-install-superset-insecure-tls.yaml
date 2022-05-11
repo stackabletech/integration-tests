@@ -68,5 +68,5 @@ spec:
       default:
         config:
   authenticationConfig:
-    methods:
-      - authenticationClass: superset-with-ldap-insecure-tls-ldap
+    authenticationClass: superset-with-ldap-insecure-tls-ldap
+    userRegistrationRole: Admin
