@@ -2,13 +2,18 @@
 apiVersion: kuttl.dev/v1beta1
 kind: TestAssert
 metadata:
-  name: trino-test-helper
+  name: install-superset
 timeout: 300
 ---
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
-  name: trino-test-helper
+  name: simple-superset-node-default
 status:
   readyReplicas: 1
   replicas: 1
+---
+apiVersion: superset.stackable.tech/v1alpha1
+kind: SupersetDB
+status:
+  condition: Ready

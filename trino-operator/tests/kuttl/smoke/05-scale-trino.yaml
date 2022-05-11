@@ -1,0 +1,38 @@
+---
+apiVersion: trino.stackable.tech/v1alpha1
+kind: TrinoCluster
+metadata:
+  name: test-trino
+spec:
+  version: "0.0.377"
+  hiveConfigMapName: test-hive-derby
+  opa:
+    configMapName: test-opa
+    package: trino
+  authentication:
+    method:
+      multiUser:
+        userCredentialsSecret:
+          name: test-trino-users-secret
+  s3:
+    endPoint: changeme
+    accessKey: changeme
+    secretKey: changeme
+    sslEnabled: false
+    pathStyleAccess: true
+  coordinators:
+    roleGroups:
+      default:
+        selector:
+          matchLabels:
+            kubernetes.io/os: linux
+        replicas: 1
+        config: {}
+  workers:
+    roleGroups:
+      default:
+        selector:
+          matchLabels:
+            kubernetes.io/os: linux
+        replicas: 2
+        config: {}
