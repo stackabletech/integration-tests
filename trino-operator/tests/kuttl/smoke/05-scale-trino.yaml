@@ -14,9 +14,6 @@ spec:
       multiUser:
         userCredentialsSecret:
           name: test-trino-users-secret
-  s3:
-    inline:
-      host: changeme
   coordinators:
     roleGroups:
       default:
