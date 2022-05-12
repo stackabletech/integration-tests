@@ -60,3 +60,4 @@ spec:
         config:
   authenticationConfig:
     authenticationClass: superset-with-ldap-no-tls-ldap
+    userRegistrationRole: Admin

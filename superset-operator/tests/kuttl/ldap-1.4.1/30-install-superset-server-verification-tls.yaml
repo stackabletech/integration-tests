@@ -67,3 +67,4 @@ spec:
         config:
   authenticationConfig:
     authenticationClass: superset-with-ldap-server-veri-tls-ldap
+    userRegistrationRole: Admin
