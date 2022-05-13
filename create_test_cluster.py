@@ -312,13 +312,14 @@ def install_dependencies_opa():
 def install_dependencies_superset():
   logging.info("Installing dependencies for Superset")
   install_stackable_operator("commons")
-  args = [
+  install_stackable_operator("secret")
+  postgresql_args = [
     '--version', '11.0.0',
     '--set', 'auth.username=superset',
     '--set', 'auth.password=superset',
     '--set', 'auth.database=superset'
   ]
-  helper_install_helm_release("superset-postgresql", "postgresql", "bitnami", "https://charts.bitnami.com/bitnami", args)
+  helper_install_helm_release("superset-postgresql", "postgresql", "bitnami", "https://charts.bitnami.com/bitnami", postgresql_args)
 
 
 def install_dependencies_spark_k8s():
