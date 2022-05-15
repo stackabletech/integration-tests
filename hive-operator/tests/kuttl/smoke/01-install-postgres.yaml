@@ -3,7 +3,8 @@ apiVersion: kuttl.dev/v1beta1
 kind: TestStep
 commands:
   - script: >-
-      helm install hive --version=10
+      helm install hive
+      --version=10
       --namespace $NAMESPACE
       --set postgresqlUsername=hive
       --set postgresqlPassword=hive
