@@ -81,7 +81,7 @@ if __name__ == '__main__':
             # should not reach here
             exit(-1)
         except Exception as ex:
-            print("[SUCCESS]: Could not read from non existing bucket: {0}".format(ex))
+            print("[SUCCESS]: Could not read from non existent bucket: {0}".format(ex))
 
         print("[SUCCESS] Test finished successfully!")
         exit(0)
