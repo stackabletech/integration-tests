@@ -16,13 +16,14 @@ spec:
     connString: jdbc:derby://localhost:1527/var/druid/metadata.db;create=true
     host: localhost
     port: 1527
-  s3:
-    endpoint: s3-de-central.profitbricks.com
-    credentialsSecret:
-      s3-credentials
+  ingestion:
+    s3connection:
+      inline:
+        host: s3-de-central.profitbricks.com
+        secretClass: s3-credentials
   deepStorage:
-    storageType: hdfs
-    storageDirectory: hdfs://druid-hdfs-namenode-default-0:8020/data
+    hdfs:
+      storageDirectory: hdfs://druid-hdfs-namenode-default-0:8020/data
   brokers:
     roleGroups:
       default:
@@ -69,5 +70,5 @@ kind: Secret
 metadata:
   name: s3-credentials
 stringData:
-  accessKeyId: YOURACCESSKEYIDHERE
-  secretAccessKey: YOURSECRETACCESSKEYHERE
+  ACCESS_KEY_ID: YOURACCESSKEYIDHERE
+  SECRET_ACCESS_KEY: YOURSECRETACCESSKEYHERE
