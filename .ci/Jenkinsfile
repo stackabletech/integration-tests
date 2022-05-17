@@ -13,7 +13,7 @@ pipeline {
             }
         }
 
-        stage('check') {
+        stage('failifnoop') {
             when {
                 anyOf {
                     expression { env.STACKABLE_OPERATOR == null }
