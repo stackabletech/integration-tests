@@ -9,8 +9,8 @@ pipeline {
 
         stage('Log variables') {
             steps {
-                sh 'printenv'
-                //echo "Git branch: $BRANCH_NAME"
+                //sh 'printenv'
+                echo "Operator to test: $STACKABLE_OPERATOR"
             }
         }
 
