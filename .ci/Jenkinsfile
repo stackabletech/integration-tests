@@ -15,6 +15,17 @@ pipeline {
 
         stage('check') {
             when {
+                anyOf {
+                    expression { env.STACKABLE_OPERATOR == null }
+                }
+            }
+            steps {
+                error('no operator selected')
+            }
+        }
+
+        stage('check') {
+            when {
                 allOf {
                     expression { env.STACKABLE_OPERATOR != null }
                 }
