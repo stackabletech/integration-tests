@@ -8,11 +8,17 @@ pipeline {
     stages {
 
         stage('Log variables') {
+            when {
+                allOf {
+                    expression { env.STACKABLE_OPERATOR != null }
+                }
+            }
             steps {
-                //sh 'printenv'
-                echo "Operator to test: $STACKABLE_OPERATOR"
+                echo "Building PR #${env.STACKABLE_OPERATOR}"
             }
         }
 
     }
 }
+
+
