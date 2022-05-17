@@ -7,14 +7,26 @@ pipeline {
 
     stages {
 
-        stage('Log variables') {
+        stage('START') {
+            steps {
+                echo "START"
+            }
+        }
+
+        stage('check') {
             when {
                 allOf {
                     expression { env.STACKABLE_OPERATOR != null }
                 }
             }
             steps {
-                echo "Building PR #${env.STACKABLE_OPERATOR}"
+                echo "Testing the operator: ${env.STACKABLE_OPERATOR}"
+            }
+        }
+
+        stage('STOP') {
+            steps {
+                echo "STOP"
             }
         }
 
