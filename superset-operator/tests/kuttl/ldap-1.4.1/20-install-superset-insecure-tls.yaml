@@ -1,0 +1,72 @@
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: superset-with-ldap-insecure-tls-credentials
+type: Opaque
+stringData:
+  adminUser.username: admin
+  adminUser.firstname: Superset
+  adminUser.lastname: Admin
+  adminUser.email: admin@superset.com
+  adminUser.password: admin
+  connections.secretKey: thisISaSECRET_1234
+  connections.sqlalchemyDatabaseUri: postgresql://superset:superset@superset-postgresql.default.svc.cluster.local/superset
+---
+apiVersion: authentication.stackable.tech/v1alpha1
+kind: AuthenticationClass
+metadata:
+  name: superset-with-ldap-insecure-tls-ldap
+spec:
+  provider:
+    ldap:
+      hostname: will.be.replaced.by.kubectl.patch # We need to use kubeclt patch so that we can dynamically put in the test namespace
+      port: 1636
+      searchBase: ou=users,dc=example,dc=org
+      ldapFieldNames:
+        uid: uid
+        group: memberof
+        givenName: givenName
+        surname: sn
+        email: mail
+      bindCredentials:
+        secretClass: superset-with-ldap-insecure-tls-ldap-bind
+      tls:
+        verification:
+          none: {}
+---
+apiVersion: secrets.stackable.tech/v1alpha1
+kind: SecretClass
+metadata:
+  name: superset-with-ldap-insecure-tls-ldap-bind
+spec:
+  backend:
+    k8sSearch:
+      searchNamespace:
+        pod: {}
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: superset-with-ldap-insecure-tls-ldap-bind
+  labels:
+    secrets.stackable.tech/class: superset-with-ldap-insecure-tls-ldap-bind
+stringData:
+  user: cn=admin,dc=example,dc=org
+  password: admin
+---
+apiVersion: superset.stackable.tech/v1alpha1
+kind: SupersetCluster
+metadata:
+  name: superset-with-ldap-insecure-tls
+spec:
+  version: 1.4.1
+  statsdExporterVersion: v0.22.4
+  credentialsSecret: superset-with-ldap-insecure-tls-credentials
+  nodes:
+    roleGroups:
+      default:
+        config:
+  authenticationConfig:
+    authenticationClass: superset-with-ldap-insecure-tls-ldap
+    userRegistrationRole: Admin

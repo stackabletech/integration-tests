@@ -1,0 +1,8 @@
+---
+apiVersion: kuttl.dev/v1beta1
+kind: TestStep
+metadata:
+  name: create-ldap-user
+commands:
+  - script: kubectl -n $NAMESPACE cp ./create_ldap_user.sh openldap-0:/tmp
+  - script: kubectl -n $NAMESPACE exec openldap-0 -- sh /tmp/create_ldap_user.sh
