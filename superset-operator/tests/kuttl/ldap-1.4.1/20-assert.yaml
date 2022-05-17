@@ -1,0 +1,8 @@
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: superset-with-ldap-insecure-tls-node-default
+status:
+  readyReplicas: 1
+  replicas: 1
