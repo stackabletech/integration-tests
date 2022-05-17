@@ -2,13 +2,14 @@
 apiVersion: kuttl.dev/v1beta1
 kind: TestAssert
 metadata:
-  name: trino-test-helper
-timeout: 300
+  name: install-hive
+timeout: 720
 ---
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
-  name: trino-test-helper
+  name: test-hive-postgres-metastore-default
 status:
   readyReplicas: 1
   replicas: 1
+
