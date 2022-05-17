@@ -8,7 +8,7 @@ timeout: 600
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
-  name: test-hive-derby-metastore-default
+  name: test-hive-postgres-metastore-default
 status:
   readyReplicas: 1
   replicas: 1
