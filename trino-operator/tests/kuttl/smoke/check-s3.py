@@ -48,15 +48,15 @@ if __name__ == '__main__':
 
     print("Trying to create TABLE...")
     test_query("admin", "admin", namespace,
-         ("CREATE TABLE IF NOT EXISTS hive.taxi.csv ( "
-          "vendor_id VARCHAR,"
-          "pickup VARCHAR,"
-          "dropoff VARCHAR)"
-          " WITH ("
-             "external_location = 's3a://test/',"
-             "format = 'CSV',"
-             "skip_header_line_count=1)"
-          ))
+               ("CREATE TABLE IF NOT EXISTS hive.taxi.csv ( "
+                "vendor_id VARCHAR,"
+                "pickup VARCHAR,"
+                "dropoff VARCHAR)"
+                " WITH ("
+                "external_location = 's3a://test/',"
+                "format = 'CSV',"
+                "skip_header_line_count=1)"
+                ))
 
     print("Trying to SELECT from TABLE...")
     test_query("admin", "admin", namespace, "SELECT * FROM hive.taxi.csv LIMIT 1")
