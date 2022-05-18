@@ -1,0 +1,24 @@
+- apiVersion: t2.stackable.tech/v1
+  kind: Infra
+  template: ionos-centos-8
+  metadata: 
+    name: ionos-k3s-centos-8
+    description: "Cluster for Stackable Operator Integration Tests (IONOS / K3s / CentOS 8)"
+  domain: stackable.test
+  publicKeys: []
+  spec:
+    region: de/fra
+    wireguard: false
+    nodes:
+      main:
+        numberOfNodes: 3
+- apiVersion: t2.stackable.tech/v1
+  kind: Infra
+  template: ionos-k8s
+  metadata: 
+    name: ionos-k8s
+    description: "Cluster for Stackable Operator Integration Tests (IONOS Cloud managed K8s)"
+  publicKeys: []
+  spec:
+    region: de/fra
+    node_count: 3
