@@ -2,20 +2,13 @@
 apiVersion: kuttl.dev/v1beta1
 kind: TestAssert
 metadata:
-  name: minio
-timeout: 900
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: test-minio
-  labels:
-    app: minio
+  name: test-metastore
+timeout: 300
 ---
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
-  name: minio-mc
+  name: test-metastore
 status:
   readyReplicas: 1
   replicas: 1

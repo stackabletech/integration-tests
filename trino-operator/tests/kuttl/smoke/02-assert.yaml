@@ -2,21 +2,20 @@
 apiVersion: kuttl.dev/v1beta1
 kind: TestAssert
 metadata:
-  name: install-trino
-timeout: 720
+  name: install-postgres
+timeout: 600
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: hive-postgresql
+  labels:
+    app.kubernetes.io/name: postgresql
 ---
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
-  name: test-trino-coordinator-default
-status:
-  readyReplicas: 1
-  replicas: 1
----
-apiVersion: apps/v1
-kind: StatefulSet
-metadata:
-  name: test-trino-worker-default
+  name: hive-postgresql
 status:
   readyReplicas: 1
   replicas: 1

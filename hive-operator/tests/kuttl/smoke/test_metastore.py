@@ -13,7 +13,7 @@ from thrift_files.libraries.thrift_hive_metastore_client.ttypes import (
 import argparse
 
 
-def table(db_name, table_name):
+def table(db_name, table_name, location):
     columns = [
         ColumnBuilder("id", "string", "col comment").build()
     ]
@@ -24,7 +24,7 @@ def table(db_name, table_name):
 
     storage_descriptor = StorageDescriptorBuilder(
         columns=columns,
-        location=f"/stackable/warehouse/location_{db_name}_{table_name}",
+        location=location,
         input_format="org.apache.hadoop.hive.ql.io.parquet.MapredParquetInputFormat",
         output_format="org.apache.hadoop.hive.ql.io.parquet.MapredParquetOutputFormat",
         serde_info=serde_info,
@@ -49,19 +49,39 @@ if __name__ == '__main__':
     namespace = args["namespace"]
     database_name = args["database"]
     port = args["port"]
-    test_table_name = "one_column_table"
-    host = 'test-hive-derby-metastore-default-0.test-hive-derby-metastore-default.' + namespace + '.svc.cluster.local'
+    local_test_table_name = "one_column_table"
+    s3_test_table_name = "s3_one_column_table"
+    s3_test_table_name_wrong_bucket = "s3_one_column_table_wrong_buckets"
+    host = 'test-hive-postgres-metastore-default-0.test-hive-postgres-metastore-default.' + namespace + '.svc.cluster.local'
     # Creating database object using builder
     database = DatabaseBuilder(database_name).build()
 
     with HiveMetastoreClient(host, port) as hive_client:
         hive_client.create_database_if_not_exists(database)
-        hive_client.create_table(table(database_name, test_table_name))
-        schema = hive_client.get_schema(db_name=database_name, table_name=test_table_name)
+
+        # Local access
+        hive_client.create_table(table(database_name, local_test_table_name, f"/stackable/warehouse/location_{database_name}_{local_test_table_name}"))
+        schema = hive_client.get_schema(db_name=database_name, table_name=local_test_table_name)
         expected = [FieldSchema(name='id', type='string', comment='col comment')]
         if schema != expected:
-            print("Error: Received schema " + str(schema) + " - expected schema: " + expected)
+            print("[ERROR]: Received local schema " + str(schema) + " - expected schema: " + expected)
             exit(-1)
-        else:
-            print("Test successful!")
-            exit(0)
+
+        # S3 access
+        hive_client.create_external_table(table(database_name, s3_test_table_name, "s3a://test/"))
+        schema = hive_client.get_schema(db_name=database_name, table_name=s3_test_table_name)
+        expected = [FieldSchema(name='id', type='string', comment='col comment')]
+        if schema != expected:
+            print("[ERROR]: Received s3 schema " + str(schema) + " - expected schema: " + expected)
+            exit(-1)
+
+        # Wrong S3 bucket
+        try:
+            hive_client.create_external_table(table(database_name, s3_test_table_name_wrong_bucket, "s3a://wrongbucket/"))
+            # should not reach here
+            exit(-1)
+        except Exception as ex:
+            print("[SUCCESS]: Could not read from non existent bucket: {0}".format(ex))
+
+        print("[SUCCESS] Test finished successfully!")
+        exit(0)
