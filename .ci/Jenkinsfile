@@ -25,7 +25,7 @@ pipeline {
                 }
                 script {
                     sh """
-                        echo The Jenkins workspace folder as seen from the Docker daemonkram: '${env.HOST_WORKSPACE}'
+                        echo \"The Jenkins workspace folder as seen from the Docker daemon: '${env.HOST_WORKSPACE}'\"
                     """
                 }
             }
@@ -35,9 +35,9 @@ pipeline {
             steps {
                 sh """
                     docker run \
-                        --volume ${env.HOST_WORKSPACE}/.ci/target/:/target/" \
-                        --volume ${env.HOST_WORKSPACE}/.ci/tests.yaml:/tests.yaml" \
-                        --volume ${env.HOST_WORKSPACE}/.ci/platforms.yaml:/platforms.yaml" \
+                        --volume ${env.HOST_WORKSPACE}/.ci/target/:/target/ \
+                        --volume ${env.HOST_WORKSPACE}/.ci/tests.yaml:/tests.yaml \
+                        --volume ${env.HOST_WORKSPACE}/.ci/platforms.yaml:/platforms.yaml \
                         --env TEST_NAME=${env.TEST_NAME} \
                         docker.stackable.tech/ci-preprocessor:latest
                 """
