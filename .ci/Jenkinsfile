@@ -34,8 +34,8 @@ pipeline {
                 sh """
                     cd .ci/
                     mkdir target/
-                    docker run docker.stackable.tech/ci-preprocessor:latest \
-                        -eHURZ=blubber
+                    docker run  -eHURZ=blubber \
+                        docker.stackable.tech/ci-preprocessor:latest
                 """
             }
         }
