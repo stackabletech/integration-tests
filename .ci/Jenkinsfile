@@ -20,12 +20,6 @@ pipeline {
 
         stage('prepare test run') {
             steps {
-                sh """
-                    echo Prepare to run test '${env.TEST_NAME}'
-                    echo Jenkins workspace is here: ${env.WORKSPACE}
-                    #export HOST_WORKSPACE=`echo ${env.WORKSPACE} | sed 's~jenkins_home~jenkins/data~'`
-                    #echo neu nun: ${env.HOST_WORKSPACE}
-                """
                 hostWorkspace = sh(script: 'echo hurz', returnStdout: true)
                 env.KRAM = hostWorkspace
                 sh """
