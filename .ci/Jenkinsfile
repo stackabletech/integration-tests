@@ -23,6 +23,8 @@ pipeline {
                 sh """
                     echo Prepare to run test '${env.TEST_NAME}'
                     echo Jenkins workspace is here: ${env.WORKSPACE}
+                    export HOST_WORKSPACE=`echo ${WORKSPACE} | sed 's~jenkins_home~jenkins/data~'`
+                    echo neu nun: ${HOST_WORKSPACE}
                 """
             }
         }
