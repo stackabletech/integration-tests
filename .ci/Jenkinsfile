@@ -33,6 +33,7 @@ pipeline {
             steps {
                 sh """
                     cd .ci/
+                    rm -rf target/ || true
                     mkdir target/
                     docker run  -eHURZ=blubber \
                         docker.stackable.tech/ci-preprocessor:latest
