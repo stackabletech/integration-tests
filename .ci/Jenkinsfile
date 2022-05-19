@@ -21,7 +21,7 @@ pipeline {
         stage('prepare test run') {
             steps {
                 script {
-                    env.HOST_WORKSPACE = sh(script: 'echo ${WORKSPACE} | sed \'s~jenkins_home~jenkins/data~\'', returnStdout: true)
+                    env.HOST_WORKSPACE = sh(script: 'echo ${WORKSPACE} | sed \'s~jenkins_home~jenkins/data~\'', returnStdout: true).trim()
                 }
                 script {
                     sh """
