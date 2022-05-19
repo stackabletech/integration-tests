@@ -32,11 +32,9 @@ pipeline {
 
         stage('dummy test run') {
             steps {
-                script {
-                    sh """
-                        neue stufe: ${env.KRAM}
-                    """
-                }
+                sh """
+                    neue stufe: ${env.KRAM}
+                """
             }
         }
 
