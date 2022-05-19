@@ -23,8 +23,8 @@ pipeline {
                 sh """
                     echo Prepare to run test '${env.TEST_NAME}'
                     echo Jenkins workspace is here: ${env.WORKSPACE}
-                    export HOST_WORKSPACE=`echo ${WORKSPACE} | sed 's~jenkins_home~jenkins/data~'`
-                    echo neu nun: ${HOST_WORKSPACE}
+                    export HOST_WORKSPACE=`echo ${env.WORKSPACE} | sed 's~jenkins_home~jenkins/data~'`
+                    echo neu nun: ${env.HOST_WORKSPACE}
                 """
             }
         }
@@ -40,17 +40,17 @@ pipeline {
         //     }
         // }
 
-        stage('print folder content') {
-            steps {
-                sh """
-                    cd .ci/
-                    rm -rf target/ || true
-                    mkdir target/
-                    docker run \
-                        docker.stackable.tech/ci-preprocessor:latest
-                """
-            }
-        }
+        // stage('print folder content') {
+        //     steps {
+        //         sh """
+        //             cd .ci/
+        //             rm -rf target/ || true
+        //             mkdir target/
+        //             docker run \
+        //                 docker.stackable.tech/ci-preprocessor:latest
+        //         """
+        //     }
+        // }
 
     }
 }
