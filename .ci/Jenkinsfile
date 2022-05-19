@@ -31,8 +31,10 @@ pipeline {
 
         stage('print folder content') {
             steps {
-                sh 'cd .ci/'
-                sh 'ls -la'
+                sh """
+                    cd .ci/
+                    ls -la
+                """
             }
         }
 
