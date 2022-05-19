@@ -30,6 +30,16 @@ pipeline {
             }
         }
 
+        stage('dummy test run') {
+            steps {
+                script {
+                    sh """
+                        neue stufe: ${env.KRAM}
+                    """
+                }
+            }
+        }
+
         // stage('print parameters') {
         //     when {
         //         allOf {
