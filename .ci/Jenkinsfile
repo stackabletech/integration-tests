@@ -23,6 +23,9 @@ pipeline {
                 script {
                     hostWorkspace = sh(script: 'echo hurz', returnStdout: true)
                     env.KRAM = hostWorkspace
+                    sh """
+                        echo KRAM: ${env.KRAM}
+                    """
                 }
             }
         }
