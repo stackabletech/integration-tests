@@ -8,9 +8,11 @@ import requests
 import re
 import subprocess
 import hiyapyco
+from jinja2 import Template
 
 platforms = None
 tests = None
+test_script_template = None
 
 def check_prerequisites():
     """ Checks the prerequisites of this script and fails if they are not satisfied. """
@@ -36,6 +38,11 @@ def read_catalogs():
     platforms = hiyapyco.load("/platforms.yaml")
     tests = hiyapyco.load("/tests.yaml")
 
+def read_templates():
+    global test_script_template
+    with open ("/test.sh.j2", "r") as f:
+        test_script_template = Template(f.read())
+
 def get_platform(name):
     global platforms
     return next(filter(lambda x: x["metadata"]["name"]==name, platforms), None)
@@ -54,9 +61,15 @@ def mergeYaml(baseYaml, yamlToMerge):
     return hiyapyco.load([baseYaml, yamlToMerge], method=hiyapyco.METHOD_MERGE)
 
 def write_cluster_definition(cluster_definition, folder):
-    os.makedirs(folder)
+    os.makedirs(folder, exist_ok = True)
     with open (f"{folder}cluster.yaml", "w") as f:
         f.write(cluster_definition)
+        f.close()
+
+def write_test_script(test, folder):
+    os.makedirs(folder, exist_ok = True)
+    with open (f"{folder}test.sh", "w") as f:
+        f.write(test_script_template.render(test))
         f.close()
 
 def yamlToString(yaml):
@@ -67,6 +80,7 @@ if __name__ == "__main__":
     check_prerequisites()
     clean_target()
     read_catalogs()
+    read_templates()
 
     # read the test
     test_name = os.environ["TEST_NAME"]
@@ -95,4 +109,6 @@ if __name__ == "__main__":
     # write the cluster definition to disk
     write_cluster_definition(yamlToString(cluster_definition), f"/target/{test_name}/")
 
+    # write the test script to disk
+    write_test_script(test, f"/target/{test_name}/")
 

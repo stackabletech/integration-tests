@@ -11,9 +11,10 @@
         _-operator: NIGHTLY
         zookeeper-operator: NIGHTLY
   git_branch: main
-  git_repo: https://github.com/stackabletech/zookeeper-operator.git
+  git_repo: zookeeper-operator
   operator_logs:
     - zookeeper
+    - opa
 - name: zookeeper-operator-nightly-k8s
   platform: ionos-k8s
   platform_overlay: |
@@ -24,6 +25,6 @@
         _-operator: NIGHTLY
         zookeeper-operator: NIGHTLY
   git_branch: main
-  git_repo: https://github.com/stackabletech/zookeeper-operator.git
+  git_repo: zookeeper-operator
   operator_logs:
     - zookeeper

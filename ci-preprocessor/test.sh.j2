@@ -1,0 +1,7 @@
+#!/bin/bash
+git clone https://github.com/stackabletech/{{ git_repo }}.git
+(cd {{ git_repo }}/ && ./scripts/run_tests.sh)
+exit_code=$?
+{% for operator in operator_logs %}./operator-logs.sh {{ operator }} > /target/{{ operator }}-operator.log
+{% endfor %}
+exit $exit_code

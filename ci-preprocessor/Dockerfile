@@ -4,6 +4,9 @@ FROM python:3
 COPY python_modules /
 RUN pip install --no-cache-dir -r python_modules
 
+# copy resources
+COPY test.sh.j2 /
+
 # copy main Python script
 COPY preprocessor.py /
 
