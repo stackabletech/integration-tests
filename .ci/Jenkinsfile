@@ -25,7 +25,7 @@ pipeline {
                 }
                 script {
                     sh """
-                        echo The Jenkins workspace folder as seen from the Docker daemon: ${env.HOST_WORKSPACE}
+                        echo The Jenkins workspace folder as seen from the Docker daemon: '${env.HOST_WORKSPACE}'
                     """
                 }
             }
