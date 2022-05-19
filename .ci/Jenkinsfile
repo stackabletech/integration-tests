@@ -26,6 +26,11 @@ pipeline {
                     export HOST_WORKSPACE=`echo ${env.WORKSPACE} | sed 's~jenkins_home~jenkins/data~'`
                     echo neu nun: ${env.HOST_WORKSPACE}
                 """
+                hostWorkspace = sh(script: 'echo hurz', returnStdout: true).trim()
+                env.KRAM = hostWorkspace
+                sh """
+                    echo KRAM: ${env.KRAM}
+                """
             }
         }
 
