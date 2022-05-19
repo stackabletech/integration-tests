@@ -20,11 +20,10 @@ pipeline {
 
         stage('prepare test run') {
             steps {
-                hostWorkspace = sh(script: 'echo hurz', returnStdout: true)
-                env.KRAM = hostWorkspace
-                sh """
-                    echo KRAM: ${env.KRAM}
-                """
+                script {
+                    hostWorkspace = sh(script: 'echo hurz', returnStdout: true)
+                    env.KRAM = hostWorkspace
+                }
             }
         }
 
