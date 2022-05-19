@@ -21,8 +21,12 @@ pipeline {
         stage('prepare test run') {
             steps {
                 script {
-                    hostWorkspace = sh(script: 'echo ${WORKSPACE} | sed \'s~jenkins_home~jenkins/data~\'', returnStdout: true)
-                    env.HOST_WORKSPACE = hostWorkspace
+                    env.HOST_WORKSPACE = sh(script: 'echo ${WORKSPACE} | sed \'s~jenkins_home~jenkins/data~\'', returnStdout: true)
+                }
+                script {
+                    sh """
+                        echo The Jenkins workspace folder as seen from the Docker daemon: ${env.HOST_WORKSPACE}
+                    """
                 }
             }
         }
