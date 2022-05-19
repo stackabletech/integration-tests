@@ -10,24 +10,33 @@ pipeline {
         stage('check parameters') {
             when {
                 anyOf {
-                    expression { env.STACKABLE_OPERATOR == null }
+                    expression { env.TEST_NAME == null }
                 }
             }
             steps {
-                error('Please select an operator using the environment variable STACKABLE_OPERATOR')
+                error('Please select an operator using the environment variable TEST_NAME')
             }
         }
 
-        stage('print parameters') {
-            when {
-                allOf {
-                    expression { env.STACKABLE_OPERATOR != null }
-                }
-            }
+        stage('prepare test run') {
             steps {
-                echo "Testing the operator: ${env.STACKABLE_OPERATOR}"
+                sh """
+                    echo Prepare to run test '${env.TEST_NAME}'
+                    echo Jenkins workspace is here: ${env.WORKSPACE}
+                """
             }
         }
+
+        // stage('print parameters') {
+        //     when {
+        //         allOf {
+        //             expression { env.STACKABLE_OPERATOR != null }
+        //         }
+        //     }
+        //     steps {
+        //         echo "Testing the operator: ${env.STACKABLE_OPERATOR}"
+        //     }
+        // }
 
         stage('print folder content') {
             steps {
@@ -35,7 +44,7 @@ pipeline {
                     cd .ci/
                     rm -rf target/ || true
                     mkdir target/
-                    docker run  -eHURZ=blubber \
+                    docker run \
                         docker.stackable.tech/ci-preprocessor:latest
                 """
             }
