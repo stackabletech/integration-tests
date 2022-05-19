@@ -33,7 +33,7 @@ pipeline {
         stage('dummy test run') {
             steps {
                 sh """
-                    neue stufe: ${env.KRAM}
+                    echo neue stufe: ${env.KRAM}
                 """
             }
         }
