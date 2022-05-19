@@ -1,0 +1,29 @@
+---
+- name: zookeeper-operator-nightly
+  platform: ionos-k3s-centos-8
+  platform_overlay: |
+    spec:
+      nodes:
+        main:
+          numberOfNodes: 4
+      k8sVersion: stable
+      versions:
+        _-operator: NIGHTLY
+        zookeeper-operator: NIGHTLY
+  git_branch: main
+  git_repo: https://github.com/stackabletech/zookeeper-operator.git
+  operator_logs:
+    - zookeeper
+- name: zookeeper-operator-nightly-k8s
+  platform: ionos-k8s
+  platform_overlay: |
+    spec:
+      node_count: 4
+      k8sVersion: stable
+      versions:
+        _-operator: NIGHTLY
+        zookeeper-operator: NIGHTLY
+  git_branch: main
+  git_repo: https://github.com/stackabletech/zookeeper-operator.git
+  operator_logs:
+    - zookeeper

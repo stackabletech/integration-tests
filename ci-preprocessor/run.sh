@@ -1,0 +1,1 @@
+docker run -v$(pwd)/target/:/target/ -v$(pwd)/platforms.yaml:/platforms.yaml -v$(pwd)/tests.yaml:/tests.yaml -eTEST_NAME=zookeeper-operator-nightly-k8s -u$(id -u):$(id -g) docker.stackable.tech/ci-preprocessor:latest

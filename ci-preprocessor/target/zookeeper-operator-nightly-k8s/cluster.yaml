@@ -1,0 +1,14 @@
+apiVersion: t2.stackable.tech/v1
+kind: Infra
+template: ionos-k8s
+metadata:
+  name: ionos-k8s
+  description: Cluster for Stackable Operator Integration Tests (IONOS Cloud managed K8s)
+publicKeys: []
+spec:
+  region: de/fra
+  node_count: 4
+  k8sVersion: stable
+  versions:
+    _-operator: NIGHTLY
+    zookeeper-operator: NIGHTLY
