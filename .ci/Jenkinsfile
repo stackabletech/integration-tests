@@ -33,11 +33,9 @@ pipeline {
             steps {
                 sh """
                     cd .ci/
-                    ls -la
-                    id -u
-                    id -g
-                    docker ps
-                    docker images
+                    mkdir target/
+                    docker run docker.stackable.tech/ci-preprocessor:latest \
+                        -eHURZ=blubber
                 """
             }
         }
