@@ -21,11 +21,8 @@ pipeline {
         stage('prepare test run') {
             steps {
                 script {
-                    hostWorkspace = sh(script: 'echo hurz', returnStdout: true)
-                    env.KRAM = hostWorkspace
-                    sh """
-                        echo KRAM: ${env.KRAM}
-                    """
+                    hostWorkspace = sh(script: 'echo ${WORKSPACE}', returnStdout: true)
+                    env.HOST_WORKSPACE = hostWorkspace
                 }
             }
         }
@@ -33,7 +30,7 @@ pipeline {
         stage('dummy test run') {
             steps {
                 sh """
-                    echo neue stufe: ${env.KRAM}
+                    echo Workspace für Docker: ${env.HOST_WORKSPACE}
                 """
             }
         }
