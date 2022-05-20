@@ -19,12 +19,12 @@ metadata:
   name: test-nifi-node-default-0
 spec:
   containers:
-  - name: nifi
-    resources:
-      limits:
-        memory: 2Gi
-      requests:
-        memory: 2Gi
+    - name: nifi
+      resources:
+        limits:
+          memory: 2Gi
+        requests:
+          memory: 2Gi
 ---
 apiVersion: kuttl.dev/v1beta1
 kind: TestAssert

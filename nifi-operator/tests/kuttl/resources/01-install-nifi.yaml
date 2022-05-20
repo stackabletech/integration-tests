@@ -32,7 +32,7 @@ spec:
     config:
       resources:
         memory:
-          limit: '2Gi'
+          limit: "2Gi"
         storage:
           flowfile_repo:
             capacity: 2Gi
@@ -53,4 +53,3 @@ spec:
           log:
             rootLogLevel: INFO
         replicas: 1
-
