@@ -34,4 +34,3 @@ status:
   capacity:
     storage: 2Gi
   phase: Bound
-
