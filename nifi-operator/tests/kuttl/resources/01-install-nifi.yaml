@@ -29,6 +29,21 @@ spec:
   sensitivePropertiesConfig:
     keySecret: nifi-sensitive-property-key
   nodes:
+    config:
+      resources:
+        memory:
+          limit: '2Gi'
+        storage:
+          flowfile_repo:
+            capacity: 2Gi
+          provenance_repo:
+            capacity: 2Gi
+          database_repo:
+            capacity: 2Gi
+          content_repo:
+            capacity: 2Gi
+          state_repo:
+            capacity: 2Gi
     roleGroups:
       default:
         selector:
