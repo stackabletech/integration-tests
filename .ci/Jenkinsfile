@@ -22,12 +22,12 @@ pipeline {
             steps {
                 script {
                     env.HOST_WORKSPACE = sh(script: 'echo ${WORKSPACE} | sed \'s~jenkins_home~jenkins/data~\'', returnStdout: true).trim()
-                    env.DOCKER_USER_PARAM = sh(script: 'echo "hurz"', returnStdout: true).trim()
+                    env.T2_TESTDRIVER_USER_PARAM = sh(script: 'echo "$(id -u):$(id -g)"', returnStdout: true).trim()
                 }
                 script {
                     sh """
                         echo \"The Jenkins workspace folder as seen from the Docker daemon: '${env.HOST_WORKSPACE}'\"
-                        echo \"The Docker user parameter value: '${env.DOCKER_USER_PARAM}'\"
+                        echo \"The Docker user parameter value for T2 testdriver: '${env.T2_TESTDRIVER_USER_PARAM}'\"
                         docker pull docker.stackable.tech/ci-preprocessor:latest
                     """
                 }
