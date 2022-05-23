@@ -20,7 +20,8 @@ spec:
     s3connection:
       inline:
         host: s3-de-central.profitbricks.com
-        secretClass: s3-credentials
+        credentials:
+          secretClass: s3-credentials-class
   deepStorage:
     hdfs:
       storageDirectory: hdfs://druid-hdfs-namenode-default-0:8020/data
@@ -64,11 +65,24 @@ spec:
             kubernetes.io/os: linux
         config: {}
         replicas: 1
+
+---
+apiVersion: secrets.stackable.tech/v1alpha1
+kind: SecretClass
+metadata:
+  name: s3-credentials-class
+spec:
+  backend:
+    k8sSearch:
+      searchNamespace:
+        pod: {}
 ---
 apiVersion: v1
 kind: Secret
 metadata:
   name: s3-credentials
+  labels:
+    secrets.stackable.tech/class: s3-credentials-class
 stringData:
-  ACCESS_KEY_ID: YOURACCESSKEYIDHERE
-  SECRET_ACCESS_KEY: YOURSECRETACCESSKEYHERE
+  accessKey: YOUR_VALID_ACCESS_KEY_ID_HERE
+  secretKey: YOUR_SECRET_ACCES_KEY_THATBELONGS_TO_THE_KEY_ID_HERE
