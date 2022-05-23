@@ -18,7 +18,7 @@ pipeline {
             }
         }
 
-        stage('prepare test run') {
+        stage('prepare environment on Jenkins') {
             steps {
                 script {
                     env.HOST_WORKSPACE = sh(script: 'echo ${WORKSPACE} | sed \'s~jenkins_home~jenkins/data~\'', returnStdout: true).trim()
@@ -29,48 +29,41 @@ pipeline {
                         echo \"The Jenkins workspace folder as seen from the Docker daemon: '${env.HOST_WORKSPACE}'\"
                         echo \"The Docker user parameter value for T2 testdriver: '${env.T2_TESTDRIVER_USER_PARAM}'\"
                         docker pull docker.stackable.tech/ci-preprocessor:latest
+                        docker pull docker.stackable.tech/t2-testdriver
+                        mkdir -p .ci/tests/
                     """
                 }
             }
         }
 
-        stage('test run') {
+        stage('generate test files') {
             steps {
                 sh """
                     docker run \
-                        --volume ${env.HOST_WORKSPACE}/.ci/target/:/target/ \
+                        --volume ${env.HOST_WORKSPACE}/.ci/tests/:/target/ \
                         --volume ${env.HOST_WORKSPACE}/.ci/tests.yaml:/tests.yaml \
                         --volume ${env.HOST_WORKSPACE}/.ci/platforms.yaml:/platforms.yaml \
                         --env TEST_NAME=${env.TEST_NAME} \
                         docker.stackable.tech/ci-preprocessor:latest
+                    mkdir -p .ci/tests/${env.TEST_NAME}/target
                 """
             }
         }
 
-        // stage('print parameters') {
-        //     when {
-        //         allOf {
-        //             expression { env.STACKABLE_OPERATOR != null }
-        //         }
-        //     }
-        //     steps {
-        //         echo "Testing the operator: ${env.STACKABLE_OPERATOR}"
-        //     }
-        // }
-
-        // stage('print folder content') {
-        //     steps {
-        //         sh """
-        //             cd .ci/
-        //             rm -rf target/ || true
-        //             mkdir target/
-        //             docker run \
-        //                 docker.stackable.tech/ci-preprocessor:latest
-        //         """
-        //     }
-        // }
+        stage('run test') {
+            steps {
+                sh """
+                    docker run \
+                        --volume ${env.HOST_WORKSPACE}/.ci/tests/${env.TEST_NAME}/target/:/target/ \
+                        --volume ${env.HOST_WORKSPACE}/.ci/tests/${env.TEST_NAME}/cluster.yaml:/cluster.yaml \
+                        --volume ${env.HOST_WORKSPACE}/.ci/tests/${env.TEST_NAME}/test.sh:/test.sh \
+                        --env T2_TOKEN=tuctuc \
+                        --env T2_URL=https://t2.stackable.tech \
+                        --env UID_GID=${env.T2_TESTDRIVER_USER_PARAM} \
+                        docker.stackable.tech/t2-testdriver    
+                """
+            }
+        }
 
     }
 }
-
-
