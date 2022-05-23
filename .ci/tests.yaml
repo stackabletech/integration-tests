@@ -11,7 +11,7 @@
         _-operator: NIGHTLY
         zookeeper-operator: NIGHTLY
   git_branch: main
-  git_repo: https://github.com/stackabletech/zookeeper-operator.git
+  git_repo: zookeeper-operator
   operator_logs:
     - zookeeper
 - name: zookeeper-operator-nightly-k8s
@@ -24,6 +24,6 @@
         _-operator: NIGHTLY
         zookeeper-operator: NIGHTLY
   git_branch: main
-  git_repo: https://github.com/stackabletech/zookeeper-operator.git
+  git_repo: zookeeper-operator
   operator_logs:
     - zookeeper

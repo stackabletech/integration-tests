@@ -7,7 +7,7 @@ pipeline {
 
     stages {
 
-        stage('check parameters') {
+        stage('assert parameters') {
             when {
                 anyOf {
                     expression { env.TEST_NAME == null }
