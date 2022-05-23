@@ -2,20 +2,13 @@
 apiVersion: kuttl.dev/v1beta1
 kind: TestAssert
 metadata:
-  name: minio
-timeout: 900
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: test-minio
-  labels:
-    app: minio
+  name: install-test-hive-derby
+timeout: 600
 ---
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
-  name: minio-mc
+  name: test-hive-postgres-metastore-default
 status:
   readyReplicas: 1
   replicas: 1

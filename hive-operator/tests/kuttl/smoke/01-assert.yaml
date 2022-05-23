@@ -1,13 +1,21 @@
+---
 apiVersion: kuttl.dev/v1beta1
 kind: TestAssert
 metadata:
-  name: test-metastore
-timeout: 300
+  name: install-postgres
+timeout: 600
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: hive-postgresql
+  labels:
+    app.kubernetes.io/name: postgresql
 ---
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
-  name: test-metastore
+  name: hive-postgresql
 status:
   readyReplicas: 1
   replicas: 1
