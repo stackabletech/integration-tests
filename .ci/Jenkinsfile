@@ -53,16 +53,18 @@ pipeline {
 
         stage('simulate test') {
             steps {
-                env.TEST_RETURN_CODE = sh (script: """
-                    docker pull docker.stackable.tech/t2-testdriver:dummy
-                    set +e
-                    docker run \
-                        --env FAIL_TERMINATE=TRUE \
-                        docker.stackable.tech/t2-testdriver:dummy
-                """, returnStatus: true)
-                sh """
-                    echo >>>${env.TEST_RETURN_CODE}<<<
-                """
+                script {
+                    env.TEST_RETURN_CODE = sh (script: """
+                        docker pull docker.stackable.tech/t2-testdriver:dummy
+                        set +e
+                        docker run \
+                            --env FAIL_TERMINATE=TRUE \
+                            docker.stackable.tech/t2-testdriver:dummy
+                    """, returnStatus: true)
+                    sh """
+                        echo >>>${env.TEST_RETURN_CODE}<<<
+                    """
+                }
             }
         }
 
