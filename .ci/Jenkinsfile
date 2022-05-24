@@ -29,7 +29,7 @@ pipeline {
                         echo \"The Jenkins workspace folder as seen from the Docker daemon: '${env.HOST_WORKSPACE}'\"
                         echo \"The Docker user parameter value for T2 testdriver: '${env.JENKINS_USER_GROUP}'\"
                         docker pull docker.stackable.tech/ci-preprocessor:latest
-                        docker pull docker.stackable.tech/t2-testdriver
+                        docker pull docker.stackable.tech/t2-testdriver:latest
                         mkdir -p .ci/tests/
                     """
                 }
@@ -54,6 +54,10 @@ pipeline {
         stage('simulate test') {
             steps {
                 sh """
+                    docker pull docker.stackable.tech/t2-testdriver:dummy
+                    docker run \
+                        --env FAIL_LAUNCH=TRUE \
+                        docker.stackable.tech/t2-testdriver:dummy
                     touch .ci/tests/${env.TEST_NAME}/target/test1.log
                     touch .ci/tests/${env.TEST_NAME}/target/test2.log
                     touch .ci/tests/${env.TEST_NAME}/target/test3.log
