@@ -61,13 +61,16 @@ pipeline {
                             --env FAIL_TERMINATE=TRUE \
                             docker.stackable.tech/t2-testdriver:dummy
                     """, returnStatus: true)
-                    sh """
-                        set +e
-                        echo rc_ist_dieser ${env.TEST_RETURN_CODE}
-                        docker hurz
-                        echo "nach docker hurz"
-                    """
-                    unstable(message: "unstable because of ${env.TEST_RETURN_CODE}")
+
+                    if (env.TEST_RETURN_CODE == 255) {
+                        unstable(message: "cluster launch failed")
+                    }
+                    if (env.TEST_RETURN_CODE == 254) {
+                        unstable(message: "cluster termination failed")
+                    }
+
+
+
                 }
             }
         }
