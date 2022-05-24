@@ -121,7 +121,7 @@ pipeline {
 
     post {
         unstable {
-            slackSend channel: 'U02G2BBMZHR', message: "${env.JOB_NAME}\nUNSTABLE\n${env.JOB_URL}", color: 'warning'
+            slackSend channel: 'U02G2BBMZHR', message: "Test ${env.JOB_NAME} is unstable!\n${env.BUILD_URL}", color: 'warning'
         }
         failure {
             slackSend channel: 'U02G2BBMZHR', message: 'failed', color: 'danger'
