@@ -60,6 +60,12 @@ pipeline {
             }
         }
 
+        stage('cleanup') {
+            steps {
+                cleanWs()
+            }
+        }
+
 
 //        stage('run test using T2 Testdriver') {
 //            steps {
