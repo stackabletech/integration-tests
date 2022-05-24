@@ -57,7 +57,7 @@ pipeline {
                     docker pull docker.stackable.tech/t2-testdriver:dummy
                     set +e
                     docker run \
-                        --env FAIL_LAUNCH=TRUE \
+                        --env FAIL_TERMINATE=TRUE \
                         docker.stackable.tech/t2-testdriver:dummy
                     echo \$?
                     set -e
