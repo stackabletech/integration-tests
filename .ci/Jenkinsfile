@@ -68,7 +68,7 @@ pipeline {
                         } else if (env.TEST_RETURN_CODE == "254") {
                             unstable(message: "cluster termination failed")
                         } else  {
-                            failed(message: "test failed (see artifacts and console for details)")
+                            error(message: "test failed (see artifacts and console for details)")
                         }
                     }
 
