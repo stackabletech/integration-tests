@@ -56,6 +56,7 @@ pipeline {
                 sh """
                     docker pull docker.stackable.tech/t2-testdriver:dummy
                     ! docker run \
+                        --env FAIL_LAUNCH=TRUE \
                         docker.stackable.tech/t2-testdriver:dummy
                     echo \$?
                     touch .ci/tests/${env.TEST_NAME}/target/test1.log
