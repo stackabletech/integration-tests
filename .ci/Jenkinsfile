@@ -59,7 +59,7 @@ pipeline {
                     // run the test in the T2 testdriver container
                     testdriverExitCode = sh (script: """
                         docker run \
-                            --env FAIL_TERMINATE=TRUE \
+                            --env FAIL_TERMINAT=TRUE \
                             docker.stackable.tech/t2-testdriver:dummy
                     """, returnStatus: true)
 
