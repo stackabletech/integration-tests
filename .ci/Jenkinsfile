@@ -54,9 +54,16 @@ pipeline {
         stage('simulate test') {
             steps {
                 sh """
-                    touch .ci/test3.log
-                    touch .ci/test4.log
+                    touch .ci/tests/${env.TEST_NAME}/target/test1.log
+                    touch .ci/tests/${env.TEST_NAME}/target/test2.log
+                    touch .ci/tests/${env.TEST_NAME}/target/test3.log
                 """
+            }
+        }
+
+        stage('archive artifacts') {
+            steps {
+                archiveArtifacts allowEmptyArchive: true, artifacts: ".ci/tests/${env.TEST_NAME}/target/**", defaultExcludes: false, followSymlinks: false
             }
         }
 
@@ -65,7 +72,6 @@ pipeline {
                 cleanWs()
             }
         }
-
 
 //        stage('run test using T2 Testdriver') {
 //            steps {
