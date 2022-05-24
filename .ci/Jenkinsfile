@@ -63,6 +63,8 @@ pipeline {
                     """, returnStatus: true)
                     sh """
                         echo ${env.TEST_RETURN_CODE}
+                        docker hurz
+                        echo "nach docker hurz"
                     """
                 }
             }
