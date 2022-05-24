@@ -63,6 +63,8 @@ pipeline {
                             docker.stackable.tech/t2-testdriver:dummy
                     """, returnStatus: true)
 
+                    sh "touch .ci/tests/${env.TEST_NAME}/target/result.txt"
+
                     // This error handling section looks weird...
                     // Depending on the outcome of the T2 testdriver run,
                     // we set the result to UNSTABLE, raise an ERROR or do nothing.
