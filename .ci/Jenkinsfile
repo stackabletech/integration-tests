@@ -54,7 +54,8 @@ pipeline {
         stage('simulate test') {
             steps {
                 sh """
-                    touch .ci/tests/${env.TEST_NAME}/target/test.log
+                    touch .ci/tests/${env.TEST_NAME}/target/test2.log
+                    touch .ci/tests/${env.TEST_NAME}/target/test3.log
                 """
             }
         }
