@@ -53,34 +53,36 @@ pipeline {
 
         stage('run test') {
             steps {
-                script {
-                    // run the test in the T2 testdriver container
-                    testdriverExitCode = sh (script: """
-                        docker run \
-                            --volume ${env.HOST_WORKSPACE}/.ci/tests/${env.TEST_NAME}/target/:/target/ \
-                            --volume ${env.HOST_WORKSPACE}/.ci/tests/${env.TEST_NAME}/cluster.yaml:/cluster.yaml \
-                            --volume ${env.HOST_WORKSPACE}/.ci/tests/${env.TEST_NAME}/test.sh:/test.sh \
-                            --env T2_TOKEN=$T2_TOKEN \
-                            --env T2_URL=https://t2.stackable.tech \
-                            --env UID_GID=${env.JENKINS_USER_GROUP} \
-                            docker.stackable.tech/t2-testdriver    
-                    """, returnStatus: true)
+                withCredentials([string(credentialsId: 'T2_TOKEN', variable: 'T2_TOKEN')]) {
+                    script {
+                        // run the test in the T2 testdriver container
+                        testdriverExitCode = sh (script: """
+                            docker run \
+                                --volume ${env.HOST_WORKSPACE}/.ci/tests/${env.TEST_NAME}/target/:/target/ \
+                                --volume ${env.HOST_WORKSPACE}/.ci/tests/${env.TEST_NAME}/cluster.yaml:/cluster.yaml \
+                                --volume ${env.HOST_WORKSPACE}/.ci/tests/${env.TEST_NAME}/test.sh:/test.sh \
+                                --env T2_TOKEN=$T2_TOKEN \
+                                --env T2_URL=https://t2.stackable.tech \
+                                --env UID_GID=${env.JENKINS_USER_GROUP} \
+                                docker.stackable.tech/t2-testdriver    
+                        """, returnStatus: true)
 
-                    sh "touch .ci/tests/${env.TEST_NAME}/target/result.txt"
+                        sh "touch .ci/tests/${env.TEST_NAME}/target/result.txt"
 
-                    // This error handling section looks weird...
-                    // Depending on the outcome of the T2 testdriver run,
-                    // we set the result to UNSTABLE, raise an ERROR or do nothing.
-                    // The surrounding catchError() makes sure that following steps
-                    // are executed regardless of the outcome of this stage
-                    catchError(message: 'test failed', stageResult: 'FAILURE') {
-                        if(testdriverExitCode != 0) {
-                            if (testdriverExitCode == 255) {
-                                unstable(message: "cluster launch failed")
-                            } else if (testdriverExitCode == 254) {
-                                unstable(message: "cluster termination failed")
-                            } else  {
-                                error(message: "test failed")
+                        // This error handling section looks weird...
+                        // Depending on the outcome of the T2 testdriver run,
+                        // we set the result to UNSTABLE, raise an ERROR or do nothing.
+                        // The surrounding catchError() makes sure that following steps
+                        // are executed regardless of the outcome of this stage
+                        catchError(message: 'test failed', stageResult: 'FAILURE') {
+                            if(testdriverExitCode != 0) {
+                                if (testdriverExitCode == 255) {
+                                    unstable(message: "cluster launch failed")
+                                } else if (testdriverExitCode == 254) {
+                                    unstable(message: "cluster termination failed")
+                                } else  {
+                                    error(message: "test failed")
+                                }
                             }
                         }
                     }
