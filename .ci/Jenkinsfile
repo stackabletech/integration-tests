@@ -68,7 +68,7 @@ pipeline {
                     // we set the result to UNSTABLE, raise an ERROR or do nothing.
                     // The surrounding catchError() makes sure that following steps
                     // are executed regardless of the outcome of this stage
-                    catchError(message: 'test failed', stageResult: 'ABORTED') {
+                    catchError(message: 'test failed', stageResult: 'FAILURE') {
                         if(testdriverExitCode != 0) {
                             if (testdriverExitCode == 255) {
                                 unstable(message: "cluster launch failed")
