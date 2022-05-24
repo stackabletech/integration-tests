@@ -58,15 +58,18 @@ pipeline {
                         docker pull docker.stackable.tech/t2-testdriver:dummy
                         set +e
                         docker run \
-                            --env FAIL_LAUNCH=TRUE \
+                            --env FAIL_LAUNC=TRUE \
                             docker.stackable.tech/t2-testdriver:dummy
                     """, returnStatus: true)
 
-                    if (env.TEST_RETURN_CODE == "255") {
-                        unstable(message: "cluster launch failed")
-                    }
-                    if (env.TEST_RETURN_CODE == "254") {
-                        unstable(message: "cluster termination failed")
+                    if(env.TEST_RETURN_CODE != "0") {
+                        if (env.TEST_RETURN_CODE == "255") {
+                            unstable(message: "cluster launch failed")
+                        } else if (env.TEST_RETURN_CODE == "254") {
+                            unstable(message: "cluster termination failed")
+                        } else  {
+                            failed(message: "test failed (see artifacts and console for details)")
+                        }
                     }
 
 
