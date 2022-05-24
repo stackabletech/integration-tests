@@ -62,7 +62,7 @@ pipeline {
                             docker.stackable.tech/t2-testdriver:dummy
                     """, returnStatus: true)
                     sh """
-                        echo >>>${env.TEST_RETURN_CODE}<<<
+                        echo ${env.TEST_RETURN_CODE}
                     """
                 }
             }
