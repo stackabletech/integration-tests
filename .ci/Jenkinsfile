@@ -54,9 +54,8 @@ pipeline {
         stage('simulate test') {
             steps {
                 script {
+                    sh "docker pull docker.stackable.tech/t2-testdriver:dummy"
                     env.TEST_RETURN_CODE = sh (script: """
-                        docker pull docker.stackable.tech/t2-testdriver:dummy
-                        set +e
                         docker run \
                             --env FAIL_LAUNCH=TRUE \
                             docker.stackable.tech/t2-testdriver:dummy
