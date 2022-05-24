@@ -59,7 +59,7 @@ pipeline {
                     // run the test in the T2 testdriver container
                     testdriverExitCode = sh (script: """
                         docker run \
-                            --env FAIL_TEST=TRUE \
+                            --env FAIL_LAUNCH=TRUE \
                             docker.stackable.tech/t2-testdriver:dummy
                     """, returnStatus: true)
 
@@ -121,7 +121,7 @@ pipeline {
 
     post {
         unstable {
-            slackSend channel: 'U02G2BBMZHR', message: 'unstable', color: 'warning'
+            slackSend channel: 'U02G2BBMZHR', message: "${env.TEST_NAME}", color: 'warning'
         }
         failure {
             slackSend channel: 'U02G2BBMZHR', message: 'failed', color: 'danger'
