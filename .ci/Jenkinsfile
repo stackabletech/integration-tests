@@ -86,7 +86,7 @@ pipeline {
         stage('set build status') {
             steps {
                 script {
-                    currentBuild.currentResult = 'UNSTABLE'
+                    unstable(message: "Blah blah")
                 }
             }
         }
