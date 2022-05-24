@@ -96,23 +96,20 @@ pipeline {
         }
 
         stage('notify') {
-            steps {
-                slackSend channel: 'U02G2BBMZHR', message: 'hallo'
+            post {
+                unstable {
+                    slackSend channel: 'U02G2BBMZHR', message: 'unstable'
+                }
+                failure {
+                    slackSend channel: 'U02G2BBMZHR', message: 'failed'
+                }
+                fixed {
+                    slackSend channel: 'U02G2BBMZHR', message: 'fixed'
+                }
             }
         }
 
 
-        post {
-            unstable {
-                slackSend channel: 'U02G2BBMZHR', message: 'unstable'
-            }
-            failure {
-                slackSend channel: 'U02G2BBMZHR', message: 'failed'
-            }
-            fixed {
-                slackSend channel: 'U02G2BBMZHR', message: 'fixed'
-            }
-        }
 
 
 
