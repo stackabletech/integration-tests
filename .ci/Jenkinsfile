@@ -67,6 +67,7 @@ pipeline {
                         docker hurz
                         echo "nach docker hurz"
                     """
+                    unstable(message: "unstable because of ${env.TEST_RETURN_CODE}")
                 }
             }
         }
@@ -83,13 +84,6 @@ pipeline {
             }
         }
 
-        stage('set build status') {
-            steps {
-                script {
-                    unstable(message: "Blah blah")
-                }
-            }
-        }
 
 //        stage('run test using T2 Testdriver') {
 //            steps {
