@@ -83,6 +83,14 @@ pipeline {
             }
         }
 
+        stage('set build status') {
+            steps {
+                script {
+                    currentBuild.currentResult = 'UNSTABLE'
+                }
+            }
+        }
+
 //        stage('run test using T2 Testdriver') {
 //            steps {
 //                withCredentials([string(credentialsId: 'T2_TOKEN', variable: 'T2_TOKEN')]) {
