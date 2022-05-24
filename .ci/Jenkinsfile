@@ -80,6 +80,8 @@ pipeline {
                         }
                     }
 
+                    sh "touch .ci/tests/${env.TEST_NAME}/target/test_output.log"
+                    sh "touch .ci/tests/${env.TEST_NAME}/target/stackable_cluster.txt"
                 }
             }
         }
