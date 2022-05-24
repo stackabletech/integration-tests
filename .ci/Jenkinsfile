@@ -51,24 +51,31 @@ pipeline {
             }
         }
 
-        stage('simulate test') {
+        stage('run test') {
             steps {
                 script {
                     sh "docker pull docker.stackable.tech/t2-testdriver:dummy"
+
+                    // run the test in the T2 testdriver container
                     testdriverExitCode = sh (script: """
                         docker run \
                             --env FAIL_TEST=TRUE \
                             docker.stackable.tech/t2-testdriver:dummy
                     """, returnStatus: true)
 
-                    catchError(message: 'test failed1', stageResult: 'FAILURE') {
+                    // This error handling section looks weird...
+                    // Depending on the outcome of the T2 testdriver run,
+                    // we set the result to UNSTABLE, raise an ERROR or do nothing.
+                    // The surrounding catchError() makes sure that following steps
+                    // are executed regardless of the outcome of this stage
+                    catchError(message: 'test failed', stageResult: 'ABORTED') {
                         if(testdriverExitCode != 0) {
                             if (testdriverExitCode == 255) {
-                                unstable(message: "cluster launch failed :-(")
+                                unstable(message: "cluster launch failed")
                             } else if (testdriverExitCode == 254) {
-                                unstable(message: "cluster termination failed :-(")
+                                unstable(message: "cluster termination failed")
                             } else  {
-                                error(message: "test failed2")
+                                error(message: "test failed")
                             }
                         }
                     }
