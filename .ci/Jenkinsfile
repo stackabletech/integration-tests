@@ -53,17 +53,15 @@ pipeline {
 
         stage('simulate test') {
             steps {
-                sh """
+                env.TEST_RETURN_CODE = sh (script: """
                     docker pull docker.stackable.tech/t2-testdriver:dummy
                     set +e
                     docker run \
                         --env FAIL_TERMINATE=TRUE \
                         docker.stackable.tech/t2-testdriver:dummy
-                    echo \$?
-                    set -e
-                    touch .ci/tests/${env.TEST_NAME}/target/test1.log
-                    touch .ci/tests/${env.TEST_NAME}/target/test2.log
-                    touch .ci/tests/${env.TEST_NAME}/target/test3.log
+                """, returnStatus: true)
+                sh """
+                    echo >>>${env.TEST_RETURN_CODE}<<<
                 """
             }
         }
