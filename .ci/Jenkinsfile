@@ -79,9 +79,6 @@ pipeline {
                             }
                         }
                     }
-
-                    sh "touch .ci/tests/${env.TEST_NAME}/target/test_output.log"
-                    sh "touch .ci/tests/${env.TEST_NAME}/target/stackable_cluster.txt"
                 }
             }
         }
@@ -95,6 +92,12 @@ pipeline {
         stage('cleanup') {
             steps {
                 cleanWs()
+            }
+        }
+
+        stage('notify') {
+            steps {
+                slackSend channel: 'U02G2BBMZHR', message: 'hallo'
             }
         }
 
