@@ -123,13 +123,13 @@ pipeline {
 
     post {
         unstable {
-            slackSend channel: 'U02G2BBMZHR', message: "*${env.JOB_NAME}* - ${env.BUILD_DISPLAY_NAME} unstable!(<${env.BUILD_URL}|Open in Jenkins>)", color: 'warning'
+            slackSend channel: 'U02G2BBMZHR', message: "*${env.JOB_NAME}* - ${env.BUILD_DISPLAY_NAME} is *unstable* (<${env.BUILD_URL}|Open in Jenkins>)", color: 'warning'
         }
         failure {
-            slackSend channel: 'U02G2BBMZHR', message: 'failed', color: 'danger'
+            slackSend channel: 'U02G2BBMZHR', message: "*${env.JOB_NAME}* - ${env.BUILD_DISPLAY_NAME} *failed* (<${env.BUILD_URL}|Open in Jenkins>)", color: 'danger'
         }
         fixed {
-            slackSend channel: 'U02G2BBMZHR', message: 'fixed', color: 'good'
+            slackSend channel: 'U02G2BBMZHR', message: "*${env.JOB_NAME}* - ${env.BUILD_DISPLAY_NAME} *back to normal* :smiley: (<${env.BUILD_URL}|Open in Jenkins>)", color: 'good'
         }
     }
 
