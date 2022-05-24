@@ -57,7 +57,7 @@ pipeline {
                     docker pull docker.stackable.tech/t2-testdriver:dummy
                     ! docker run \
                         docker.stackable.tech/t2-testdriver:dummy
-                    echo $?
+                    echo \$?
                     touch .ci/tests/${env.TEST_NAME}/target/test1.log
                     touch .ci/tests/${env.TEST_NAME}/target/test2.log
                     touch .ci/tests/${env.TEST_NAME}/target/test3.log
