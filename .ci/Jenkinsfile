@@ -61,14 +61,14 @@ pipeline {
                             docker.stackable.tech/t2-testdriver:dummy
                     """, returnStatus: true)
 
-                    catchError(message: 'test failed :-(((', stageResult: 'FAILURE') {
+                    catchError(message: 'test failed1', stageResult: 'FAILURE') {
                         if(testdriverExitCode != 0) {
                             if (testdriverExitCode == 255) {
                                 unstable(message: "cluster launch failed :-(")
                             } else if (testdriverExitCode == 254) {
                                 unstable(message: "cluster termination failed :-(")
                             } else  {
-                                error(message: "test failed :-(  - see artifacts and console for details")
+                                error(message: "test failed2")
                             }
                         }
                     }
