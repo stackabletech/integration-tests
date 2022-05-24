@@ -102,6 +102,21 @@ pipeline {
         }
 
 
+        post {
+            unstable {
+                slackSend channel: 'U02G2BBMZHR', message: 'unstable'
+            }
+            failure {
+                slackSend channel: 'U02G2BBMZHR', message: 'failed'
+            }
+            fixed {
+                slackSend channel: 'U02G2BBMZHR', message: 'fixed'
+            }
+        }
+
+
+
+
 //        stage('run test using T2 Testdriver') {
 //            steps {
 //                withCredentials([string(credentialsId: 'T2_TOKEN', variable: 'T2_TOKEN')]) {
