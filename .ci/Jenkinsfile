@@ -54,13 +54,16 @@ pipeline {
         stage('run test') {
             steps {
                 script {
-                    sh "docker pull docker.stackable.tech/t2-testdriver:dummy"
-
                     // run the test in the T2 testdriver container
                     testdriverExitCode = sh (script: """
                         docker run \
-                            --env SUCCESS=TRUE \
-                            docker.stackable.tech/t2-testdriver:dummy
+                            --volume ${env.HOST_WORKSPACE}/.ci/tests/${env.TEST_NAME}/target/:/target/ \
+                            --volume ${env.HOST_WORKSPACE}/.ci/tests/${env.TEST_NAME}/cluster.yaml:/cluster.yaml \
+                            --volume ${env.HOST_WORKSPACE}/.ci/tests/${env.TEST_NAME}/test.sh:/test.sh \
+                            --env T2_TOKEN=$T2_TOKEN \
+                            --env T2_URL=https://t2.stackable.tech \
+                            --env UID_GID=${env.JENKINS_USER_GROUP} \
+                            docker.stackable.tech/t2-testdriver    
                     """, returnStatus: true)
 
                     sh "touch .ci/tests/${env.TEST_NAME}/target/result.txt"
@@ -96,29 +99,6 @@ pipeline {
                 cleanWs()
             }
         }
-
-
-
-
-
-
-//        stage('run test using T2 Testdriver') {
-//            steps {
-//                withCredentials([string(credentialsId: 'T2_TOKEN', variable: 'T2_TOKEN')]) {
-//                    sh """
-//                        docker run \
-//                            --volume ${env.HOST_WORKSPACE}/.ci/tests/${env.TEST_NAME}/target/:/target/ \
-//                            --volume ${env.HOST_WORKSPACE}/.ci/tests/${env.TEST_NAME}/cluster.yaml:/cluster.yaml \
-//                            --volume ${env.HOST_WORKSPACE}/.ci/tests/${env.TEST_NAME}/test.sh:/test.sh \
-//                            --env T2_TOKEN=$T2_TOKEN \
-//                            --env T2_URL=https://t2.stackable.tech \
-//                            --env UID_GID=${env.JENKINS_USER_GROUP} \
-//                            docker.stackable.tech/t2-testdriver    
-//                    """
-//                }
-//            }
-//        }
-
     }
 
     post {
