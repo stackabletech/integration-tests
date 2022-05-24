@@ -1,9 +1,9 @@
 - apiVersion: t2.stackable.tech/v1
   kind: Infra
-  template: ionos-centos-8
+  template: hcloud-centos-8
   metadata: 
-    name: ionos-k3s-centos-8
-    description: "Cluster for Stackable Operator Integration Tests (IONOS / K3s / CentOS 8)"
+    name: hcloud-k3s-centos-8
+    description: "Cluster for Stackable Operator Integration Tests (Hetzner Cloud / K3s / CentOS 8)"
   domain: stackable.test
   publicKeys: []
   spec:

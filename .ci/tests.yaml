@@ -1,6 +1,6 @@
 ---
 - name: zookeeper-operator-nightly
-  platform: ionos-k3s-centos-8
+  platform: hcloud-k3s-centos-8
   platform_overlay: |
     spec:
       nodes:
