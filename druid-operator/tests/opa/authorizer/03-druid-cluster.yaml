@@ -21,8 +21,8 @@ spec:
     host: localhost
     port: 1527
   deepStorage:
-    storageType: hdfs
-    storageDirectory: hdfs://druid-hdfs-namenode-default-0:8020/data
+    hdfs:
+      storageDirectory: hdfs://druid-hdfs-namenode-default-0:8020/data
   brokers:
     configOverrides:
       runtime.properties:
