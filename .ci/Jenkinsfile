@@ -62,10 +62,10 @@ pipeline {
                             docker.stackable.tech/t2-testdriver:dummy
                     """, returnStatus: true)
 
-                    if (env.TEST_RETURN_CODE == 255) {
+                    if (env.TEST_RETURN_CODE == "255") {
                         unstable(message: "cluster launch failed")
                     }
-                    if (env.TEST_RETURN_CODE == 254) {
+                    if (env.TEST_RETURN_CODE == "254") {
                         unstable(message: "cluster termination failed")
                     }
 
