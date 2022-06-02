@@ -157,10 +157,12 @@ def create_kind_cluster(name: str):
   helper_execute(['kind', 'create', 'cluster', '--name', name, '--config', '-'], KIND_CLUSTER_DEFINITION)
   logging.info(f'Successfully created kind cluster [{name}]')
 
+
 def check_python_version():
   if sys.version_info < (3, 7):
     print("This script requires at least Python 3.7 to work correctly, please update your Python version!")
     sys.exit(1)
+
 
 def check_kubernetes_available():
   """ Checks if Kubernetes is available, this is a naive approach but better than nothing """
