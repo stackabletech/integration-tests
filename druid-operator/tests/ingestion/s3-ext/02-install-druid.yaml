@@ -16,13 +16,15 @@ spec:
     connString: jdbc:derby://localhost:1527/var/druid/metadata.db;create=true
     host: localhost
     port: 1527
-  s3:
-    endpoint: s3-de-central.profitbricks.com
-    credentialsSecret:
-      s3-credentials
+  ingestion:
+    s3connection:
+      inline:
+        host: s3-de-central.profitbricks.com
+        credentials:
+          secretClass: s3-credentials-class
   deepStorage:
-    storageType: hdfs
-    storageDirectory: hdfs://druid-hdfs-namenode-default-0:8020/data
+    hdfs:
+      storageDirectory: hdfs://druid-hdfs-namenode-default-0:8020/data
   brokers:
     roleGroups:
       default:
@@ -63,11 +65,24 @@ spec:
             kubernetes.io/os: linux
         config: {}
         replicas: 1
+
+---
+apiVersion: secrets.stackable.tech/v1alpha1
+kind: SecretClass
+metadata:
+  name: s3-credentials-class
+spec:
+  backend:
+    k8sSearch:
+      searchNamespace:
+        pod: {}
 ---
 apiVersion: v1
 kind: Secret
 metadata:
   name: s3-credentials
+  labels:
+    secrets.stackable.tech/class: s3-credentials-class
 stringData:
-  accessKeyId: YOURACCESSKEYIDHERE
-  secretAccessKey: YOURSECRETACCESSKEYHERE
+  accessKey: YOUR_VALID_ACCESS_KEY_ID_HERE
+  secretKey: YOUR_SECRET_ACCES_KEY_THATBELONGS_TO_THE_KEY_ID_HERE
