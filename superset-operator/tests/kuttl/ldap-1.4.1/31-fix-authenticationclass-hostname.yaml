@@ -1,8 +1,0 @@
----
-apiVersion: kuttl.dev/v1beta1
-kind: TestStep
-metadata:
-  name: fix-authenticationclass-hostname
-commands:
-  - script: >
-      kubectl patch authenticationclass superset-with-ldap-server-veri-tls-ldap --type=merge --patch '{"spec": {"provider": {"ldap": {"hostname": "openldap.'"$NAMESPACE"'.svc.cluster.local"}}}}'
