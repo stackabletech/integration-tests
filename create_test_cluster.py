@@ -139,6 +139,7 @@ def check_args() -> Namespace:
 def check_prerequisites():
   """ Checks whether Helm is installed"""
   helper_command_exists('helm')
+  check_python_version()
 
 
 def create_kind_cluster(name: str):
@@ -155,6 +156,12 @@ def create_kind_cluster(name: str):
   logging.info(f"Kind cluster [{name}] missing - creating now")
   helper_execute(['kind', 'create', 'cluster', '--name', name, '--config', '-'], KIND_CLUSTER_DEFINITION)
   logging.info(f'Successfully created kind cluster [{name}]')
+
+
+def check_python_version():
+  if sys.version_info < (3, 7):
+    print("This script requires at least Python 3.7 to work correctly, please update your Python version!")
+    sys.exit(1)
 
 
 def check_kubernetes_available():
@@ -501,8 +508,8 @@ def operator_from_input(input: str) -> OperatorVersion:
     raise argparse.ArgumentTypeError(f"Operator name {input} is invalid")
 
 def main() -> int:
-  args = check_args()
   check_prerequisites()
+  args = check_args()
   if args.kind:
     create_kind_cluster(args.kind)
   check_kubernetes_available()
