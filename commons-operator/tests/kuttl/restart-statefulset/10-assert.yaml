@@ -1,9 +1,0 @@
----
-apiVersion: kuttl.dev/v1beta1
-kind: TestAssert
-commands:
-  - command: sleep 1
-  - script: >
-      kubectl -n $NAMESPACE get pod busybox-0
-  - script: >
-      kubectl -n $NAMESPACE get pod busybox-0 | grep Terminating
