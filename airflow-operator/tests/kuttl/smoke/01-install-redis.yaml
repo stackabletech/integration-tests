@@ -1,6 +1,0 @@
-apiVersion: kuttl.dev/v1beta1
-kind: TestStep
-commands:
-  - script: helm repo add $NAMESPACE-bitnami https://charts.bitnami.com/bitnami
-  - script: helm install airflow-redis $NAMESPACE-bitnami/redis --namespace $NAMESPACE --set auth.password=redis
-  - script: helm repo remove $NAMESPACE-bitnami
