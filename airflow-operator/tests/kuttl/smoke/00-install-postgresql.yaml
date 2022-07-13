@@ -1,6 +1,0 @@
-apiVersion: kuttl.dev/v1beta1
-kind: TestStep
-commands:
-  - script: helm repo add $NAMESPACE-bitnami https://charts.bitnami.com/bitnami
-  - script: helm install airflow-postgresql $NAMESPACE-bitnami/postgresql --namespace $NAMESPACE --version 11.0.0 --set auth.username=airflow --set auth.password=airflow --set auth.database=airflow
-  - script: helm repo remove $NAMESPACE-bitnami
